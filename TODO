@@ -1,0 +1,99 @@
+Export Settings:
+	The current solution for export is to specify export in each
+	channel individually; this may be not the most efficient solution
+	Building an extra export node might be better but need to get some more
+	experience what is actually needed. (For example the export path should not
+	be hardcoded in each export node)
+
+General:
+ - Is the transformation matrix really needed in filter nodes? A simpler solution (especially for the caching system) would
+   be to allow transformation only in Patterns
+ - Make the Help-System using nice font and backgrounds and write a base dialog class for displaying such messages
+ 
+ - Make Matrix a parameter
+ 
+ - Make the parameter of a network accessible through commandline; this allows for simple animations 
+ 
+ - Image Output Node (on change or on button press) writes out an image (can be used to store destination paths)
+   perhaps I want also to put the channel combiner in here (use 4 inputs and select the combination for the output image)
+  
+ - Make the "Drag All" feature in the gradient editor more robust
+
+ - Special Color for bitmap pattern nodes in graph editor
+
+ - More Features needed in lighting node: ambient and diffuse lighting, highlight color, ...
+ 
+ - Higher order Interpolation in Gradient Editor (Hermite, ...)
+  
+
+Caching System:
+ - Try caching for the 64 preview resolution; find a solution for the derivative scaling problem... (?always on grid??)
+
+
+OpenGL Preview
+ - Add a scrollbar to the parameter editor of the GL Preview (?)
+ - Encapsulate glsl uniform parameters and location code into class for easy adding/removing of shader parameters
+ - Load the preview objects from external data or generate them procedurally
+
+Feature Requests:
+ - Keyboard shortcuts for the Graph Editor 
+ 
+Known Bugs:
+  - Check output of the kd-tree (in the cellular pattern) for non-euclidean distances (it should be wrong)
+  - Repaint of GLCanvas sloppy (without thread it disappears sometimes; with thread it flickers unnecessarily)
+
+
+Planned Features:
+ - FFT-Node
+ - HDR OutputNode + Curve Editor
+ - Auto Graph Layout
+ - Loading and/or Editing of GL Shaders for Preview
+ - Export Format Specifier (How to group channels in export images; postfix for filenames)
+ - Multi-Core support for texture evaluation (especially for export)
+ - DXTC export
+ - ?? loading of own objects ??
+ 
+ 
+-----------------------------------------------------------------------------------------------------------------------
+Releases (Notes):
+-----------------------------------------------------------------------------------------------------------------------
+0.5.4+ (Current):
+ - Export String (with replace options %f %r) for marking channels for export
+ - Command Line option for export to image (now batch export possible; also with wildcards)
+ - Basic drag-all feature in gradient editor (not yet very robust)
+-----------------------------------------------------------------------------------------------------------------------
+0.5.3a
+ - Command line options for loading texture file and disabling OpenGL
+ - Experimental: Synthesis Pattern
+ - Function Pattern: basic sin/saw/square function as generator pattern
+ - Possible fix for the 2.3 LWJGL
+ - Bitmap Pattern: allows to load images as generator patterns
+-----------------------------------------------------------------------------------------------------------------------
+0.5.2a 
+ - some new pattern presets
+ - export of (almost) arbitrary resolution now works
+ - switched for release back from LWJGL 2.3 to LWJGL 2.2.2 because of MacOS problems
+ - re-enabled autosave into exit.tgr when quitting program
+ - added ambient term to OpenGL preview
+ - fixed some OpenGL preview bugs
+ - open texture file from command line parameter
+ - added popup-menu to OpenGL preview with clear textures option
+ 
+-----------------------------------------------------------------------------------------------------------------------
+0.5.1a:
+ - OpenGL Preview of Textures
+ 
+-----------------------------------------------------------------------------------------------------------------------
+ 
+ 
+
+Done:
+ - Loading of Bitmap files as input nodes
+ - Move to new LWJGL Version 2.3
+ - Add preview objects with tangents (probably best to export them as vertex array)
+ - Add more preview objects
+ - Scaling of u/v coords for preview
+ - Interpolation Modes for Bitmap Node (at least bi-linear)
+ - Lighting Filter (with Normal Map input)
+
+

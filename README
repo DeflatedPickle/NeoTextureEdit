@@ -1,0 +1,59 @@
+NeoTextureEdit.
+===============
+
+http://neotextureedit.sourceforge.net/
+
+NeoTextureEdit is an easy to use graph-based procedural seamless
+texture editor. Using continuous basis functions it can generate
+arbitrary resolution images without quality degradation. Its main
+purpose is to produce high quality textures for real time rendering
+applications that can be stored in a few kB and synthesized on
+application startup. But it can also be used to generate off-line
+images.
+
+
+Dependencies.
+=============
+
+NeoTextureEdit needs a Java 1.6 compliant runtime environment.  For
+OpenGL preview rendering a graphics card with shader support is
+needed.
+
+
+Notes.
+======
+
+To learn the usage of the editor you can look at the provided example
+textures in the examples directory.
+
+NeoTextureEdit saves its settings on exit in a file called
+'TextureEdtiorSettings'.  This file will be saved in the directory
+from where you start the editor.  This file also contains your pattern
+presets. Deleting this file resets to the factory settings.
+
+
+
+Running NeoTextureEdit:
+=======================
+
+Linux: Use the provided shell script in the main directory to run
+       NeoTextureEdit.
+
+Windows: Use the provided executable to start.
+
+MacOS: The application can be started via double-click in the finder.
+
+
+Release Notes:
+==============
+
+0.5.3:
+ - New Pattern: Bitmap: allows to load images as generator patterns
+ - New Pattern: Function: basic sin/saw/square function as generator pattern
+ - Command line options for loading texture graph files and disabling OpenGL
+ - Switched to LWJGL 2.3
+ - several minor fixes/tweaks: among others are new presets, auto-loading 
+   of example at first start; switched to system UI instead of nimbus for
+   now
+
+   
