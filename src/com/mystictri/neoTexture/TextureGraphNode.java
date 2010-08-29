@@ -31,12 +31,17 @@ import engine.graphics.synthesis.texture.Channel;
  * the texture generation source code. It also manages the connections.
  * It contains also an absolute position that should be used for graph rendering.
  * 
+ * !!TODO: simplify the location handling (and remove most of the methods)
+ * 
  * @author Holger Dammertz
  * 
  */
 public final class TextureGraphNode {
 	public static final int width = 64 + 8; 
 	public static final int height = 64 + 16 +12;
+	
+	// this is currently a 'workaround' for the TextureGraphEditorPanel to efficiently store preview images
+	public Object userData = null;
 	
 	Channel texChannel;
 	
@@ -65,6 +70,11 @@ public final class TextureGraphNode {
 	public Channel getChannel() {
 		return texChannel;
 	}
+	
+	public void movePosition(int dx, int dy) {
+		loc.x += dx;
+		loc.y += dy;
+	}
 
 	// saves only the node; not the Connection!!
 	public void save(Writer w, TextureGraphNode n) throws IOException {
@@ -89,6 +99,17 @@ public final class TextureGraphNode {
 		return ret;
 	}
 
+	
+	/**
+	 * Checks if the given point (in world coordinates) is contained inside the node
+	 * by checking if (getX() <= x <= getX()+width) && (getY() <= y <= getY()+width))
+	 * @param x the x position in world coordinates
+	 * @param y the y position in world coordinates
+	 * @return
+	 */
+	public boolean containsPoint(int x, int y) {
+		return (x >= loc.x) && (x <= loc.x+width) && (y >= loc.y) && (y <= loc.y + height);
+	}
 	
 	/**
 	 * A ConnectionPoint is attached to a specific TextureGraphNode parent and represents
@@ -128,10 +149,10 @@ public final class TextureGraphNode {
 		}
 
 		
-		// Utility method to check if the mouse position is insied the
+		// Utility method to check if the mouse position is inside the
 		// connection point
 		public boolean inside(int px, int py) {
-			return ((px >= x) && (px <= (x + width)) && (py >= y) && (py <= (y + height)));
+			return ((px >= x+parent.getX()) && (px <= (x+parent.getX() + width)) && (py >= y+parent.getY()) && (py <= (y+parent.getY() + height)));
 		}
 	}
 
@@ -196,6 +217,8 @@ public final class TextureGraphNode {
 		//channel.addChannelChangeListener(this);
 		//updatePreviewImage();
 	}
+	
+
 
 	
 

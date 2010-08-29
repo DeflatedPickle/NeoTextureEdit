@@ -68,6 +68,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 
 
 	boolean nodeDragging = false;
+	TextureGraphNode draggedNode = null;
 	boolean desktopDragging = false;
 	boolean connectionDragging = false;
 	TextureGraphNode.ConnectionPoint connectionSource = null;
@@ -105,6 +106,38 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	
 	TextureGraph graph;
 	
+	/** 
+	 * Used in the draw method to generate a preview image that is cached
+	 * @author Holger Dammertz
+	 *
+	 */
+	class NodePreviewImage implements ChannelChangeListener {
+		BufferedImage previewImage;
+		TextureGraphNode node;
+		
+		public NodePreviewImage(TextureGraphNode node) {
+			this.node = node;
+			node.getChannel().addChannelChangeListener(this);
+			updatePreviewImage();
+		}
+		
+		public void updatePreviewImage() {
+			if ((node.getChannel() != null) && (node.getChannel().chechkInputChannels())) {
+				if (previewImage == null)
+					previewImage = node.getChannel().createAndComputeImage(64, 64, null, 0);
+				else
+					node.getChannel().computeImage(previewImage, null, 0);
+			} else {
+				previewImage = null;
+			}
+			repaint();
+		}
+		
+		public void channelChanged(Channel source) {
+			updatePreviewImage();
+		}
+	}
+	
 	
 	int desktopX, desktopY;
 	
@@ -112,17 +145,13 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 
 		public void drop(DropTargetDropEvent e) {
 			TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(TextureEditor.INSTANCE.dragndropChannel));
-			n.setLocation(e.getLocation());
-			graph.addNode(n);
+			addTextureNode(n, e.getLocation().x, e.getLocation().y);
 			setSelectedNode(n);
-			//addNode(new DrawableTextureGraphNode(n));
 			repaint();
-			//TextureGraphNode.cloneChannel(ppl.pat);
-			//addNode(node)
-			//System.out.println("DROP da bOmB " + e);
-			//System.out.println();
 		}
 	}
+	
+	
 	
 	
 	
@@ -153,6 +182,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	public ChannelParameterEditorPanel getParameterEditorPanel() {
 		return paramEditorPanel;
 	}
+	
 
 	private void createPopupMenus() {
 		newChannelPopupMenu = new JPopupMenu("Create Channel");
@@ -284,7 +314,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			try {
 				if (!mi.isAReplaceCall) { // insert a new Node
 					Channel chan = (Channel) mi.classType.newInstance();
-					graph.addNode(new TextureGraphNode(chan), mousePosition.x, mousePosition.y);
+					addTextureNode(new TextureGraphNode(chan), mousePosition.x - desktopX, mousePosition.y - desktopY);
 				} else { // try to replace an existing node as good as possible
 					TextureGraphNode node = graph.selectedNodes.get(0);
 					if (node != null) {
@@ -304,7 +334,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			if (toCopyTextureGraphNode == null) {
 				Logger.logError(this, "No node copied to insert.");
 			} else {
-				graph.addNode(toCopyTextureGraphNode.cloneThisNode(), mousePosition.x, mousePosition.y);
+				addTextureNode(toCopyTextureGraphNode.cloneThisNode(), mousePosition.x - desktopX, mousePosition.y - desktopY);
 			}
 		} else if (e.getSource() == copyChannelMenuItem) {
 			if (graph.selectedNodes.size() > 0) {
@@ -329,7 +359,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			if (graph.selectedNodes.size() > 0) {
 				TextureGraphNode orig = graph.selectedNodes.get(0);
 				TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(graph.selectedNodes.get(0).getChannel()));
-				graph.addNode(n, orig.getX()+32, orig.getY()+32);
+				addTextureNode(n, orig.getX()+32 - desktopX, orig.getY()+32 - desktopY);
 				repaint();
 			} else {
 				Logger.logError(this, "no selection in cloneChannel popup menu.");
@@ -410,6 +440,11 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	
 	
 	
+	void addTextureNode(TextureGraphNode n, int x, int y) {
+		graph.addNode(n, x, y);
+		
+	}
+
 	public void setSelectedNode(TextureGraphNode node) {
 		paramEditorPanel.setTextureNode(node);
 		graph.setSelectedNode(node);
@@ -499,16 +534,20 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	}
 	
 	public void drawNode(Graphics g, TextureGraphNode node) {
+		
+		if (node.userData == null) node.userData = new NodePreviewImage(node);
+
+		
 		g.setColor(bgColor);
 		int x = node.getX() + desktopX;
 		int y = node.getY() + desktopY;
-		int w = node.width;
-		int h = node.height;
+		int w = TextureGraphNode.width;
+		int h = TextureGraphNode.height;
 		g.fillRect(x, y, w, h);
 		
 		//if (threadIsRecomputing) return;
 		
-		//g.drawImage(previewImage, 4, 12+12, this);
+		g.drawImage(((NodePreviewImage)node.userData).previewImage, x + 4, y+12+12, this);
 		
 		g.setFont(font);
 		
@@ -555,7 +594,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		g.setColor(Color.yellow);
 		for (TextureGraphNode n : graph.selectedNodes) {
 			//Rectangle r = new n.getBounds();
-			g.drawRect(desktopX + n.getX() - 2, desktopY + n.getY() - 2, n.width + 4, n.height + 4);
+			g.drawRect(desktopX + n.getX() - 2, desktopY + n.getY() - 2, TextureGraphNode.width + 4, TextureGraphNode.height + 4);
 		}
 		
 		g.setColor(Color.blue);
@@ -572,7 +611,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		
 		if (connectionDragging) {
 			g.setColor(Color.red);
-			drawConnectionLine(g, desktopX + connectionTarget.x, connectionTarget.y, desktopX + connectionOrigin.x, connectionOrigin.y);
+			drawConnectionLine(g, connectionTarget.x, connectionTarget.y, desktopX + connectionOrigin.x, desktopY + connectionOrigin.y);
 		}
 		
 		
@@ -589,9 +628,6 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	
 	
 	public void moveDesktop(int dx, int dy) {
-		//for (int i = 0; i < getComponentCount(); i++) {
-		//	getComponent(i).setLocation(getComponent(i).getX()+dx, getComponent(i).getY()+dy);
-		//}
 		desktopX += dx;
 		desktopY += dy;
 		repaint();
@@ -639,29 +675,15 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			int dx =  e.getXOnScreen() - dragStartX; dragStartX = e.getXOnScreen();
 			int dy =  e.getYOnScreen() - dragStartY; dragStartY = e.getYOnScreen();
 			moveDesktop(dx, dy);
-		}
-		
-		/*if (desktopDragging) { // moving the desktop with the mouse
-			int dx =  e.getXOnScreen() - dragStartX; dragStartX = e.getXOnScreen();
-			int dy =  e.getYOnScreen() - dragStartY; dragStartY = e.getYOnScreen();
-			moveDesktop(dx, dy);
 		} else if (nodeDragging) {
-			// TextureNode node = (TextureNode) e.getComponent();
-			Point p = getLocation();
-			p.x = e.getXOnScreen() + dragStartX;
-			p.y = e.getYOnScreen() + dragStartY;
-			//e.getComponent().setLocation(p);
-
+			draggedNode.movePosition(e.getXOnScreen() - dragStartX, e.getYOnScreen() - dragStartY);
+			dragStartX = e.getXOnScreen();
+			dragStartY = e.getYOnScreen();
 			repaint();
 		} else if (connectionDragging) {
-			//TextureGraphNode node = (TextureGraphNode)e.getComponent();
-			//!!TODO: refactoring artifact
 			connectionTarget = e.getPoint();
-			//!!TODO: connectionTarget.x += node.getX();
-			//!!TODO: connectionTarget.y += node.getY();
 			repaint();
 		}
-		*/
 	}
 	
 	// !!TODO: addToSelection
@@ -679,61 +701,85 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	}
 
 	
-	public void mousePressed(MouseEvent e) {
+	// 1: drag component
+	// 2: output node clicked
+	// 3: Help button clicked
+	// < 0: input node clicked; index = -val - 1
+	public int getActionTypeForMouseClick(int x, int y, TextureGraphNode n) {
+		// check if we clicked in the output node
+		if (n.getOutputConnectionPoint().inside(x, y)) {
+			return 2;
+		}
+		// now check if we clicked into an input node
+		for (ConnectionPoint cp : n.getAllConnectionPointsVector()) {
+			if (cp.inside(x, y))
+				return -cp.channelIndex - 1;
+		}
 		
+		if ((x >= helpX+n.getX()) && (x <= (helpX+n.getX() + helpW)) && (y >= helpY+n.getY()) && (y <= (helpY+n.getY() + helpH))) {
+			JOptionPane.showMessageDialog(this, n.getChannel().getHelpText(), n.getChannel().getName() + " Help", JOptionPane.PLAIN_MESSAGE);
+			return 3;
+		}
+
+		return 1;
+	}
+
+	
+	public void mousePressed(MouseEvent e) {
 		mousePosition = e.getPoint();
+		
+		System.out.println(mousePosition);
+		dragStartX = e.getXOnScreen();
+		dragStartY = e.getYOnScreen();
+		int wsX = e.getX() - desktopX;
+		int wsY = e.getY() - desktopY;
 
 		if (e.getButton() == 2 || (e.isAltDown() || e.isControlDown())) { // Desktop Dragging
-			dragStartX = e.getXOnScreen();
-			dragStartY = e.getYOnScreen();
 			desktopDragging = true;
-			
-			System.out.println("BLAH");
-		} 
-		//!!TODO: refactoring artifact; select node here with helper
-		/*else if (e.getComponent().getClass() == TextureGraphNode.class) { // clicked on a TextureGraphNode
-			TextureGraphNode pat = (TextureGraphNode) e.getComponent();
-			if (e.getButton() == 3) { // Popup menu for a TextureGraphNode
-				setSelectedNode(pat);
-				showSelectedChannelPopupMenu(pat, e.getX(), e.getY());
-			} else { // if it was not a popup we look if we clicked on a connection point or on the rest of the node
-				Point p = e.getComponent().getLocation();
-				dragStartX = -e.getXOnScreen() + p.x;
-				dragStartY = -e.getYOnScreen() + p.y;
-				int actionType = pat.getActionTypeForMouseClick(e.getX(), e.getY());
-				if (actionType == 1) { // want to drag the position of the node
+		} else {
+			TextureGraphNode pat = graph.getNodeAtPosition(wsX, wsY);
+			System.out.println(pat);
+			if (pat != null) {
+				if (e.getButton() == 3) { // Popup menu for a TextureGraphNode
 					setSelectedNode(pat);
-					nodeDragging = true;
-				} 
-				else if (actionType == 2) { // dragging from the output node of a channel
-					connectionDragging = true;
-					connectionSource = pat.getOutputConnectionPoint();
-					connectionOrigin = connectionSource.getWorldSpaceCenter();
-					connectionTarget = e.getPoint();
-					connectionTarget.x += p.getX();
-					connectionTarget.y += p.getY();
-				}
-				else if (actionType < 0) { // dragging an existing connection of an input away
-					int index = -actionType - 1;
-					TextureGraphNode.ConnectionPoint inputPoint = pat.getInputConnectionPointByChannelIndex(index);
-					TextureNodeConnection connection = getConnectionAtInputPoint(inputPoint);
-					if (connection != null) {
-						removeConnection(connection);
+					showSelectedChannelPopupMenu(pat, e.getX(), e.getY());
+				} else { // if it was not a popup we look if we clicked on a connection point or on the rest of the node
+					Point p = pat.getLocation();
+					int actionType = getActionTypeForMouseClick(wsX, wsY, pat);
+					if (actionType == 1) { // want to drag the position of the node
+						setSelectedNode(pat);
+						nodeDragging = true;
+						draggedNode = pat;
+					} 
+					else if (actionType == 2) { // dragging from the output node of a channel
 						connectionDragging = true;
-						connectionSource = connection.source;
+						connectionSource = pat.getOutputConnectionPoint();
 						connectionOrigin = connectionSource.getWorldSpaceCenter();
-						// pat.updatePreviewImage();
 						connectionTarget = e.getPoint();
-						connectionTarget.x += p.getX();
-						connectionTarget.y += p.getY();
+					}
+					else if (actionType < 0) { // dragging an existing connection of an input away
+						int index = -actionType - 1;
+						TextureGraphNode.ConnectionPoint inputPoint = pat.getInputConnectionPointByChannelIndex(index);
+						TextureNodeConnection connection = graph.getConnectionAtInputPoint(inputPoint);
+						if (connection != null) {
+							graph.removeConnection(connection);
+							connectionDragging = true;
+							connectionSource = connection.source;
+							connectionOrigin = connectionSource.getWorldSpaceCenter();
+							// pat.updatePreviewImage();
+							connectionTarget = e.getPoint();
+							connectionTarget.x += p.getX();
+							connectionTarget.y += p.getY();
+						}
 					}
 				}
+			} else if (e.isPopupTrigger()) {
+				showNewChannelPopupMenu(e.getComponent(), e.getX(), e.getY());
+			} else {
+				setSelectedNode(null);
 			}
-		} */else if (e.isPopupTrigger()) {
-			showNewChannelPopupMenu(e.getComponent(), e.getX(), e.getY());
-		} else {
-			setSelectedNode(null);
 		}
+		
 
 		repaint();
 	}
@@ -744,6 +790,24 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		
 		
 		mousePosition = e.getPoint();
+		
+		int wsX = mousePosition.x - desktopX;
+		int wsY = mousePosition.y - desktopY;
+		
+		
+		if (connectionDragging) {
+			TextureGraphNode targetPat = graph.getNodeAtPosition(wsX, wsY);
+			System.out.println(targetPat);
+			if (targetPat != null) {
+				int actionType = getActionTypeForMouseClick(wsX, wsY, targetPat);
+				if (actionType < 0) { // we dragged onto an input node
+					int index = -actionType - 1;
+					
+					TextureGraphNode.ConnectionPoint inputPoint = targetPat.getInputConnectionPointByChannelIndex(index);
+					graph.addConnection(new TextureNodeConnection(connectionSource, inputPoint));
+				}
+			}			
+		}		
 		//!!TODO: refactoring artifact
 		/*
 		if (e.getSource().getClass() == TextureGraphNode.class) {

@@ -27,19 +27,16 @@ public class TextureGraph {
 	public final Vector<TextureGraphNode> allNodes = new Vector<TextureGraphNode>();
 	public final Vector<TextureNodeConnection> allConnections = new Vector<TextureNodeConnection>();
 
-	
 	public void addNode(TextureGraphNode node) {
 		allNodes.add(node);
-		//!!TODO: move this back to TextureGraphEditorPanel
-		/*add(node);
-		node.addMouseListener(this);
-		node.addMouseMotionListener(this);*/
 	}
 
+
+	
 	public void addNode(TextureGraphNode node, int x, int y) {
-		addNode(node);
 		node.setLocation(x, y);
-		setSelectedNode(node);
+		addNode(node);
+		//setSelectedNode(node);
 	}
 	
 	// first saving version: simple ascii test
@@ -100,6 +97,14 @@ public class TextureGraph {
 		return true;
 	}
 	
+	
+	public TextureGraphNode getNodeAtPosition(int x, int y) {
+		TextureGraphNode ret = null;
+		for (TextureGraphNode n : allNodes) {
+			if (n.containsPoint(x, y)) ret = n;
+		}
+		return ret;
+	}
 	
 	public void deleteFullGraph() {
 		removeConnections(allConnections);
