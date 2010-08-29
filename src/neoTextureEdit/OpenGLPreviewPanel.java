@@ -161,10 +161,10 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 	public void save(Writer w) throws IOException  {
 		w.write("glpreview ");
 		// now store the 4 preview nodes
-		w.write(TextureEditor.INSTANCE.m_GraphDrawPanel.allNodes.indexOf(diffuseTexNode) + " ");
-		w.write(TextureEditor.INSTANCE.m_GraphDrawPanel.allNodes.indexOf(normalTexNode) + " ");
-		w.write(TextureEditor.INSTANCE.m_GraphDrawPanel.allNodes.indexOf(specWeightTexNode) + " ");
-		w.write(TextureEditor.INSTANCE.m_GraphDrawPanel.allNodes.indexOf(heightmapTexNode) + " ");
+		w.write(TextureEditor.INSTANCE.m_GraphDrawPanel.graph.allNodes.indexOf(diffuseTexNode) + " ");
+		w.write(TextureEditor.INSTANCE.m_GraphDrawPanel.graph.allNodes.indexOf(normalTexNode) + " ");
+		w.write(TextureEditor.INSTANCE.m_GraphDrawPanel.graph.allNodes.indexOf(specWeightTexNode) + " ");
+		w.write(TextureEditor.INSTANCE.m_GraphDrawPanel.graph.allNodes.indexOf(heightmapTexNode) + " ");
 		
 		if (TextureEditor.GL_ENABLED) {
 			for (AbstractParam p : glcanvas.params.m_LocalParameters) {
@@ -182,10 +182,10 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 		s.next(); // glpreview
 		
 		int idx;
-		if ((idx = s.nextInt())!= -1) setDiffuseTextureNode(TextureEditor.INSTANCE.m_GraphDrawPanel.allNodes.get(idx));
-		if ((idx = s.nextInt())!= -1) setNormalTextureNode(TextureEditor.INSTANCE.m_GraphDrawPanel.allNodes.get(idx));
-		if ((idx = s.nextInt())!= -1) setSpecWeightTextureNode(TextureEditor.INSTANCE.m_GraphDrawPanel.allNodes.get(idx));
-		if ((idx = s.nextInt())!= -1) setHeightmapTextureNode(TextureEditor.INSTANCE.m_GraphDrawPanel.allNodes.get(idx));
+		if ((idx = s.nextInt())!= -1) setDiffuseTextureNode(TextureEditor.INSTANCE.m_GraphDrawPanel.graph.allNodes.get(idx));
+		if ((idx = s.nextInt())!= -1) setNormalTextureNode(TextureEditor.INSTANCE.m_GraphDrawPanel.graph.allNodes.get(idx));
+		if ((idx = s.nextInt())!= -1) setSpecWeightTextureNode(TextureEditor.INSTANCE.m_GraphDrawPanel.graph.allNodes.get(idx));
+		if ((idx = s.nextInt())!= -1) setHeightmapTextureNode(TextureEditor.INSTANCE.m_GraphDrawPanel.graph.allNodes.get(idx));
 		
 		String t;
 		while (!(t = s.next()).equals("endglpreview")) {

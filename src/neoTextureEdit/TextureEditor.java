@@ -709,7 +709,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 			TextureGraphEditorPanel te = new TextureGraphEditorPanel();
 			te.load(filename, true);
 			
-			for (TextureGraphNode n : te.getAllNodes()) {
+			for (TextureGraphNode n : te.graph.getAllNodes()) {
 				if (n.getChannel().isMarkedForExport()) {
 					String exportname = n.getChannel().exportName.get();
 					String f = filename;

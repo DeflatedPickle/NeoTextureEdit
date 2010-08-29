@@ -31,17 +31,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 import java.util.TooManyListenersException;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -53,6 +45,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import com.mystictri.neoTexture.TextureGraph;
+import com.mystictri.neoTexture.TextureGraph.TextureNodeConnection;
 import com.mystictri.neoTexture.TextureGraphNode;
 import com.mystictri.neoTexture.TextureGraphNode.ConnectionPoint;
 
@@ -117,8 +110,9 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		public void drop(DropTargetDropEvent e) {
 			TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(TextureEditor.INSTANCE.dragndropChannel));
 			n.setLocation(e.getLocation());
-			addNode(n);
+			graph.addNode(n);
 			setSelectedNode(n);
+			//addNode(new DrawableTextureGraphNode(n));
 			repaint();
 			//TextureGraphNode.cloneChannel(ppl.pat);
 			//addNode(node)
@@ -126,7 +120,8 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			//System.out.println();
 		}
 	}
-
+	
+	
 	
 	public TextureGraphEditorPanel() {
 		setBackground(Color.darkGray);
@@ -262,7 +257,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			if (!name.endsWith(".png"))
 				name += ".png";
 			try {
-				ImageIO.write(selectedNodes.lastElement().getChannel()
+				ImageIO.write(graph.selectedNodes.lastElement().getChannel()
 						.createAndComputeImage(resX, resY, TextureEditor.INSTANCE.m_ProgressDialog, 0), "png", new File(name));
 				Logger.log(this, "Saved image to " + name + ".");
 			} catch (IOException exc) {
@@ -283,13 +278,13 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			try {
 				if (!mi.isAReplaceCall) { // insert a new Node
 					Channel chan = (Channel) mi.classType.newInstance();
-					addNode(new TextureGraphNode(chan), mousePosition.x, mousePosition.y);
+					graph.addNode(new TextureGraphNode(chan), mousePosition.x, mousePosition.y);
 				} else { // try to replace an existing node as good as possible
-					TextureGraphNode node = selectedNodes.get(0);
+					TextureGraphNode node = graph.selectedNodes.get(0);
 					if (node != null) {
 						Channel chan = (Channel) mi.classType.newInstance();
 						TextureGraphNode newNode = new TextureGraphNode(chan);
-						replaceNode(node, newNode);
+						graph.replaceNode(node, newNode);
 					} else {
 						Logger.logWarning(this, "No node selected for replace.");
 					}
@@ -303,71 +298,72 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			if (toCopyTextureGraphNode == null) {
 				Logger.logError(this, "No node copied to insert.");
 			} else {
-				addNode(toCopyTextureGraphNode.cloneThisNode(), mousePosition.x, mousePosition.y);
+				graph.addNode(toCopyTextureGraphNode.cloneThisNode(), mousePosition.x, mousePosition.y);
 			}
 		} else if (e.getSource() == copyChannelMenuItem) {
-			if (selectedNodes.size() > 0) {
-				toCopyTextureGraphNode = selectedNodes.get(0).cloneThisNode();
+			if (graph.selectedNodes.size() > 0) {
+				toCopyTextureGraphNode = graph.selectedNodes.get(0).cloneThisNode();
 			} else {
 				Logger.logError(this, "no selection in copyChannel popup menu.");
 			}
 		} else if (e.getSource() == replacepasteChannelMenuItem) {
 			if (toCopyTextureGraphNode == null) {
 				Logger.logError(this, "No node copied to replace paste.");
-			} else if (selectedNodes.size() > 0) {
-				replaceNode(selectedNodes.get(0), toCopyTextureGraphNode.cloneThisNode());
+			} else if (graph.selectedNodes.size() > 0) {
+				graph.replaceNode(graph.selectedNodes.get(0), toCopyTextureGraphNode.cloneThisNode());
 			} else {
 				Logger.logError(this, "no selection in insert-replaceChannel popup menu.");
 			}
 		} else if (e.getSource() == previewChannelMenuItem) {
-			if (selectedNodes.size() > 0) {
+			if (graph.selectedNodes.size() > 0) {
 				setPreviewNode(null);
-				setPreviewNode(selectedNodes.get(0));
+				setPreviewNode(graph.selectedNodes.get(0));
 			}
 		} else if (e.getSource() == cloneChannelMenuItem) { // --------------------------------------------------------
-			if (selectedNodes.size() > 0) {
-				TextureGraphNode orig = selectedNodes.get(0);
-				TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(selectedNodes.get(0).getChannel()));
-				addNode(n, orig.getX()+32, orig.getY()+32);
+			if (graph.selectedNodes.size() > 0) {
+				TextureGraphNode orig = graph.selectedNodes.get(0);
+				TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(graph.selectedNodes.get(0).getChannel()));
+				graph.addNode(n, orig.getX()+32, orig.getY()+32);
 				repaint();
 			} else {
 				Logger.logError(this, "no selection in cloneChannel popup menu.");
 			}
 		} else if (e.getSource() == swapInputsChannelMenuItem) { // --------------------------------------------------------
-			TextureGraphNode node = selectedNodes.get(0);
+			TextureGraphNode node = graph.selectedNodes.get(0);
 			if (node != null) {
 				if (node.getChannel().getNumInputChannels() < 2) return;
 				ConnectionPoint p0 = node.getInputConnectionPointByChannelIndex(0);
 				ConnectionPoint p1 = node.getInputConnectionPointByChannelIndex(1);
-				TextureNodeConnection c0 = getConnectionAtInputPoint(p0);
-				TextureNodeConnection c1 = getConnectionAtInputPoint(p1);
-				removeConnection(c0);
-				removeConnection(c1);
+				TextureNodeConnection c0 = graph.getConnectionAtInputPoint(p0);
+				TextureNodeConnection c1 = graph.getConnectionAtInputPoint(p1);
+				graph.removeConnection(c0);
+				graph.removeConnection(c1);
 				if (c0 != null && c1 != null) {
 					ConnectionPoint temp = c0.target;
 					c0.target = c1.target;
 					c1.target = temp;
-					addConnection(c0);
-					addConnection(c1);
+					graph.addConnection(c0);
+					graph.addConnection(c1);
 				} else if (c1 != null) {
 					c1.target = p0;
-					addConnection(c1);
+					graph.addConnection(c1);
 				} else if (c0 != null) {
 					c0.target = p1;
-					addConnection(c0);
+					graph.addConnection(c0);
 				} else {
 					return;
 				}
 				repaint();
 			}
 		} else if (e.getSource() == addToPresetsChannelMenuItem) { // --------------------------------------------------------
-			if (selectedNodes.size() > 0) {
-				if (selectedNodes.get(0).getChannel() instanceof Pattern)
-					TextureEditor.INSTANCE.m_PatternSelector.addPatternPreset((Pattern)Channel.cloneChannel((Pattern)selectedNodes.get(0).getChannel()));
+			if (graph.selectedNodes.size() > 0) {
+				if (graph.selectedNodes.get(0).getChannel() instanceof Pattern)
+					TextureEditor.INSTANCE.m_PatternSelector.addPatternPreset((Pattern)Channel.cloneChannel((Pattern)graph.selectedNodes.get(0).getChannel()));
 				else Logger.logError(this, "Invalid action 'Add to Presets': selected node is not a pattern");
 			} else Logger.logError(this, "Invalid action 'Add To Presets': no selected nodes exists.");
 		} else if (e.getSource() == deleteChannelMenuItem) { // --------------------------------------------------------
-			deleteSelection();
+			graph.deleteSelection();
+			repaint();
 		} else if (e.getActionCommand().equals("arbitraryResolutionExport")) {
 			String resolution = JOptionPane.showInputDialog(this, "Specify your desried resolution (for example 1024x1024)", "What Resolution?", JOptionPane.QUESTION_MESSAGE);
 			if (resolution != null && resolution.matches("\\d+x\\d+")) {
@@ -384,7 +380,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		else {
 			// ----------------------- OpenGL ---------------------------
 			if (TextureEditor.GL_ENABLED) {
-				TextureGraphNode n = selectedNodes.get(0);
+				TextureGraphNode n = graph.selectedNodes.get(0);
 				if (n.getChannel().chechkInputChannels()) { 
 					if (e.getSource() == openGLDiffuseMenuItem) {
 						TextureEditor.INSTANCE.m_OpenGLPreviewPanel.setDiffuseTextureNode(n);
@@ -405,14 +401,39 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		}
 
 	}
+	
+	
+	
+	public void setSelectedNode(TextureGraphNode node) {
+		paramEditorPanel.setTextureNode(node);
+		graph.setSelectedNode(node);
+	}
 
-	private void _deleteNode(DrawableTextureGraphNode node, boolean removeFromSelected) {
-		remove(node);
+	
+	public void deleteFullGraph() {
+		paramEditorPanel.setTextureNode(null);
+		setPreviewNode(null);
+		graph.deleteFullGraph();
+		repaint();
+		
+	}
+	
+	
+	public void save(String filename) {
+		graph.save(filename);
+	}
+	
+	public boolean load(String filename, boolean eraseOld) {
+		return graph.load(filename, eraseOld);
+	}
+
+	private void _deleteNode(TextureGraphNode node, boolean removeFromSelected) {
+		//remove(drawnode);
 		if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.notifyTextureNodeRemoved(node);
-		if (paramEditorPanel.getActiveTextureNode() == node.node)
+		if (paramEditorPanel.getActiveTextureNode() == node)
 			paramEditorPanel.setTextureNode(null);
-		if (previewNode == node.node) setPreviewNode(null);
-		graph._deleteNode(node.node, removeFromSelected);
+		if (previewNode == node) setPreviewNode(null);
+		graph._deleteNode(node, removeFromSelected);
 		repaint();
 	}
 	
@@ -456,16 +477,16 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 
 		// draw the connection lines
 		g.setColor(Color.white);
-		for (TextureNodeConnection c : allConnections) {
+		for (TextureNodeConnection c : graph.allConnections) {
 			Point p0 = c.source.getWorldSpaceCenter();
 			Point p1 = c.target.getWorldSpaceCenter();
 			drawConnectionLine(g, p1.x, p1.y, p0.x, p0.y);
 		}
 
 		g.setColor(Color.yellow);
-		for (TextureGraphNode n : selectedNodes) {
-			Rectangle r = n.getBounds();
-			g.drawRect(r.x - 2, r.y - 2, r.width + 4, r.height + 4);
+		for (TextureGraphNode n : graph.selectedNodes) {
+			//Rectangle r = new n.getBounds();
+			g.drawRect(n.getX() - 2, n.getY() - 2, n.width + 4, n.height + 4);
 		}
 		
 		if (TextureEditor.GL_ENABLED) {
@@ -500,10 +521,11 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 
 			repaint();
 		} else if (connectionDragging) {
-			TextureGraphNode node = (TextureGraphNode) e.getComponent();
+			//TextureGraphNode node = (TextureGraphNode)e.getComponent();
+			//!!TODO: refactoring artifact
 			connectionTarget = e.getPoint();
-			connectionTarget.x += node.getX();
-			connectionTarget.y += node.getY();
+			//!!TODO: connectionTarget.x += node.getX();
+			//!!TODO: connectionTarget.y += node.getY();
 			repaint();
 		}
 	}
@@ -546,7 +568,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		else addToPresetsChannelMenuItem.setEnabled(false);
 		
 		replacepasteChannelMenuItem.setEnabled(toCopyTextureGraphNode != null);
-		selectedChannelPopupMenu.show(node, x, y);
+		selectedChannelPopupMenu.show(this, x, y); //!!TODO: refactoring artifact
 	}
 	
 	void showNewChannelPopupMenu(Component c, int x, int y) {
@@ -568,6 +590,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	public void mouseExited(MouseEvent arg0) {
 	}
 
+	
 	public void mousePressed(MouseEvent e) {
 		mousePosition = e.getPoint();
 
@@ -575,7 +598,9 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			dragStartX = e.getXOnScreen();
 			dragStartY = e.getYOnScreen();
 			desktopDragging = true;
-		} else if (e.getComponent().getClass() == TextureGraphNode.class) { // clicked on a TextureGraphNode
+		} 
+		//!!TODO: refactoring artifact; select node here with helper
+		/*else if (e.getComponent().getClass() == TextureGraphNode.class) { // clicked on a TextureGraphNode
 			TextureGraphNode pat = (TextureGraphNode) e.getComponent();
 			if (e.getButton() == 3) { // Popup menu for a TextureGraphNode
 				setSelectedNode(pat);
@@ -613,7 +638,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 					}
 				}
 			}
-		} else if (e.isPopupTrigger()) {
+		} */else if (e.isPopupTrigger()) {
 			showNewChannelPopupMenu(e.getComponent(), e.getX(), e.getY());
 		} else {
 			setSelectedNode(null);
@@ -626,7 +651,8 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 
 	public void mouseReleased(MouseEvent e) {
 		mousePosition = e.getPoint();
-
+		//!!TODO: refactoring artifact
+		/*
 		if (e.getSource().getClass() == TextureGraphNode.class) {
 			TextureGraphNode pat = (TextureGraphNode) e.getComponent();
 			Point loc = e.getPoint();
@@ -647,7 +673,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 				}
 			}
 
-		} else if (e.isPopupTrigger()) {
+		} else */if (e.isPopupTrigger()) {
 			showNewChannelPopupMenu(e.getComponent(), e.getX(), e.getY());
 		}
 

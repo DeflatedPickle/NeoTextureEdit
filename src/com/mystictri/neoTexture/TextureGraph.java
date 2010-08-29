@@ -99,6 +99,12 @@ public class TextureGraph {
 	}
 	
 	
+	public void deleteFullGraph() {
+		removeConnections(allConnections);
+		selectedNodes.clear();
+		allNodes.clear();
+
+	}
 	
 	/**
 	 * Replaces oldNode in the texture graph with newNode and trys to reconnect all
@@ -111,7 +117,7 @@ public class TextureGraph {
 	 * @param oldNode
 	 * @param newNode
 	 */
-	private void replaceNode(TextureGraphNode oldNode, TextureGraphNode newNode) {
+	public void replaceNode(TextureGraphNode oldNode, TextureGraphNode newNode) {
 		addNode(newNode, oldNode.getX(), oldNode.getY());
 		
 		Vector<TextureNodeConnection> outConns = getAllConnectionsAtOutputPoint(oldNode.getOutputConnectionPoint());
@@ -146,19 +152,7 @@ public class TextureGraph {
 		allNodes.remove(node);
 		if (removeFromSelected) selectedNodes.remove(node);
 	}
-
-	public void deleteFullGraph() {
-		paramEditorPanel.setTextureNode(null);
-		setPreviewNode(null);
-		removeConnections(allConnections);
-		for (TextureGraphNode n : allNodes) {
-			remove(n);
-		}
-		selectedNodes.clear();
-		allNodes.clear();
-		repaint();
-		
-	}
+	
 
 	public void deleteSelection() {
 		for (TextureGraphNode n : selectedNodes) {
@@ -169,15 +163,13 @@ public class TextureGraph {
 			_deleteNode(n, false);
 		}
 		selectedNodes.clear();
-		repaint();
 	}
 
 	public void setSelectedNode(TextureGraphNode node) {
 		selectedNodes.clear();
-		paramEditorPanel.setTextureNode(node);
 		if (node != null) {
 			selectedNodes.add(node);
-			setComponentZOrder(node, 0);
+			//!!TODO: refactoring artifact setComponentZOrder(node, 0);
 		}
 	}
 	
@@ -268,7 +260,7 @@ public class TextureGraph {
 	 * @author Holger Dammertz
 	 * 
 	 */
-	class TextureNodeConnection implements ChannelChangeListener {
+	public static class TextureNodeConnection implements ChannelChangeListener {
 		public TextureGraphNode.ConnectionPoint source; // this is an output-node
 		public TextureGraphNode.ConnectionPoint target; // this is an input-node
 		

@@ -183,7 +183,7 @@ public final class TextureGraphNode {
 	}
 
 	
-	/*
+
 	public void setChannel(Channel channel) {
 		if (channel == texChannel)
 			return;
@@ -204,10 +204,10 @@ public final class TextureGraphNode {
 			x += 12;
 		}
 
-		channel.addChannelChangeListener(this);
-		updatePreviewImage();
+		//channel.addChannelChangeListener(this);
+		//updatePreviewImage();
 	}
-	*/
+
 	
 
 	
