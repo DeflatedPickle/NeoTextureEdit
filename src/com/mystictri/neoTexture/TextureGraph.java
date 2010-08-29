@@ -19,6 +19,8 @@ import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 
 public class TextureGraph {
+	
+	public TextureGraphListener graphListener = null;
 
 	// currently all operations on nodes with the mouse expect that the clicked node is the selected node
 	public final Vector<TextureGraphNode> selectedNodes = new Vector<TextureGraphNode>();
@@ -151,6 +153,7 @@ public class TextureGraph {
 		removeConnections(getConnectionsAtAllInputPoints(node));
 		allNodes.remove(node);
 		if (removeFromSelected) selectedNodes.remove(node);
+		if (graphListener != null) graphListener.nodeDeleted(node);
 	}
 	
 

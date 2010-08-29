@@ -18,24 +18,15 @@
 package com.mystictri.neoTexture;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Scanner;
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
-import engine.graphics.synthesis.texture.Channel.ChannelVizType;
-import engine.graphics.synthesis.texture.ChannelChangeListener;
-import engine.graphics.synthesis.texture.Pattern;
 
 /**
  * A TextureNode represents graphically a Channel (Pattern or Filter) from
@@ -123,7 +114,7 @@ public final class TextureGraphNode {
 		}
 
 		public Point getWorldSpaceCenter() {
-			Point p = parent.getLocation();
+			Point p = new Point(parent.getLocation());
 			p.x += x + 4;
 			p.y += y + 4;
 			return p;

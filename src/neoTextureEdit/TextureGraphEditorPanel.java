@@ -19,9 +19,9 @@ package neoTextureEdit;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
@@ -34,6 +34,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.TooManyListenersException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -45,6 +46,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import com.mystictri.neoTexture.TextureGraph;
+import com.mystictri.neoTexture.TextureGraphListener;
 import com.mystictri.neoTexture.TextureGraph.TextureNodeConnection;
 import com.mystictri.neoTexture.TextureGraphNode;
 import com.mystictri.neoTexture.TextureGraphNode.ConnectionPoint;
@@ -60,7 +62,7 @@ import engine.graphics.synthesis.texture.Pattern;
  * @author Holger Dammertz
  *
  */
-class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener, ChannelChangeListener {
+class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener, ChannelChangeListener, TextureGraphListener {
 	private static final long serialVersionUID = 4535161419971720668L;
 	int dragStartX = 0;
 	int dragStartY = 0;
@@ -102,7 +104,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	TextureGraphNode previewNode;
 	BufferedImage previewImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
 	
-	TextureGraph graph = new TextureGraph();
+	TextureGraph graph;
 	
 	
 	public class TextureGraphDropTarget extends DropTargetAdapter {
@@ -124,6 +126,9 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	
 	
 	public TextureGraphEditorPanel() {
+		graph = new TextureGraph();
+		graph.graphListener = this;
+		
 		setBackground(Color.darkGray);
 		setLayout(null);
 
@@ -427,13 +432,12 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		return graph.load(filename, eraseOld);
 	}
 
-	private void _deleteNode(TextureGraphNode node, boolean removeFromSelected) {
-		//remove(drawnode);
+	
+	public void nodeDeleted(TextureGraphNode node) {
 		if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.notifyTextureNodeRemoved(node);
 		if (paramEditorPanel.getActiveTextureNode() == node)
 			paramEditorPanel.setTextureNode(null);
 		if (previewNode == node) setPreviewNode(null);
-		graph._deleteNode(node, removeFromSelected);
 		repaint();
 	}
 	
@@ -472,9 +476,63 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		repaint();
 	}
 	
+	
+	public static final Color ms_PatternColor = new Color(0x929AAF);
+	public static final Color ms_SlowColor = new Color(128,16,16);
+	Color bgColor = Color.gray;
+	static final Font font = new Font("Sans", Font.PLAIN, 10);
+	static final int helpW = 16;
+	static final int helpH = 16;
+	static final int helpX = TextureGraphNode.width - helpW;
+	static final int helpY = 0;
+	
+	public void drawNode(Graphics g, TextureGraphNode node) {
+		g.setColor(bgColor);
+		int x = node.getX();
+		int y = node.getY();
+		int w = node.width;
+		int h = node.height;
+		g.fillRect(x, y, w, h);
+		
+		//if (threadIsRecomputing) return;
+		
+		//g.drawImage(previewImage, 4, 12+12, this);
+		
+		g.setFont(font);
+		
+		g.setColor(Color.white);
+		g.drawString(node.getChannel().getName(), x+2, y+12+8);
+
+		g.setColor(Color.white);
+		g.drawRect(x, y, w-1, h-1);
+		
+		
+		Vector<ConnectionPoint> allCPs = node.getAllConnectionPointsVector();
+		for (int i = 0; i < allCPs.size(); i++) {
+			allCPs.get(i).draw(g);
+		}
+		
+		g.setColor(Color.yellow);
+		g.drawString("?", x+helpX+6, y+helpY+12);
+		
+		if (node.getChannel().isMarkedForExport()) {
+			g.drawString("E", x+4, y+helpY+10);
+			/*int h = g.getFontMetrics().getHeight() + 2;
+			int x = getX() + 2;
+			int y = getY() + h;
+			
+			g.setColor(new Color(0x00505084));
+			g.fillRect(x, y-h, 12, h);
+			g.setColor(Color.white);
+			
+			g.drawString("E", x+1, y-2);*/
+		}
+	}
+	
+	
 	public void paint(Graphics g) {
 		super.paint(g);
-
+		
 		// draw the connection lines
 		g.setColor(Color.white);
 		for (TextureNodeConnection c : graph.allConnections) {
@@ -488,6 +546,14 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			//Rectangle r = new n.getBounds();
 			g.drawRect(n.getX() - 2, n.getY() - 2, n.width + 4, n.height + 4);
 		}
+		
+		g.setColor(Color.blue);
+		for (TextureGraphNode n : graph.allNodes) {
+			//Rectangle r = new n.getBounds();
+			//g.drawRect(n.getX(), n.getY(), n.width, n.height);
+			drawNode(g, n);
+		}
+
 		
 		if (TextureEditor.GL_ENABLED) {
 			TextureEditor.INSTANCE.m_OpenGLPreviewPanel.drawTokens(g);
@@ -504,39 +570,17 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			g.drawLine(previewNode.getX(), previewNode.getY(), previewImage.getWidth()/2, previewImage.getHeight()/2);
 			g.drawImage(previewImage, 0, 0, this);
 		}
-
+	
 	}
 	
-	public void mouseDragged(MouseEvent e) {
-		if (desktopDragging) { // moving the desktop with the mouse
-			int dx =  e.getXOnScreen() - dragStartX; dragStartX = e.getXOnScreen();
-			int dy =  e.getYOnScreen() - dragStartY; dragStartY = e.getYOnScreen();
-			moveDesktop(dx, dy);
-		} else if (nodeDragging) {
-			// TextureNode node = (TextureNode) e.getComponent();
-			Point p = getLocation();
-			p.x = e.getXOnScreen() + dragStartX;
-			p.y = e.getYOnScreen() + dragStartY;
-			e.getComponent().setLocation(p);
-
-			repaint();
-		} else if (connectionDragging) {
-			//TextureGraphNode node = (TextureGraphNode)e.getComponent();
-			//!!TODO: refactoring artifact
-			connectionTarget = e.getPoint();
-			//!!TODO: connectionTarget.x += node.getX();
-			//!!TODO: connectionTarget.y += node.getY();
-			repaint();
-		}
-	}
 	
 	
 	
 	
 	public void moveDesktop(int dx, int dy) {
-		for (int i = 0; i < getComponentCount(); i++) {
-			getComponent(i).setLocation(getComponent(i).getX()+dx, getComponent(i).getY()+dy);
-		}
+		//for (int i = 0; i < getComponentCount(); i++) {
+		//	getComponent(i).setLocation(getComponent(i).getX()+dx, getComponent(i).getY()+dy);
+		//}
 		repaint();
 	}
 	
@@ -576,6 +620,31 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		newChannelPopupMenu.show(c, x, y);
 	}
 	
+	
+	public void mouseDragged(MouseEvent e) {
+		/*if (desktopDragging) { // moving the desktop with the mouse
+			int dx =  e.getXOnScreen() - dragStartX; dragStartX = e.getXOnScreen();
+			int dy =  e.getYOnScreen() - dragStartY; dragStartY = e.getYOnScreen();
+			moveDesktop(dx, dy);
+		} else if (nodeDragging) {
+			// TextureNode node = (TextureNode) e.getComponent();
+			Point p = getLocation();
+			p.x = e.getXOnScreen() + dragStartX;
+			p.y = e.getYOnScreen() + dragStartY;
+			//e.getComponent().setLocation(p);
+
+			repaint();
+		} else if (connectionDragging) {
+			//TextureGraphNode node = (TextureGraphNode)e.getComponent();
+			//!!TODO: refactoring artifact
+			connectionTarget = e.getPoint();
+			//!!TODO: connectionTarget.x += node.getX();
+			//!!TODO: connectionTarget.y += node.getY();
+			repaint();
+		}
+		*/
+	}
+	
 	// !!TODO: addToSelection
 
 	public void mouseMoved(MouseEvent e) {
@@ -592,6 +661,8 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 
 	
 	public void mousePressed(MouseEvent e) {
+		if (true) return;
+		
 		mousePosition = e.getPoint();
 
 		if (e.getButton() == 2 || (e.isAltDown() || e.isControlDown())) { // Desktop Dragging
@@ -650,6 +721,8 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	
 
 	public void mouseReleased(MouseEvent e) {
+		
+		
 		mousePosition = e.getPoint();
 		//!!TODO: refactoring artifact
 		/*
