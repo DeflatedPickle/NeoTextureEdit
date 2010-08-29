@@ -132,11 +132,11 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 	}
 	
 	
-	private void token(Graphics g, int ofs, TextureGraphNode n, String s) {
+	private void token(Graphics g, int ox, int oy, int ofs, TextureGraphNode n, String s) {
 		if (n == null) return;
 		int h = g.getFontMetrics().getHeight() + 2;
-		int x = n.getX() + TextureGraphNode.width + 2;
-		int y = n.getY() + h*(ofs+1);
+		int x = ox + n.getX() + TextureGraphNode.width + 2;
+		int y = oy + n.getY() + h*(ofs+1);
 		
 		g.setColor(new Color(0x00505084));
 		g.fillRect(x, y-h, 12, h);
@@ -146,11 +146,11 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 	}
 	
 	/** Marks the texture nodes used for preview */
-	public void drawTokens(Graphics g) {
-		token(g, 0, diffuseTexNode, "D");
-		token(g, 1, normalTexNode, "N");
-		token(g, 2, specWeightTexNode, "S");
-		token(g, 3, heightmapTexNode, "H");
+	public void drawTokens(Graphics g, int ox, int oy) {
+		token(g, ox, oy, 0, diffuseTexNode, "D");
+		token(g, ox, oy, 1, normalTexNode, "N");
+		token(g, ox, oy, 2, specWeightTexNode, "S");
+		token(g, ox, oy, 3, heightmapTexNode, "H");
 	}
 	
 	

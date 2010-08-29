@@ -17,8 +17,6 @@
 
 package com.mystictri.neoTexture;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.Writer;
@@ -29,8 +27,9 @@ import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
 
 /**
- * A TextureNode represents graphically a Channel (Pattern or Filter) from
- * the texture generation source code. It also manages the connections
+ * A TextureNode represents a Channel (Pattern or Filter) from
+ * the texture generation source code. It also manages the connections.
+ * It contains also an absolute position that should be used for graph rendering.
  * 
  * @author Holger Dammertz
  * 
@@ -91,6 +90,14 @@ public final class TextureGraphNode {
 	}
 
 	
+	/**
+	 * A ConnectionPoint is attached to a specific TextureGraphNode parent and represents
+	 * either an input or an output of this TextureGraphNode. It has an internal position
+	 * and size that are relative to the parent.
+	 * 
+	 * @author Holger Dammertz
+	 *
+	 */
 	public static class ConnectionPoint {
 		public int x, y;
 		//public int direction; // 0 input; 1 output
@@ -120,16 +127,7 @@ public final class TextureGraphNode {
 			return p;
 		}
 
-		public void draw(Graphics g) {
-			if (channelIndex == -1) { // input
-				g.setColor(Color.green);
-				g.fillRect(x, y, width, height);
-			} else { // output
-				g.setColor(Color.red);
-				g.fillRect(x, y, width, height);
-			}
-		}
-
+		
 		// Utility method to check if the mouse position is insied the
 		// connection point
 		public boolean inside(int px, int py) {

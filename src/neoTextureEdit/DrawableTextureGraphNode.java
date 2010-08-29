@@ -78,7 +78,7 @@ public class DrawableTextureGraphNode  extends JPanel implements ChannelChangeLi
 		
 		Vector<ConnectionPoint> allCPs = node.getAllConnectionPointsVector();
 		for (int i = 0; i < allCPs.size(); i++) {
-			allCPs.get(i).draw(g);
+		//	allCPs.get(i).draw(g);
 		}
 		
 		g.setColor(Color.yellow);
