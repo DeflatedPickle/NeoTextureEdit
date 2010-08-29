@@ -1,3 +1,8 @@
+Refactoring:
+  - the package names are from a legacy projects and need adjustment to better reflect the current
+    structure
+    
+
 Export Settings:
 	The current solution for export is to specify export in each
 	channel individually; this may be not the most efficient solution

@@ -32,6 +32,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 
+import com.mystictri.neoTexture.TextureGraphNode;
+
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 import engine.parameters.AbstractParam;
@@ -180,13 +182,13 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 		if (n == node)
 			return;
 		if (node != null) 
-			node.texChannel.removeChannelChangeListener(this);
+			node.getChannel().removeChannelChangeListener(this);
 		
 		scrollPaneContent.removeAll();
 		node = n;
 		if (n != null) {
-			node.texChannel.addChannelChangeListener(this);
-			Channel c = n.texChannel;
+			node.getChannel().addChannelChangeListener(this);
+			Channel c = n.getChannel();
 			Vector<AbstractParam> params = c.getParameters();
 			int x = 8;
 			int y = 8;
@@ -240,11 +242,11 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 		//System.out.println("ChannelParameterEditor: Channel Change " + node);
 		if (node == null) {
 			previewImage = null;
-		} else if (node.texChannel.chechkInputChannels()) {
+		} else if (node.getChannel().chechkInputChannels()) {
 			if (previewImage == null)
-				previewImage = node.texChannel.createAndComputeImage(previewImageSize, previewImageSize, null, previewImageMode);
+				previewImage = node.getChannel().createAndComputeImage(previewImageSize, previewImageSize, null, previewImageMode);
 			else
-				node.texChannel.computeImage(previewImage, null, previewImageMode);
+				node.getChannel().computeImage(previewImage, null, previewImageMode);
 			benchmarkLabel.setText("Benchmark: "+Channel.lastComputationTime);
 		} else {
 			previewImage = null;

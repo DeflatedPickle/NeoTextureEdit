@@ -73,6 +73,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
 
+import com.mystictri.neoTexture.TextureGraphNode;
+
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.Pattern;
@@ -267,7 +269,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 			Scanner s = new Scanner(NTEPresetString);
 			int numNodes = s.nextInt();
 			for (int i = 0; i < numNodes; i++) {
-				Channel c = TextureGraphNode.loadChannel(s);
+				Channel c = Channel.loadChannel(s);
 				if (c instanceof Pattern) {
 					addPatternPreset((Pattern) c);
 				} else {
@@ -285,7 +287,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 				StringWriter sw = new StringWriter();
 				sw.write(presets.size() + "\n");
 				for (int i = 0; i < presets.size(); i++) {
-					TextureGraphNode.saveChannel(sw, presets.get(i));
+					Channel.saveChannel(sw, presets.get(i));
 				}
 				sw.close();
 				NTEPresetString = sw.getBuffer().toString();
@@ -426,7 +428,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 	PatternSelectorPanel m_PatternSelector;
 	TextureGraphEditorPanel m_GraphDrawPanel;
-	OpenGLPreviewPanel m_OpenGLPreviewPanel;
+	public OpenGLPreviewPanel m_OpenGLPreviewPanel; //!!TODO: remove the public here
 	JPanel m_CenterPanel;
 
 
@@ -708,8 +710,8 @@ public class TextureEditor extends JFrame implements ActionListener {
 			te.load(filename, true);
 			
 			for (TextureGraphNode n : te.getAllNodes()) {
-				if (n.texChannel.isMarkedForExport()) {
-					String exportname = n.texChannel.exportName.get();
+				if (n.getChannel().isMarkedForExport()) {
+					String exportname = n.getChannel().exportName.get();
 					String f = filename;
 					// ugly
 					String tmp_filename = f.substring(f.lastIndexOf("\\")+1, f.length()-4);
@@ -719,7 +721,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 					exportname = commandLineOptions.exportPath+"/"+exportname+".png";
 					System.out.println("Exporting " + exportname);
 					try {
-						ImageIO.write(n.texChannel
+						ImageIO.write(n.getChannel()
 								.createAndComputeImage(commandLineOptions.exportResX, commandLineOptions.exportResY, new StdOutProgressBar(), 0), "png", new File(exportname));
 					} catch (IOException e) {
 						e.printStackTrace();

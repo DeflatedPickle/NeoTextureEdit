@@ -18,7 +18,11 @@
 package engine.graphics.synthesis.texture;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.FloatBuffer;
+import java.util.Scanner;
 import java.util.Vector;
 
 import engine.base.FMath;
@@ -404,4 +408,70 @@ public abstract class Channel extends LocalParameterManager {
 	}
 	
 	
+	
+	
+	
+	public static Channel cloneChannel(Channel c) {
+		StringWriter sw = new StringWriter();
+		try {
+			saveChannel(sw, c);
+			sw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return loadChannel(new Scanner(sw.getBuffer().toString()));
+	}
+
+	/**
+	 * This method saves a Channel to a given writer by storing all parameters. For
+	 * Parameter storage all spaces in a name are replaced with an underscore _
+	 * @param w The Writer to write to
+	 * @param c The Channel that will be saved
+	 * @throws IOException
+	 */
+	public static void saveChannel(Writer w, Channel c) throws IOException {
+		w.write(c.getClass().getName() + "\n");
+		for (int i = 0; i < c.m_LocalParameters.size(); i++) {
+			AbstractParam param = c.m_LocalParameters.get(i);
+			w.write(param.getName().replace(' ', '_') + " ");
+			param.save(w);
+		}
+		// transformation
+		w.write("transformation ");
+		for (int i = 0; i < 9; i++)
+			w.write(c.transformation.get(i) + " ");
+		w.write("endparameters\n");
+	}
+
+	public static Channel loadChannel(Scanner s) {
+		try {
+			AbstractParam.SILENT = true;
+			Channel c = (Channel) Class.forName(s.next()).newInstance();
+			//Logger.log(null, "loadChannel " + c);
+			
+			String t;
+			while (!(t = s.next()).equals("endparameters")) {
+				AbstractParam param;
+				if ((param = c.getParamByName(t.replace('_', ' '))) != null) {
+					param.load(s);
+				} else if (t.equals("transformation")){
+					c.transformation.set(Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()));
+				} else {
+					Logger.logWarning(null, " loading of param " + t + " failed.");
+				}
+			}
+			AbstractParam.SILENT = false;
+			c.parameterChanged(null);
+			return c;
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			AbstractParam.SILENT = false;
+		}
+		return null;
+	}
 }

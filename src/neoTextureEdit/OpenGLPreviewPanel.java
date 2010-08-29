@@ -18,6 +18,8 @@ import javax.swing.JPopupMenu;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
+import com.mystictri.neoTexture.TextureGraphNode;
+
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
@@ -133,7 +135,7 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 	private void token(Graphics g, int ofs, TextureGraphNode n, String s) {
 		if (n == null) return;
 		int h = g.getFontMetrics().getHeight() + 2;
-		int x = n.getX() + n.getWidth() + 2;
+		int x = n.getX() + TextureGraphNode.width + 2;
 		int y = n.getY() + h*(ofs+1);
 		
 		g.setColor(new Color(0x00505084));
@@ -234,9 +236,9 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 	TextureGraphNode heightmapTexNode;
 	
 	private final TextureGraphNode setTexNode(TextureGraphNode o, TextureGraphNode n) {
-		if (o != null) o.texChannel.removeChannelChangeListener(this);
+		if (o != null) o.getChannel().removeChannelChangeListener(this);
 		if (n == null) return null; 
-		n.texChannel.addChannelChangeListener(this);
+		n.getChannel().addChannelChangeListener(this);
 		return n;
 	}
 	
@@ -256,38 +258,38 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 	public void setDiffuseTextureNode(TextureGraphNode c) {
 		diffuseTexNode = setTexNode(diffuseTexNode, c);
 		if (!TextureEditor.GL_ENABLED) return;
-		if (diffuseTexNode != null) channelChanged(diffuseTexNode.texChannel);
+		if (diffuseTexNode != null) channelChanged(diffuseTexNode.getChannel());
 		else glcanvas.updateDiffuseMap(null);
 	}
 
 	public void setNormalTextureNode(TextureGraphNode c) {
 		normalTexNode = setTexNode(normalTexNode, c); 
 		if (!TextureEditor.GL_ENABLED) return;
-		if (normalTexNode != null) channelChanged(normalTexNode.texChannel);
+		if (normalTexNode != null) channelChanged(normalTexNode.getChannel());
 		else glcanvas.updateNormalMap(null);
 	}
 	
 	public void setSpecWeightTextureNode(TextureGraphNode c) {
 		specWeightTexNode = setTexNode(specWeightTexNode, c); 
 		if (!TextureEditor.GL_ENABLED) return;
-		if (specWeightTexNode != null) channelChanged(specWeightTexNode.texChannel);
+		if (specWeightTexNode != null) channelChanged(specWeightTexNode.getChannel());
 		else glcanvas.updateSpecWeightMap(null);
 	}
 
 	public void setHeightmapTextureNode(TextureGraphNode c) {
 		heightmapTexNode = setTexNode(heightmapTexNode, c); 
 		if (!TextureEditor.GL_ENABLED) return;
-		if (heightmapTexNode != null) channelChanged(heightmapTexNode.texChannel);
+		if (heightmapTexNode != null) channelChanged(heightmapTexNode.getChannel());
 		else glcanvas.updateHeightMap(null);
 	}
 
 	
 	public void channelChanged(Channel source) {
 		if (!TextureEditor.GL_ENABLED) return;
-		if ((diffuseTexNode != null) && (source == diffuseTexNode.texChannel)) glcanvas.updateDiffuseMap(diffuseTexNode.texChannel);
-		if ((normalTexNode != null) && (source == normalTexNode.texChannel)) glcanvas.updateNormalMap(normalTexNode.texChannel);
-		if ((specWeightTexNode != null) && (source == specWeightTexNode.texChannel)) glcanvas.updateSpecWeightMap(specWeightTexNode.texChannel);
-		if ((heightmapTexNode != null) && (source == heightmapTexNode.texChannel)) glcanvas.updateHeightMap(heightmapTexNode.texChannel);
+		if ((diffuseTexNode != null) && (source == diffuseTexNode.getChannel())) glcanvas.updateDiffuseMap(diffuseTexNode.getChannel());
+		if ((normalTexNode != null) && (source == normalTexNode.getChannel())) glcanvas.updateNormalMap(normalTexNode.getChannel());
+		if ((specWeightTexNode != null) && (source == specWeightTexNode.getChannel())) glcanvas.updateSpecWeightMap(specWeightTexNode.getChannel());
+		if ((heightmapTexNode != null) && (source == heightmapTexNode.getChannel())) glcanvas.updateHeightMap(heightmapTexNode.getChannel());
 	}
 	
 	

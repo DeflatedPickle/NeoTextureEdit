@@ -29,6 +29,7 @@ import engine.base.FMath;
  * !!TODO: the axis distance in the traversal is currently computed using
  *         euclidean (squared) distance: this is wrong if the nd_Distance function
  *         uses some other distance measure
+ * !!TODO: make the KDPoint class also generic
  * 
  * @author Holger Dammertz
  *
@@ -55,7 +56,9 @@ public class PointKDTree<Type> {
 	}
 	
 	public Type get(int i) {
-		return (Type)tree.get(i).point;
+		@SuppressWarnings("unchecked")
+		Type r = (Type)tree.get(i).point;
+		return r;
 	}
 	
 	public int getDimension() {
@@ -143,7 +146,9 @@ public class PointKDTree<Type> {
 				nearest = p;
 			}
 		}
-		return (Type)nearest.point;
+		@SuppressWarnings("unchecked")
+		Type r = (Type)nearest.point;
+		return r;
 	}
 	
 	
@@ -186,7 +191,9 @@ public class PointKDTree<Type> {
 			}
 		}
 		//!!TODO;
-		return (Type)ret.point;
+		@SuppressWarnings("unchecked")
+		Type r = (Type)ret.point;
+		return r;
 	}
 	
 	// !!TODO: optimize
@@ -267,8 +274,8 @@ public class PointKDTree<Type> {
 		//TOO slow: heap.getAllElements((NdPositionable[])k_nearest);
 	}
 	
-	class KDPoint {
-		NdPositionable point;
+	static final class KDPoint {
+		final NdPositionable point;
 		int right;
 		int axis;
 		
