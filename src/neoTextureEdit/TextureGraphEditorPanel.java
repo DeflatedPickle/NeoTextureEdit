@@ -31,8 +31,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 import java.util.TooManyListenersException;
 
 import javax.imageio.ImageIO;
@@ -467,11 +474,38 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	
 	
 	public void save(String filename) {
-		graph.save(filename);
+		Logger.log(this, "Saving TextureGraph to " + filename);
+		try {
+			BufferedWriter w = new BufferedWriter(new FileWriter(filename));
+			graph.save(w);
+			
+			// now the openGL settings
+			if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.save(w);
+			w.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean load(String filename, boolean eraseOld) {
-		return graph.load(filename, eraseOld);
+		try {
+			Scanner s = new Scanner(new BufferedReader(new FileReader(filename)));
+			if (eraseOld) deleteFullGraph();
+			
+			graph.load(s);
+			if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.load(s);
+			repaint();
+			
+			return true;
+		} catch (FileNotFoundException e) {
+			Logger.logError(this, "Could not load " + filename);
+			return false;
+		} catch (InputMismatchException ime) {
+			ime.printStackTrace();
+			Logger.logError(this, "Could not load " + filename);
+			return false;
+		}
+		
 	}
 
 	

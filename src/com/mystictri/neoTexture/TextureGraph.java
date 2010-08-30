@@ -1,20 +1,12 @@
 package com.mystictri.neoTexture;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.InputMismatchException;
+import java.io.Writer;
 import java.util.Scanner;
 import java.util.Vector;
 
-import neoTextureEdit.TextureEditor;
-
 import com.mystictri.neoTexture.TextureGraphNode.ConnectionPoint;
 
-import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 
@@ -40,11 +32,7 @@ public class TextureGraph {
 	}
 	
 	// first saving version: simple ascii test
-	public void save(String filename) {
-		Logger.log(this, "Saving TextureGraph to " + filename);
-		try {
-			BufferedWriter w = new BufferedWriter(new FileWriter(filename));
-
+	public void save(Writer w) throws IOException {
 			w.write("Nodes " + allNodes.size() + "\n");
 			// first save all the nodes
 			for (TextureGraphNode n : allNodes) {
@@ -57,43 +45,31 @@ public class TextureGraph {
 				w.write(allNodes.indexOf(c.target.parent)+ " ");
 				w.write(c.target.channelIndex+ "\n");
 			}
-			// now the openGL settings
-			if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.save(w);
-			w.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			
+			
 	}
 
-	public boolean load(String filename, boolean eraseOld) {
-		try {
-			Scanner s = new Scanner(new BufferedReader(new FileReader(filename)));
-			if (eraseOld) deleteFullGraph();
-			
-			int offset = allNodes.size();
+	/**
+	 * Loads (and appends) a propperly formatted texture graph from the given scanner
+	 * @param s
+	 * @return false if something failed during loading, but the test does not guarantee that
+	 *         the loaded graph was correct
+	 */
+	public boolean load(Scanner s) {
+		int offset = allNodes.size();
 
-			s.next();
-			int numNodes = s.nextInt();
-			for (int i = 0; i < numNodes; i++) {
-				TextureGraphNode n = TextureGraphNode.load(s);
-				addNode(n);
-			}
-			int numConnections = s.nextInt();
-			for (int i = 0; i < numConnections; i++) {
-				TextureGraphNode.ConnectionPoint sourcePoint = allNodes.get(offset + s.nextInt()).getOutputConnectionPoint();
-				TextureGraphNode.ConnectionPoint targetPoint = allNodes.get(offset + s.nextInt()).getInputConnectionPointByChannelIndex(s.nextInt());
-				addConnection(new TextureNodeConnection(sourcePoint, targetPoint));
-			}
-			if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.load(s);
-		} catch (FileNotFoundException e) {
-			Logger.logError(this, "Could not load " + filename);
-			return false;
-		} catch (InputMismatchException ime) {
-			ime.printStackTrace();
-			Logger.logError(this, "Could not load " + filename);
-			return false;
+		if (!s.next().equals("Nodes")) return false;
+		int numNodes = s.nextInt();
+		for (int i = 0; i < numNodes; i++) {
+			TextureGraphNode n = TextureGraphNode.load(s);
+			addNode(n);
 		}
-		//!!TODO: repaint();
+		int numConnections = s.nextInt();
+		for (int i = 0; i < numConnections; i++) {
+			TextureGraphNode.ConnectionPoint sourcePoint = allNodes.get(offset + s.nextInt()).getOutputConnectionPoint();
+			TextureGraphNode.ConnectionPoint targetPoint = allNodes.get(offset + s.nextInt()).getInputConnectionPointByChannelIndex(s.nextInt());
+			addConnection(new TextureNodeConnection(sourcePoint, targetPoint));
+		}
 		return true;
 	}
 	
