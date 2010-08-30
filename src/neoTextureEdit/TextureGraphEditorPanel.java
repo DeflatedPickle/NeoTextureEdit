@@ -315,12 +315,15 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 				if (!mi.isAReplaceCall) { // insert a new Node
 					Channel chan = (Channel) mi.classType.newInstance();
 					addTextureNode(new TextureGraphNode(chan), mousePosition.x - desktopX, mousePosition.y - desktopY);
+					repaint();
 				} else { // try to replace an existing node as good as possible
 					TextureGraphNode node = graph.selectedNodes.get(0);
 					if (node != null) {
 						Channel chan = (Channel) mi.classType.newInstance();
 						TextureGraphNode newNode = new TextureGraphNode(chan);
 						graph.replaceNode(node, newNode);
+						graph.setSelectedNode(newNode);
+						repaint();
 					} else {
 						Logger.logWarning(this, "No node selected for replace.");
 					}
@@ -335,6 +338,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 				Logger.logError(this, "No node copied to insert.");
 			} else {
 				addTextureNode(toCopyTextureGraphNode.cloneThisNode(), mousePosition.x - desktopX, mousePosition.y - desktopY);
+				repaint();
 			}
 		} else if (e.getSource() == copyChannelMenuItem) {
 			if (graph.selectedNodes.size() > 0) {
@@ -347,6 +351,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 				Logger.logError(this, "No node copied to replace paste.");
 			} else if (graph.selectedNodes.size() > 0) {
 				graph.replaceNode(graph.selectedNodes.get(0), toCopyTextureGraphNode.cloneThisNode());
+				repaint();
 			} else {
 				Logger.logError(this, "no selection in insert-replaceChannel popup menu.");
 			}
@@ -354,6 +359,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			if (graph.selectedNodes.size() > 0) {
 				setPreviewNode(null);
 				setPreviewNode(graph.selectedNodes.get(0));
+				repaint();
 			}
 		} else if (e.getSource() == cloneChannelMenuItem) { // --------------------------------------------------------
 			if (graph.selectedNodes.size() > 0) {
@@ -580,8 +586,21 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	}
 	
 	
+	Color gridColor = new Color(0xFF606060);
+	
 	public void paint(Graphics g) {
 		super.paint(g);
+		
+		int w = getWidth();
+		int h = getHeight();
+		
+		g.setColor(gridColor);
+		for (int y = desktopY % 16; y < h; y+=16) {
+			g.drawLine(0, y, w, y);
+		}
+		for (int x = desktopX % 16; x < w; x+=16) {
+			g.drawLine(x, 0, x, h);
+		}
 		
 		// draw the connection lines
 		g.setColor(Color.white);
@@ -617,7 +636,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		
 		if (previewNode != null) {
 			g.setColor(Color.blue);
-			g.drawLine(previewNode.getX(), previewNode.getY(), previewImage.getWidth()/2, previewImage.getHeight()/2);
+			g.drawLine(previewNode.getX() + desktopX, previewNode.getY() + desktopY, previewImage.getWidth()/2, previewImage.getHeight()/2);
 			g.drawImage(previewImage, 0, 0, this);
 		}
 	
@@ -807,30 +826,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 					graph.addConnection(new TextureNodeConnection(connectionSource, inputPoint));
 				}
 			}			
-		}		
-		//!!TODO: refactoring artifact
-		/*
-		if (e.getSource().getClass() == TextureGraphNode.class) {
-			TextureGraphNode pat = (TextureGraphNode) e.getComponent();
-			Point loc = e.getPoint();
-			loc.x += pat.getX();
-			loc.y += pat.getY();
-
-			Component c = getComponentAt(loc);
-			if (c.getClass() == TextureGraphNode.class) {
-				TextureGraphNode targetPat = (TextureGraphNode) c;
-				if (connectionDragging) { // we are currently drawing a connection
-					int actionType = targetPat.getActionTypeForMouseClick(loc.x - targetPat.getX(), loc.y - targetPat.getY());
-					if (actionType < 0) { // we dragged onto an input node
-						int index = -actionType - 1;
-						
-						TextureGraphNode.ConnectionPoint inputPoint = targetPat.getInputConnectionPointByChannelIndex(index);
-						addConnection(new TextureNodeConnection(connectionSource, inputPoint));
-					}
-				}
-			}
-
-		} else */if (e.isPopupTrigger()) {
+		} else if (e.isPopupTrigger()) {
 			showNewChannelPopupMenu(e.getComponent(), e.getX(), e.getY());
 		}
 
