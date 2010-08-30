@@ -145,7 +145,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 
 		public void drop(DropTargetDropEvent e) {
 			TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(TextureEditor.INSTANCE.dragndropChannel));
-			addTextureNode(n, e.getLocation().x, e.getLocation().y);
+			addTextureNode(n, e.getLocation().x - desktopX, e.getLocation().y - desktopY);
 			setSelectedNode(n);
 			repaint();
 		}
@@ -637,21 +637,21 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	 *  computes the bounding box of all positions and centers it computes the bounding box of all positions and centers it
 	 */
 	public void centerDesktop() {
-		if (getComponentCount() < 1) return;
 		int minX = Integer.MAX_VALUE;
 		int minY = Integer.MAX_VALUE;
 		int maxX = Integer.MIN_VALUE;
 		int maxY = Integer.MIN_VALUE;
-		for (int i = 0; i < getComponentCount(); i++) {
-			Component c = getComponent(i);
-			minX = Math.min(minX, c.getX());
-			minY = Math.min(minY, c.getY());
-			maxX = Math.max(maxX, c.getX() + c.getWidth());
-			maxY = Math.max(maxY, c.getY() + c.getHeight());
+		for (TextureGraphNode n : graph.allNodes) {
+			minX = Math.min(minX, n.getX());
+			minY = Math.min(minY, n.getY());
+			maxX = Math.max(maxX, n.getX() + TextureGraphNode.width);
+			maxY = Math.max(maxY, n.getY() + TextureGraphNode.height);
 		}
 		int dx = getWidth()/2 - (minX+maxX)/2;
 		int dy = getHeight()/2 - (minY+maxY)/2;
-		moveDesktop(dx, dy);
+		desktopX = dx;
+		desktopY = dy;
+		repaint();
 	}
 
 	
