@@ -33,20 +33,20 @@ public class TextureGraph {
 	
 	// first saving version: simple ascii test
 	public void save(Writer w) throws IOException {
-			w.write("Nodes " + allNodes.size() + "\n");
+			w.write("#BeginNodes " + allNodes.size() + "\n");
 			// first save all the nodes
 			for (TextureGraphNode n : allNodes) {
 				n.save(w, n);
 			}
+			w.write("#EndNodes\n");
 			// now all the connections
-			w.write(allConnections.size()+"\n");
+			w.write("#BeginConnections " + allConnections.size()+"\n");
 			for (TextureNodeConnection c : allConnections) {
 				w.write(allNodes.indexOf(c.source.parent)+ " ");
 				w.write(allNodes.indexOf(c.target.parent)+ " ");
 				w.write(c.target.channelIndex+ "\n");
 			}
-			
-			
+			w.write("#EndConnections\n");
 	}
 
 	/**
@@ -58,18 +58,21 @@ public class TextureGraph {
 	public boolean load(Scanner s) {
 		int offset = allNodes.size();
 
-		if (!s.next().equals("Nodes")) return false;
+		while (!s.next().equals("#BeginNodes")) System.out.println("ParseWarning A in TextureGraph.load");
 		int numNodes = s.nextInt();
 		for (int i = 0; i < numNodes; i++) {
 			TextureGraphNode n = TextureGraphNode.load(s);
 			addNode(n);
 		}
+		while (!s.next().equals("#EndNodes")) System.out.println("ParseWarning B in TextureGraph.load");
+		while (!s.next().equals("#BeginConnections")) System.out.println("ParseWarning C in TextureGraph.load");
 		int numConnections = s.nextInt();
 		for (int i = 0; i < numConnections; i++) {
 			TextureGraphNode.ConnectionPoint sourcePoint = allNodes.get(offset + s.nextInt()).getOutputConnectionPoint();
 			TextureGraphNode.ConnectionPoint targetPoint = allNodes.get(offset + s.nextInt()).getInputConnectionPointByChannelIndex(s.nextInt());
 			addConnection(new TextureNodeConnection(sourcePoint, targetPoint));
 		}
+		while (!s.next().equals("#EndConnections")) System.out.println("ParseWarning D in TextureGraph.load");
 		return true;
 	}
 	

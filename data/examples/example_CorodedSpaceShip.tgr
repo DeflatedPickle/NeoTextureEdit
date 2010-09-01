@@ -1,38 +1,39 @@
-Nodes 11
+#BeginNodes 11
 162 94
 engine.graphics.synthesis.texture.PatternCellular
-Color_Mapping 5 0.07 0.1048424 0.2 1.0 0.0 0.41799998 0.6588552 0.76 1.0 0.092642605 0.031238401 0.106384 0.2121216 1.0 0.17874396 0.8 0.7874512 0.7874512 1.0 0.4305176 0.29624242 0.5031728 0.6303032 1.0 1.0 Cell_Type 4 Distance_ 2 PointGen 1 Seed 0 Intensity 1.0 Jitter 0.5 NumPoints 32 RandColor true Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Color_Mapping 5 0.07 0.1048424 0.2 1.0 0.0 0.41799998 0.6588552 0.76 1.0 0.092642605 0.031238401 0.106384 0.2121216 1.0 0.17874396 0.8 0.7874512 0.7874512 1.0 0.4305176 0.29624242 0.5031728 0.6303032 1.0 1.0 Cell_Type 4 Distance_ 2 PointGen 1 Seed 0 Intensity 1.0 Jitter 0.5 NumPoints 32 RandColor true Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 238 431
 engine.graphics.synthesis.texture.FilterEmboss
-Strength 6.0 Angle 45.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Strength 6.0 Angle 45.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 343 298
 engine.graphics.synthesis.texture.FilterBlend
-Layer_Func. 0 Opacity 1.0 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Layer_Func. 0 Opacity 1.0 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 410 -8
 engine.graphics.synthesis.texture.PatternPerlinNoise
-Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 3.0 ScaleY 3.0 ValueScale 0.875 Persistence 0.6875 StartBand 1 EndBand 8 Seed 4 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 3.0 ScaleY 3.0 ValueScale 0.875 Persistence 0.6875 StartBand 1 EndBand 8 Seed 4 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 466 142
 engine.graphics.synthesis.texture.FilterColorize
-Gray_to_Color_Mapping 5 0.8 0.7874512 0.7874512 0.0 0.0 0.20705919 0.0972552 0.0282352 0.0 0.4589372 0.6211765 0.2854902 0.13803922 0.3828125 0.5458937 0.5239216 0.26352942 0.11921569 0.546875 0.64612705 0.8 0.44549042 0.1756864 0.65625 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Gray_to_Color_Mapping 5 0.8 0.7874512 0.7874512 0.0 0.0 0.20705919 0.0972552 0.0282352 0.0 0.4589372 0.6211765 0.2854902 0.13803922 0.3828125 0.5458937 0.5239216 0.26352942 0.11921569 0.546875 0.64612705 0.8 0.44549042 0.1756864 0.65625 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 300 129
 engine.graphics.synthesis.texture.FilterColorize
-Gray_to_Color_Mapping 5 1.0 0.99607843 0.99607843 0.0 0.0 1.0 0.99607843 0.99607843 0.0 0.45893717 0.003921569 0.003921569 0.003921569 0.4609375 0.5458937 0.003921569 0.003921569 0.003921569 0.6015625 0.64612705 0.003921569 0.003921569 0.003921569 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Gray_to_Color_Mapping 5 1.0 0.99607843 0.99607843 0.0 0.0 1.0 0.99607843 0.99607843 0.0 0.45893717 0.003921569 0.003921569 0.003921569 0.4609375 0.5458937 0.003921569 0.003921569 0.003921569 0.6015625 0.64612705 0.003921569 0.003921569 0.003921569 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 187 263
 engine.graphics.synthesis.texture.FilterBlend
-Layer_Func. 0 Opacity 1.0 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Layer_Func. 0 Opacity 1.0 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 51 411
 engine.graphics.synthesis.texture.FilterNormalMap
-Strength 1.25 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Strength 1.25 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 513 299
 engine.graphics.synthesis.texture.FilterMask
-Invert false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Invert false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 518 440
 engine.graphics.synthesis.texture.FilterColorize
-Gray_to_Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Gray_to_Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 596 167
 engine.graphics.synthesis.texture.FilterColorize
-Gray_to_Color_Mapping 2 0.8 0.8 0.8 1.0 0.0 1.0 1.0 1.0 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
-14
+ExportName "" Gray_to_Color_Mapping 2 0.8 0.8 0.8 1.0 0.0 1.0 1.0 1.0 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+#EndNodes
+#BeginConnections 14
 0 2 0
 2 1 0
 3 4 0
@@ -47,4 +48,5 @@ Gray_to_Color_Mapping 2 0.8 0.8 0.8 1.0 0.0 1.0 1.0 1.0 1.0 1.0 transformation 1
 8 9 0
 3 10 0
 10 8 1
+#EndConnections
 glpreview 2 7 5 9 Object 0 Spec._Power 10.0 POM_Strength 0.125 Ambient 0.125 TexScale_U 2 TexScale_V 2 CamRotX 38.0 CamRotY 311.0 CamDist 1.8999995 endglpreview
