@@ -17,7 +17,6 @@
 
 package com.mystictri.neoTexture;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Scanner;
@@ -45,35 +44,30 @@ public final class TextureGraphNode {
 	
 	Channel texChannel;
 	
-	Point loc = new Point();
+	int posX, posY;
 	
 	public void setLocation(int x, int y) {
-		loc.setLocation(x, y);
+		posX = x;
+		posY = y;
 	}
 	
-	public void setLocation(Point p) {
-		loc.setLocation(p);
-	}
 	
 	public int getX() {
-		return loc.x;
+		return posX;
 	}
 	
 	public int getY() {
-		return loc.y;
+		return posY;
 	}
 	
-	public Point getLocation() {
-		return loc;
-	}
 	
 	public Channel getChannel() {
 		return texChannel;
 	}
 	
 	public void movePosition(int dx, int dy) {
-		loc.x += dx;
-		loc.y += dy;
+		posX += dx;
+		posY += dy;
 	}
 
 	// saves only the node; not the Connection!!
@@ -95,7 +89,7 @@ public final class TextureGraphNode {
 	 */
 	public TextureGraphNode cloneThisNode() {
 		TextureGraphNode ret = new TextureGraphNode(Channel.cloneChannel(texChannel));
-		ret.setLocation(getLocation());
+		ret.setLocation(getX(), getY());
 		return ret;
 	}
 
@@ -108,7 +102,7 @@ public final class TextureGraphNode {
 	 * @return
 	 */
 	public boolean containsPoint(int x, int y) {
-		return (x >= loc.x) && (x <= loc.x+width) && (y >= loc.y) && (y <= loc.y + height);
+		return (x >= posX) && (x <= posX+width) && (y >= posY) && (y <= posY + height);
 	}
 	
 	/**
@@ -140,15 +134,17 @@ public final class TextureGraphNode {
 			this.parent = parent;
 			this.channelIndex = index;
 		}
+		
 
-		public Point getWorldSpaceCenter() {
-			Point p = new Point(parent.getLocation());
-			p.x += x + 4;
-			p.y += y + 4;
-			return p;
+		public int getWorldSpaceX() {
+			return parent.getX() + x + 4;
 		}
 
-		
+		public int getWorldSpaceY() {
+			return parent.getY() + y + 4;
+		}
+
+	
 		// Utility method to check if the mouse position is inside the
 		// connection point
 		public boolean inside(int px, int py) {

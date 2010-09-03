@@ -639,9 +639,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		// draw the connection lines
 		g.setColor(Color.white);
 		for (TextureNodeConnection c : graph.allConnections) {
-			Point p0 = c.source.getWorldSpaceCenter();
-			Point p1 = c.target.getWorldSpaceCenter();
-			drawConnectionLine(g, desktopX + p1.x, desktopY + p1.y, desktopX + p0.x, desktopY + p0.y);
+			drawConnectionLine(g, desktopX + c.target.getWorldSpaceX(), desktopY + c.target.getWorldSpaceY(), desktopX + c.source.getWorldSpaceX(), desktopY + c.source.getWorldSpaceY());
 		}
 
 		g.setColor(Color.yellow);
@@ -797,7 +795,6 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 					setSelectedNode(pat);
 					showSelectedChannelPopupMenu(pat, e.getX(), e.getY());
 				} else { // if it was not a popup we look if we clicked on a connection point or on the rest of the node
-					Point p = pat.getLocation();
 					int actionType = getActionTypeForMouseClick(wsX, wsY, pat);
 					if (actionType == 1) { // want to drag the position of the node
 						setSelectedNode(pat);
@@ -807,7 +804,7 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 					else if (actionType == 2) { // dragging from the output node of a channel
 						connectionDragging = true;
 						connectionSource = pat.getOutputConnectionPoint();
-						connectionOrigin = connectionSource.getWorldSpaceCenter();
+						connectionOrigin = new Point(connectionSource.getWorldSpaceX(), connectionSource.getWorldSpaceY());
 						connectionTarget = e.getPoint();
 					}
 					else if (actionType < 0) { // dragging an existing connection of an input away
@@ -818,11 +815,11 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 							graph.removeConnection(connection);
 							connectionDragging = true;
 							connectionSource = connection.source;
-							connectionOrigin = connectionSource.getWorldSpaceCenter();
+							connectionOrigin = new Point(connectionSource.getWorldSpaceX(), connectionSource.getWorldSpaceY());
 							// pat.updatePreviewImage();
 							connectionTarget = e.getPoint();
-							connectionTarget.x += p.getX();
-							connectionTarget.y += p.getY();
+							connectionTarget.x += pat.getX();
+							connectionTarget.y += pat.getY();
 						}
 					}
 				}

@@ -31,10 +31,10 @@ engine.graphics.synthesis.texture.PatternPerlinNoise
 ExportName "" Color_Mapping 3 0.9490196 0.94509804 0.94509804 0.265625 0.0 0.6086956 0.6086956 0.6086956 0.44293478 0.39130434 0.0 0.0 0.0 0.0 1.0 ScaleX 7.0 ScaleY 7.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 9 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 546 367
 engine.graphics.synthesis.texture.FilterBlend
-ExportName "" Layer_Func. 0 Opacity 1.0 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "brick_d" Layer_Func. 0 Opacity 1.0 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 272 360
 engine.graphics.synthesis.texture.FilterNormalMap
-ExportName "" Strength 1.5 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "brick_n" Strength 1.5 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 405 316
 engine.graphics.synthesis.texture.FilterBlend
 ExportName "" Layer_Func. 0 Opacity 0.125 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
@@ -51,9 +51,9 @@ ExportName "" Layer_Func. 0 Opacity 0.125 Inv._Alpha false transformation 1.0 0.
 7 10 0
 10 8 0
 1 6 0
-9 10 1
 3 12 0
 12 11 0
 4 12 1
+9 10 1
 #EndConnections
 glpreview 10 11 3 3 Object 1 Spec._Power 20.0 POM_Strength 0.25 Ambient 0.25 TexScale_U 2 TexScale_V 2 CamRotX 23.0 CamRotY 133.0 CamDist 3.1999993 endglpreview
