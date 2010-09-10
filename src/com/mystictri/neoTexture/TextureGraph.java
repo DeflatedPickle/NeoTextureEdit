@@ -10,8 +10,7 @@ import com.mystictri.neoTexture.TextureGraphNode.ConnectionPoint;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 
-public class TextureGraph {
-	
+public final class TextureGraph {
 	public TextureGraphListener graphListener = null;
 
 	// currently all operations on nodes with the mouse expect that the clicked node is the selected node
@@ -33,6 +32,7 @@ public class TextureGraph {
 	
 	// first saving version: simple ascii test
 	public void save(Writer w) throws IOException {
+			w.write("#NTEVersion 6\n");
 			w.write("#BeginNodes " + allNodes.size() + "\n");
 			// first save all the nodes
 			for (TextureGraphNode n : allNodes) {
@@ -57,7 +57,9 @@ public class TextureGraph {
 	 */
 	public boolean load(Scanner s) {
 		int offset = allNodes.size();
-
+		while (!s.next().equals("#NTEVersion")) System.out.println("ParseWarning 0 in TextureGraph.load");
+		int nteVersion = s.nextInt();
+		if (nteVersion != 6) System.err.println("WARNING: loading incompatible texture graph of version "+nteVersion); 
 		while (!s.next().equals("#BeginNodes")) System.out.println("ParseWarning A in TextureGraph.load");
 		int numNodes = s.nextInt();
 		for (int i = 0; i < numNodes; i++) {

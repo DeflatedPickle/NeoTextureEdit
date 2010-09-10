@@ -1,3 +1,4 @@
+#NTEVersion 6
 #BeginNodes 10
 67 126
 engine.graphics.synthesis.texture.PatternBrick
@@ -42,4 +43,3 @@ ExportName "" Strength 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 en
 0 4 0
 7 9 0
 #EndConnections
-glpreview 4 9 -1 2 Object 0 Spec._Power 60.0 POM_Strength 0.125 Ambient 0.125 TexScale_U 2 TexScale_V 2 CamRotX 36.0 CamRotY 336.0 CamDist 1.8999995 endglpreview

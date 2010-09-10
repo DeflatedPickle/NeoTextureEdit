@@ -779,7 +779,6 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 	public void mousePressed(MouseEvent e) {
 		mousePosition = e.getPoint();
 		
-		System.out.println(mousePosition);
 		dragStartX = e.getXOnScreen();
 		dragStartY = e.getYOnScreen();
 		int wsX = e.getX() - desktopX;
@@ -789,7 +788,6 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 			desktopDragging = true;
 		} else {
 			TextureGraphNode pat = graph.getNodeAtPosition(wsX, wsY);
-			System.out.println(pat);
 			if (pat != null) {
 				if (e.getButton() == 3) { // Popup menu for a TextureGraphNode
 					setSelectedNode(pat);
@@ -847,7 +845,6 @@ class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMoti
 		
 		if (connectionDragging) {
 			TextureGraphNode targetPat = graph.getNodeAtPosition(wsX, wsY);
-			System.out.println(targetPat);
 			if (targetPat != null) {
 				int actionType = getActionTypeForMouseClick(wsX, wsY, targetPat);
 				if (actionType < 0) { // we dragged onto an input node

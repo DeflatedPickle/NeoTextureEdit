@@ -1,3 +1,4 @@
+#NTEVersion 6
 #BeginNodes 14
 42 95
 engine.graphics.synthesis.texture.PatternPerlinNoise
@@ -59,4 +60,3 @@ ExportName "" Strength 0.5 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 en
 3 4 1
 6 13 0
 #EndConnections
-glpreview 12 13 6 -1 Object 0 Spec._Power 10.0 POM_Strength 0.0 Ambient 0.375 TexScale_U 2 TexScale_V 2 CamRotX 30.0 CamRotY 318.0 CamDist 2.1000001 endglpreview
