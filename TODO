@@ -2,6 +2,10 @@ Refactoring:
   - the package names are from a legacy project and need adjustment to better reflect the current
     structure
     
+Check the allocation pattern of the channel cache; depending on graph this might consume a lot
+of memory
+A Tiled caching system might solve this problem
+    
 
 Export Settings:
 	The current solution for export is to specify export in each

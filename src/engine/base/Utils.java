@@ -36,7 +36,7 @@ import javax.imageio.ImageIO;
  * @author Holger Dammertz
  *
  */
-public class Utils {
+public final class Utils {
 
 	public static FloatBuffer allocFloatBuffer(int size) {
 		return ByteBuffer.allocateDirect(4 * size).order(ByteOrder.nativeOrder()).asFloatBuffer();
@@ -96,6 +96,14 @@ public class Utils {
 		return (0xFF000000 | (r << 16) | (g << 8) | (b << 0));
 	}
 	
+	public static final int floatRGBAToINTColor(float fr, float fg, float fb, float fa) {
+		int r = ((int)(fr*255.0f)) & 0xFF;
+		int g = ((int)(fg*255.0f)) & 0xFF;
+		int b = ((int)(fb*255.0f)) & 0xFF;
+		int a = ((int)(fa*255.0f)) & 0xFF;
+		return ((a << 24) | (r << 16) | (g << 8) | (b << 0));
+	}
+	
 	public static final int vector3ToINTColor(Vector3 c) {
 		int r = ((int)(c.x*255.0f)) & 0xFF;
 		int g = ((int)(c.y*255.0f)) & 0xFF;
@@ -108,7 +116,7 @@ public class Utils {
 		int g = ((int)(c.y*255.0f)) & 0xFF;
 		int b = ((int)(c.z*255.0f)) & 0xFF;
 		int a = ((int)(c.w*255.0f)) & 0xFF;
-		return ((a<<24) | (r << 16) | (g << 8) | (b << 0));
+		return ((a << 24) | (r << 16) | (g << 8) | (b << 0));
 	}
 
 	public static Vector4 RGBAToVector4(int c) {

@@ -52,8 +52,8 @@ public abstract class Channel extends LocalParameterManager {
 	};
 	public ChannelVizType vizType = ChannelVizType.NORMAL;
 	
-	final class CacheEntry {
-		FloatBuffer values;
+	public static final class CacheEntry {
+		public FloatBuffer values;
 		int xres, yres;
 		
 		public CacheEntry(int x, int y) {
@@ -111,6 +111,14 @@ public abstract class Channel extends LocalParameterManager {
 	
 	CacheEntry cache;
 	boolean cacheInvalid = true;
+	
+	/**
+	 * Clears the local cache of this node.
+	 */
+	public void clearCache() {
+		cache = null;
+		cacheInvalid = true;
+	}
 	
 	
 	//!!TODO: not thread save
@@ -410,7 +418,12 @@ public abstract class Channel extends LocalParameterManager {
 	
 	
 	
-	
+	/**
+	 * Creates a full copy of the given channel by using an internal StringWriter
+	 * and by calling the saveChannel and loadChannel method
+	 * @param c
+	 * @return a full copy of the given channel as if it was loaded from disk
+	 */
 	public static Channel cloneChannel(Channel c) {
 		StringWriter sw = new StringWriter();
 		try {
