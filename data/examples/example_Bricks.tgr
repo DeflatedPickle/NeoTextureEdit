@@ -57,3 +57,4 @@ ExportName "" Layer_Func. 0 Opacity 0.125 Inv._Alpha false transformation 1.0 0.
 4 12 1
 9 10 1
 #EndConnections
+glpreview 10 11 3 3 Object 1 Spec._Power 20.0 POM_Strength 0.25 Ambient 0.25 TexScale_U 2 TexScale_V 2 CamRotX 23.0 CamRotY 133.0 CamDist 3.1999993 endglpreview

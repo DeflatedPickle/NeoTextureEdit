@@ -36,3 +36,4 @@ ExportName "" Strength 0.875 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 
 3 6 1
 6 7 0
 #EndConnections
+glpreview 4 7 0 2 Object 0 Spec._Power 80.0 POM_Strength 0.625 Ambient 0.5 TexScale_U 2 TexScale_V 2 CamRotX 17.0 CamRotY 298.0 CamDist 1.3000001 endglpreview
