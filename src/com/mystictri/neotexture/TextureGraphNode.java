@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.mystictri.neoTexture;
+package com.mystictri.neotexture;
 
 import java.io.IOException;
 import java.io.Writer;

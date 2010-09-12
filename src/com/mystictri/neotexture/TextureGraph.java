@@ -1,15 +1,20 @@
-package com.mystictri.neoTexture;
+package com.mystictri.neotexture;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Scanner;
 import java.util.Vector;
 
-import com.mystictri.neoTexture.TextureGraphNode.ConnectionPoint;
+import com.mystictri.neotexture.TextureGraphNode.ConnectionPoint;
 
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 
+/**
+ * A full texture graph as created and editied by the NeoTextureEditor.
+ * @author Holger Dammertz
+ *
+ */
 public final class TextureGraph {
 	public TextureGraphListener graphListener = null;
 

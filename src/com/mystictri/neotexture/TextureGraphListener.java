@@ -1,4 +1,4 @@
-package com.mystictri.neoTexture;
+package com.mystictri.neotexture;
 
 public interface TextureGraphListener {
 	

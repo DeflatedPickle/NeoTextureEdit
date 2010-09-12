@@ -1,29 +1,24 @@
-package com.mystictri.neoTexture;
+package com.mystictri.neotexture;
 
-import java.awt.FlowLayout;
-import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import engine.base.Utils;
 import engine.graphics.synthesis.texture.Channel;
 
 /**
  * This is the public interface to the NeoTexture procedural texture generation
- * library.
+ * library. Note that the current version is heavily under development and none of
+ * the interfaces, class names and features are final. Note also that the current
+ * version is not yet optimized for speed. This will be done when the interface
+ * and functionality becomes more stable.
  * 
  * @author Holger Dammertz
  * 
  */
-public final class NeoTextureLib {
+public final class TextureGenerator {
 	static private boolean useCache = false;
 
 	/**
@@ -146,40 +141,5 @@ public final class NeoTextureLib {
 
 		return null;
 	}
-
-	public static void main(String[] args) {
-		try {
-			loadGraph(new FileInputStream("data/examples/example_Bricks.tgr"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		for (String s : getTextureNames())
-			System.out.println(s);
-
-		int size = 256;
-
-		setUseCache(true);
-		JFrame f = new JFrame();
-		f.setLayout(new FlowLayout());
-		int N = 2;
-		long time = 0;
-		for (int k = 0; k < N; k++) {
-			BufferedImage img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-			long startTime = System.nanoTime();
-			int[] i = generateTexture_ARGB("brick_" + ((k % 2) == 0 ? "d" : "n"), size, size);
-			time += System.nanoTime() - startTime;
-			img.setRGB(0, 0, size, size, i, 0, size);
-			f.add(new JLabel(new ImageIcon(img)));
-			System.out.print(".");
-		}
-		System.out.printf("Time per image: %f%n", (double) time / (N * 1000.0 * 1000.0));
-		
-		
-		clearCache();
-
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.pack();
-		f.setVisible(true);
-	}
 }
+

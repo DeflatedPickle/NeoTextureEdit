@@ -18,7 +18,7 @@ import javax.swing.JPopupMenu;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
-import com.mystictri.neoTexture.TextureGraphNode;
+import com.mystictri.neotexture.TextureGraphNode;
 
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;

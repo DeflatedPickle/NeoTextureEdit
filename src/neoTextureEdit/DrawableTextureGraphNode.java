@@ -10,8 +10,8 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.mystictri.neoTexture.TextureGraphNode;
-import com.mystictri.neoTexture.TextureGraphNode.ConnectionPoint;
+import com.mystictri.neotexture.TextureGraphNode;
+import com.mystictri.neotexture.TextureGraphNode.ConnectionPoint;
 
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;

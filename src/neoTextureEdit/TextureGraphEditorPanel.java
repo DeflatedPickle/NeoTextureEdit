@@ -51,11 +51,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import com.mystictri.neoTexture.TextureGraph;
-import com.mystictri.neoTexture.TextureGraph.TextureNodeConnection;
-import com.mystictri.neoTexture.TextureGraphListener;
-import com.mystictri.neoTexture.TextureGraphNode;
-import com.mystictri.neoTexture.TextureGraphNode.ConnectionPoint;
+import com.mystictri.neotexture.TextureGraph;
+import com.mystictri.neotexture.TextureGraphListener;
+import com.mystictri.neotexture.TextureGraphNode;
+import com.mystictri.neotexture.TextureGraph.TextureNodeConnection;
+import com.mystictri.neotexture.TextureGraphNode.ConnectionPoint;
 
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;

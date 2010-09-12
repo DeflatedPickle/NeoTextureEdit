@@ -73,7 +73,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
 
-import com.mystictri.neoTexture.TextureGraphNode;
+import com.mystictri.neotexture.TextureGraphNode;
 
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;

@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 
-import com.mystictri.neoTexture.TextureGraphNode;
+import com.mystictri.neotexture.TextureGraphNode;
 
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
