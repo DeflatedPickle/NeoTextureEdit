@@ -2,7 +2,7 @@
 #BeginNodes 4
 485 355
 engine.graphics.synthesis.texture.FilterIlluminate
-ExportName "" Theta 23.875 Phi 45.0 Shininess 100.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "brain" Theta 23.875 Phi 45.0 Shininess 100.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 566 215
 engine.graphics.synthesis.texture.FilterNormalMap
 ExportName "" Strength 5.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters

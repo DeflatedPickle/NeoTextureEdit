@@ -14,7 +14,7 @@ engine.graphics.synthesis.texture.PatternPerlinNoise
 ExportName "" Color_Mapping 2 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 0.0 1.0 ScaleX 4.0 ScaleY 4.0 ValueScale 1.0 Persistence 0.875 StartBand 2 EndBand 8 Seed -1 Periodic true transformation 1.0 0.0 -0.625 0.0 1.0 0.5625 0.0 0.0 1.0 endparameters
 522 369
 engine.graphics.synthesis.texture.FilterColorize
-ExportName "" Gray_to_Color_Mapping 8 0.7882353 0.49803922 0.023529412 1.0 0.0 0.91764706 0.8784314 0.05490196 1.0 0.10628019 0.89 0.329199 0.177758 1.0 0.15458937 0.5562499 0.20574935 0.11109874 1.0 0.21256039 0.0 0.0 0.0 1.0 0.28985506 0.14565827 0.13333333 0.11988795 1.0 0.4589372 0.50980395 0.46666667 0.41960785 1.0 0.68599033 0.8156863 0.8117647 0.8117647 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "lava_d" Gray_to_Color_Mapping 8 0.7882353 0.49803922 0.023529412 1.0 0.0 0.91764706 0.8784314 0.05490196 1.0 0.10628019 0.89 0.329199 0.177758 1.0 0.15458937 0.5562499 0.20574935 0.11109874 1.0 0.21256039 0.0 0.0 0.0 1.0 0.28985506 0.14565827 0.13333333 0.11988795 1.0 0.4589372 0.50980395 0.46666667 0.41960785 1.0 0.68599033 0.8156863 0.8117647 0.8117647 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 226 297
 engine.graphics.synthesis.texture.FilterEmboss
 ExportName "" Strength 2.0 Angle 45.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
@@ -23,7 +23,7 @@ engine.graphics.synthesis.texture.FilterMask
 ExportName "" Invert false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 346 447
 engine.graphics.synthesis.texture.FilterNormalMap
-ExportName "" Strength 0.875 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "lava_n" Strength 0.875 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
 #EndNodes
 #BeginConnections 9
 1 2 1

@@ -41,8 +41,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Vector;
@@ -68,8 +66,8 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
 
@@ -137,15 +135,15 @@ public class TextureEditor extends JFrame implements ActionListener {
 	private void tempTest_FindAllPatternsAndChannelClasses() {
 		String packName = Channel.class.getPackage().getName();
 		String[] files = null;
-		String dir = "/" + packName.replace('.', '/');
+		/*String dir = "/" + packName.replace('.', '/');
 		try {
 			URL url = Channel.class.getResource(dir);
 			if (url != null) {
 				File f = new File(url.toURI());
 				files = f.list();
 			} 
-			else {
-				System.err.println("WARNING: automatic loading of patterns/channels failed; adding hardcoded set");
+			else */{
+				//System.err.println("WARNING: automatic loading of patterns/channels failed; adding hardcoded set");
 				String[] f = {"FilterBlend.class", "FilterBrightnessContrast.class", "FilterColorize.class", "FilterEmboss.class",
 						"FilterMask.class", "FilterNormalMap.class", "FilterWarp.class", "Pattern.class", "PatternBrick.class", "PatternCellular.class",
 						"PatternChecker.class", "PatternConstantColor.class", "PatternGradient.class", "PatternPerlinNoise.class", "PatternTile.class",
@@ -181,9 +179,9 @@ public class TextureEditor extends JFrame implements ActionListener {
 				}
 				// Class.forName()
 			}
-		} catch (URISyntaxException e) {
+		/*} catch (URISyntaxException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	/**
