@@ -10,15 +10,19 @@ import engine.graphics.synthesis.texture.Channel;
 
 /**
  * This is the public interface to the NeoTexture procedural texture generation
- * library. Note that the current version is heavily under development and none of
- * the interfaces, class names and features are final. Note also that the current
- * version is not yet optimized for speed. This will be done when the interface
- * and functionality becomes more stable.
+ * library. Note that the current version is heavily under development and none
+ * of the interfaces, class names and features are final. Note also that the
+ * current version is not yet optimized for speed. This will be done when the
+ * interface and functionality becomes more stable.
+ * 
+ * Visit http://sourceforge.net/projects/neotextureedit/ for the latest version
+ * and do not hesitate to contact me about feature requests or bug reports.
  * 
  * @author Holger Dammertz
  * 
  */
 public final class TextureGenerator {
+	static private String version = "0.6.1";
 	static private boolean useCache = false;
 
 	/**
@@ -29,6 +33,16 @@ public final class TextureGenerator {
 	 */
 	static private final TextureGraph graph = new TextureGraph();
 
+	/**
+	 * Returns the current version string. Compatibility between the editor
+	 * and the runtime library is currently only guaranteed when the same version
+	 * is used.
+	 */
+	public static String getVersion() {
+		return version;
+	}
+	
+	
 	/**
 	 * Parses a well formatted texture graph as saved by TextureGraph.save
 	 * 
@@ -84,9 +98,10 @@ public final class TextureGenerator {
 				for (int x = 0; x < xres; x++) {
 					// float u = (float)x/(float)xres;
 					// float v = (float)y/(float)yres;
-					// img[x+y*xres] = Utils.vector4ToINTColor(c.valueRGBA(u, v));
+					// img[x+y*xres] = Utils.vector4ToINTColor(c.valueRGBA(u,
+					// v));
 					// img[x+y*xres] = Utils.vector4ToINTColor(ce.sample(u, v));
-	
+
 					int i = (x + y * xres) * 4;
 					img[x + y * xres] = Utils.floatRGBAToINTColor(ce.values.get(i + 0), ce.values.get(i + 1), ce.values.get(i + 2), ce.values
 							.get(i + 3));
@@ -97,9 +112,9 @@ public final class TextureGenerator {
 				// if (progress != null)
 				// progress.setProgress(y/(float)img.getHeight());
 				for (int x = 0; x < xres; x++) {
-					float u = (float)x/(float)xres;
-					float v = (float)y/(float)yres;
-					img[x+y*xres] = Utils.vector4ToINTColor(c.valueRGBA(u, v));
+					float u = (float) x / (float) xres;
+					float v = (float) y / (float) yres;
+					img[x + y * xres] = Utils.vector4ToINTColor(c.valueRGBA(u, v));
 				}
 			}
 		}
@@ -142,4 +157,3 @@ public final class TextureGenerator {
 		return null;
 	}
 }
-

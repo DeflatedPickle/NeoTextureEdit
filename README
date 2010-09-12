@@ -11,6 +11,20 @@ applications that can be stored in a few kB and synthesized on
 application startup. But it can also be used to generate off-line
 images.
 
+NeoTexture Library.
+===================
+
+The NeoTexture Library can be used to load a texture graph generated
+by NeoTextureEdit and create the according textures at runtime.
+
+
+License.
+========
+
+NeoTextureEdit and the runtime generation library NeoTexture are
+licensed under the GNU LGPL v.3. See the files COPYING and 
+COPYING.lesser for details. 
+
 
 Dependencies.
 =============
@@ -46,6 +60,14 @@ MacOS: The application can be started via double-click in the finder.
 
 Release Notes:
 ==============
+
+0.6.1:
+ - external run time generation library now available
+ - changed the texture graph file format slightly
+ - Export String (with replace options %f %r) for marking channels for export
+ - Command Line option for export to image (now batch export possible; also with wildcards)
+ - SCM changed from svn to git on sourceforge
+ 
 
 0.5.3:
  - New Pattern: Bitmap: allows to load images as generator patterns

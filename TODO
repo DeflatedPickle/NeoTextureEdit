@@ -66,7 +66,9 @@ Planned Features:
 -----------------------------------------------------------------------------------------------------------------------
 Releases (Notes):
 -----------------------------------------------------------------------------------------------------------------------
-0.5.4+ (Current):
+0.6.1+ (Current):
+ - external run time generation library now available
+ - some changes to the file format
  - Export String (with replace options %f %r) for marking channels for export
  - Command Line option for export to image (now batch export possible; also with wildcards)
  - Basic drag-all feature in gradient editor (not yet very robust)

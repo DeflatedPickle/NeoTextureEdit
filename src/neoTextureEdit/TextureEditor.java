@@ -73,6 +73,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
 
+import com.mystictri.neotexture.TextureGenerator;
 import com.mystictri.neotexture.TextureGraphNode;
 
 import engine.base.Logger;
@@ -93,7 +94,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 	public static TextureEditor INSTANCE = null;
 
 	private final Properties globalSettings = new Properties();
-	static final String programVersionNumber = "0.5.5git";
+	static final String programVersionNumber = TextureGenerator.getVersion()+"git";
 	
 	
 	String m_CurrentFileName = null;
