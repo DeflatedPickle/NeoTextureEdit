@@ -5,6 +5,9 @@ Refactoring:
 Check the allocation pattern of the channel cache; depending on graph this might consume a lot
 of memory
 A Tiled caching system might solve this problem
+
+
+FIXME: don't remove the glpreview string in the texture graph files when gl preview is disabled/could not be loaded on graph save
     
 
 Export Settings:

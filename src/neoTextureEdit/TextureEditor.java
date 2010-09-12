@@ -94,7 +94,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 	public static TextureEditor INSTANCE = null;
 
 	private final Properties globalSettings = new Properties();
-	static final String programVersionNumber = TextureGenerator.getVersion()+"git";
+	static final String programVersionNumber = TextureGenerator.getVersion();//+"git";
 	
 	
 	String m_CurrentFileName = null;
@@ -125,6 +125,9 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 	String about_message = "NeoTextureEdit\n\n" + "Version: " + programVersionNumber + "\n" + "(c) Copyright Holger Dammertz 2010. All rights reserved.\n"
 			+ "Visit http://sourceforge.net/projects/neotextureedit/\n\n" +
+			  		"NeoTextureEdit and the runtime generation library NeoTexture are\n" +
+			  		"licensed under the GNU LGPL v.3. See the files COPYING and\n" +
+			  		"COPYING.LESSER for details.\n\n" +
 					"This program is distributed in the hope that it will be useful,\n" +
     "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
     "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";

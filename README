@@ -23,7 +23,7 @@ License.
 
 NeoTextureEdit and the runtime generation library NeoTexture are
 licensed under the GNU LGPL v.3. See the files COPYING and 
-COPYING.lesser for details. 
+COPYING.LESSER for details. 
 
 
 Dependencies.
@@ -62,6 +62,7 @@ Release Notes:
 ==============
 
 0.6.1:
+ - license change to GNU LGPL v.3
  - external run time generation library now available
  - changed the texture graph file format slightly
  - Export String (with replace options %f %r) for marking channels for export
