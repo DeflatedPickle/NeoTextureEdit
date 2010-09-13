@@ -69,6 +69,11 @@ public class PatternBrick extends Pattern {
 	}
 
 	public void parameterChanged(AbstractParam source) {
+		if (source == null) {
+			createRandomColors();
+			createRandomShifts();
+		}
+		
 		if ((source == widthY) || (source == widthX))
 			createRandomColors();
 		if (source == widthY)
@@ -81,7 +86,8 @@ public class PatternBrick extends Pattern {
 		FMath.setSeed(3123);
 		for (int i = 0; i < randomColors.length; i++)
 			randomColors[i] = FMath.random();
-
+		
+		
 	}
 
 	void createRandomShifts() {
