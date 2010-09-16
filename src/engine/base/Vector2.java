@@ -78,7 +78,7 @@ public class Vector2 {
 		return FMath.sqrt((x - v.x)*(x - v.x) + (y - v.y)*(y - v.y));
 	}
 	
-	public float manhatten(Vector2 v) {
+	public float manhattan(Vector2 v) {
 		return FMath.abs(x - v.x) + FMath.abs(y - v.y);
 	}
 	

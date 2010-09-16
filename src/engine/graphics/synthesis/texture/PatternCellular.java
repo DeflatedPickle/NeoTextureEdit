@@ -56,8 +56,8 @@ public class PatternCellular extends Pattern {
 
 	float randomColors[];
 
-	//boolean useManhattenDist = false;
-	int distanceFunctionType = 0; // 0 euclid, 1 manhatten, 2 max
+	//boolean useManhattanDist = false;
+	int distanceFunctionType = 0; // 0 euclid, 1 manhattan, 2 max
 
 	final PatternPoint[] p2 = new PatternPoint[2];
 	final PatternPoint[] p3 = new PatternPoint[3];
@@ -98,7 +98,7 @@ public class PatternCellular extends Pattern {
 
 	public PatternCellular() {
 		cellFunction = CreateLocalEnumParam("Cell Type", "F1,F2,F3,Constant,F2-F1");
-		distanceFunction = CreateLocalEnumParam("Distance ", "Euclid,Manhatten,Max,Minkowski0.5");
+		distanceFunction = CreateLocalEnumParam("Distance ", "Euclid,Manhattan,Max,Minkowski0.5");
 		randomFunction = CreateLocalEnumParam("PointGen", "Random,Regular,Halton23,Hammersley");
 		randomSeedParam = CreateLocalIntParam("Seed", 0, 0, Integer.MAX_VALUE);
 		valueScale = CreateLocalFloatParam("Intensity", 1.0f, 0.0f, Float.MAX_VALUE);
@@ -127,7 +127,7 @@ public class PatternCellular extends Pattern {
 		if (distanceFunction.getEnumPos() == 0)
 			return p0.distance(p1);
 		else if (distanceFunction.getEnumPos() == 1)
-			return p0.manhatten(p1);
+			return p0.manhattan(p1);
 		else if (distanceFunction.getEnumPos() == 2) 
 			return Math.max(FMath.abs(p0.x - p1.x), FMath.abs(p0.y - p1.y));
 		else if (distanceFunction.getEnumPos() == 3) { 
