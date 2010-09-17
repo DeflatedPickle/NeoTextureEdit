@@ -661,6 +661,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 					System.out.println(" Options: ");
 					System.out.println("    -h, --help                this help");
 					System.out.println("    -e                        export the given file and exit");
+					System.out.println("    -r  128x128               set the output resolution for the export");
 					System.out.println("    -p path                   set the path for export");
 					System.out.println("    --disableGL               disable the use of the OpenGL preview");
 					System.out.println("\nContact and bug reports at http://sourceforge.net/projects/neotextureedit");
