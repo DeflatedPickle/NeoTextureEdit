@@ -53,13 +53,16 @@ public class TextParameterEditor extends AbstractParameterEditor implements Acti
 		inputField.setCaretPosition(pos);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		checkAndApplyChange();
 	}
 
+	@Override
 	public void focusGained(FocusEvent e) {
 	}
 
+	@Override
 	public void focusLost(FocusEvent e) {
 		checkAndApplyChange();
 	}

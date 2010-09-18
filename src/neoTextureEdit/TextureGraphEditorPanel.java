@@ -322,6 +322,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 	 * This is the main action method for TextureGraphEditorPanel. Here the actions from the popup-menus
 	 * are processed.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println(e);
 		
@@ -525,6 +526,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 	}
 
 	
+	@Override
 	public void nodeDeleted(TextureGraphNode node) {
 		if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.notifyTextureNodeRemoved(node);
 		if (paramEditorPanel.getActiveTextureNode() == node)
@@ -754,6 +756,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 	}
 	
 	
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (desktopDragging) {
 			int dx =  (int)((e.getXOnScreen()*zoom) - dragStartX); dragStartX = (int)(e.getXOnScreen() * zoom);
@@ -774,17 +777,20 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 		}
 	}
 	
-	// !!TODO: addToSelection
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent arg0) {
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent arg0) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent arg0) {
 	}
 
@@ -812,7 +818,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 		return 1;
 	}
 
-	
+	@Override
 	public void mousePressed(MouseEvent e) {
 		mousePosition.x = (int)(e.getX()*zoom);
 		mousePosition.y = (int)(e.getY()*zoom);
@@ -873,7 +879,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 	}
 	
 	
-
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		mousePosition.x = (int)(e.getX()*zoom);
 		mousePosition.y = (int)(e.getY()*zoom);
@@ -903,9 +909,13 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 	}
 
 
+	@Override
 	public void channelChanged(Channel source) {
 		if ((previewNode != null) && (previewNode.getChannel() == source)){
 			updatePreview();
 		}
 	}
+
+
+
 }

@@ -13,7 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package neoTextureEdit;
 
@@ -30,6 +30,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -66,8 +67,8 @@ import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
 
@@ -81,113 +82,113 @@ import engine.graphics.synthesis.texture.PatternChecker;
 import engine.graphics.synthesis.texture.ProgressBarInterface;
 
 /**
- * This is the main window of NeoTextureEdit. It is more or less a singelton class that manages all components in
- * the editor.
+ * This is the main window of NeoTextureEdit. It is more or less a singelton
+ * class that manages all components in the editor.
+ * 
  * @author Holger Dammertz
- *
+ * 
  */
-public class TextureEditor extends JFrame implements ActionListener {
+public class TextureEditor extends JFrame implements ActionListener, KeyListener {
 	private static final long serialVersionUID = -5567955539436014517L;
-	public static boolean GL_ENABLED = false; // on init this is set to true if we can successfully initialize GL
+	public static boolean GL_ENABLED = false; // on init this is set to true if
+												// we can successfully
+												// initialize GL
 	public static TextureEditor INSTANCE = null;
 
 	private final Properties globalSettings = new Properties();
-	static final String programVersionNumber = TextureGenerator.getVersion();//+"git";
-	
-	
+	static final String programVersionNumber = TextureGenerator.getVersion();// +"git";
+
 	String m_CurrentFileName = null;
 	public Channel dragndropChannel = null;
 
 	// The default Presets that are loaded when no preset file is found
-	//final String defaultNTEPresets = "18\nengine.graphics.synthesis.texture.PatternChecker\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 1.0 ScaleY 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternConstantColor\nColor 0.8 0.4 0.7 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternGradient\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 Type 0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 1.0 ScaleY 1.0 ValueScale 1.0 Persistence 0.5 StartBand 1 EndBand 8 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.2173913 1.0 1.0 1.0 1.0 0.41062802 Cell_Type 4 Distance_ 0 PointGen 2 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 32 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 2 0.0 0.0 1.0 1.0 0.2657005 1.0 1.0 1.0 1.0 0.68599033 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 10 Seed 2 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternTile\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 BorderX 0.1 BorderY 0.1 Smooth 0.025 transformation 2.0 0.0 0.0 0.0 2.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 1.0 1.0 0.0 1.0 0.096618354 0.0 0.0 0.0 1.0 0.28502417 Cell_Type 0 Distance_ 0 PointGen 1 Seed 0 Intensity 1.0 Jitter 0.625 NumPoints 64 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 5 1.0 1.0 1.0 1.0 0.0 0.83137256 0.827451 0.827451 1.0 0.37198067 0.0 0.0 0.0 1.0 0.5458937 0.78039217 0.7764706 0.7764706 1.0 0.65700483 1.0 0.99607843 0.99607843 1.0 1.0 ScaleX 3.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.5 StartBand 1 EndBand 3 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 8 0.7882353 0.49803922 0.023529412 1.0 0.0 0.91764706 0.8784314 0.05490196 1.0 0.10628019 0.89 0.329199 0.177758 1.0 0.15458937 0.5562499 0.20574935 0.11109874 1.0 0.21256039 0.0 0.0 0.0 1.0 0.28985506 0.14565827 0.13333333 0.11988795 1.0 0.4589372 0.50980395 0.46666667 0.41960785 1.0 0.68599033 0.8156863 0.8117647 0.8117647 1.0 1.0 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.875 StartBand 2 EndBand 8 Seed -1 Periodic true transformation 1.0 0.0 -0.625 0.0 1.0 0.5625 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 9 0.198883 0.3 0.135 1.0 0.0 0.406805 0.613636 0.276136 1.0 0.10337928 0.324169 0.454545 0.114714 1.0 0.29771367 0.098346 0.136364 0.085909 1.0 0.44657052 0.196692 0.272727 0.171818 1.0 0.5964217 0.272727 0.21499 0.203431 1.0 0.68787223 0.430776 0.666667 0.326636 1.0 0.78330016 0.36939 0.42 0.3444 1.0 0.90258443 0.091517 0.26 0.0 1.0 0.99999994 Cell_Type 4 Distance_ 0 PointGen 0 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 16 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 0.8 0.8 0.0 1.0 1.0 Cell_Type 0 Distance_ 0 PointGen 0 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 26 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 6 0.5764706 0.5411765 0.5019608 1.0 0.004830897 0.36862746 0.3529412 0.32156864 1.0 0.20772946 0.18998075 0.16630016 0.11761947 1.0 0.37681162 0.006127451 0.006127451 0.006127451 1.0 0.64734304 0.42352942 0.39607844 0.3529412 1.0 0.82608694 0.34901962 0.29803923 0.2627451 1.0 1.0 ScaleX 4.0 ScaleY 5.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 8 Seed 22 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 12 1.0 1.0 1.0 1.0 0.09178744 0.0 0.4 0.4 1.0 0.13043478 0.0 0.4 0.4 1.0 0.17874396 1.0 1.0 1.0 1.0 0.22705314 1.0 1.0 1.0 1.0 0.44444445 0.0 0.4 0.4 1.0 0.49758455 0.0 0.4 0.4 1.0 0.5410628 1.0 1.0 1.0 1.0 0.589372 1.0 1.0 1.0 1.0 0.7487923 0.0 0.4 0.4 1.0 0.8115942 0.0 0.4 0.4 1.0 0.8647343 1.0 1.0 1.0 1.0 0.9178744 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.6875 StartBand 1 EndBand 10 Seed 17 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 9 1.0 1.0 1.0 1.0 0.09178744 0.6 0.6 0.0 1.0 0.14975846 1.0 1.0 1.0 1.0 0.22705314 1.0 1.0 1.0 1.0 0.44444445 0.6 0.6 0.0 1.0 0.5169082 1.0 1.0 1.0 1.0 0.589372 1.0 1.0 1.0 1.0 0.7487923 0.6 0.6 0.0 1.0 0.8357488 1.0 1.0 1.0 1.0 0.9178744 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.6875 StartBand 1 EndBand 4 Seed 15 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 6 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 0.5636701 0.89 0.329199 0.177758 1.0 0.7153562 1.0 1.0 0.0 1.0 0.8352055 0.91 0.574437 0.0 1.0 0.8820228 0.727273 0.127938 0.14837 1.0 0.99999994 Cell_Type 4 Distance_ 0 PointGen 2 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 23 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternBrick\nColor_Mapping 4 0.0 0.0 0.0 1.0 0.0 0.7254902 0.36078432 0.36078432 1.0 0.08695652 0.44313726 0.21176471 0.21176471 1.0 0.531401 1.0 0.4 0.4 1.0 1.0 NumX 4 NumY 6 Shift 0.5 RandShift 0.1 GapX 0.03 GapY 0.03 Smooth 0.05 RandColor true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternBrick\nColor_Mapping 6 0.003921569 0.003921569 0.003921569 1.0 0.0 0.003921569 0.003921569 0.003921569 1.0 0.08695652 0.654902 0.4862745 0.23529412 1.0 0.16425121 0.34 0.128091 0.107291 1.0 0.44927537 0.74509805 0.39215687 0.16862746 1.0 0.7198068 0.204545 0.121376 0.046011 1.0 1.0 NumX 14 NumY 1 Shift 0.5 RandShift 0.1 GapX 0.005000001 GapY 0.0 Smooth 0.009375 RandColor true transformation 0.5 0.0 0.0 0.0 0.5 0.375 0.0 0.0 1.0 endparameters\n";
+	// final String defaultNTEPresets =
+	// "18\nengine.graphics.synthesis.texture.PatternChecker\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 1.0 ScaleY 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternConstantColor\nColor 0.8 0.4 0.7 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternGradient\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 Type 0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 1.0 ScaleY 1.0 ValueScale 1.0 Persistence 0.5 StartBand 1 EndBand 8 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.2173913 1.0 1.0 1.0 1.0 0.41062802 Cell_Type 4 Distance_ 0 PointGen 2 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 32 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 2 0.0 0.0 1.0 1.0 0.2657005 1.0 1.0 1.0 1.0 0.68599033 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 10 Seed 2 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternTile\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 BorderX 0.1 BorderY 0.1 Smooth 0.025 transformation 2.0 0.0 0.0 0.0 2.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 1.0 1.0 0.0 1.0 0.096618354 0.0 0.0 0.0 1.0 0.28502417 Cell_Type 0 Distance_ 0 PointGen 1 Seed 0 Intensity 1.0 Jitter 0.625 NumPoints 64 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 5 1.0 1.0 1.0 1.0 0.0 0.83137256 0.827451 0.827451 1.0 0.37198067 0.0 0.0 0.0 1.0 0.5458937 0.78039217 0.7764706 0.7764706 1.0 0.65700483 1.0 0.99607843 0.99607843 1.0 1.0 ScaleX 3.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.5 StartBand 1 EndBand 3 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 8 0.7882353 0.49803922 0.023529412 1.0 0.0 0.91764706 0.8784314 0.05490196 1.0 0.10628019 0.89 0.329199 0.177758 1.0 0.15458937 0.5562499 0.20574935 0.11109874 1.0 0.21256039 0.0 0.0 0.0 1.0 0.28985506 0.14565827 0.13333333 0.11988795 1.0 0.4589372 0.50980395 0.46666667 0.41960785 1.0 0.68599033 0.8156863 0.8117647 0.8117647 1.0 1.0 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.875 StartBand 2 EndBand 8 Seed -1 Periodic true transformation 1.0 0.0 -0.625 0.0 1.0 0.5625 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 9 0.198883 0.3 0.135 1.0 0.0 0.406805 0.613636 0.276136 1.0 0.10337928 0.324169 0.454545 0.114714 1.0 0.29771367 0.098346 0.136364 0.085909 1.0 0.44657052 0.196692 0.272727 0.171818 1.0 0.5964217 0.272727 0.21499 0.203431 1.0 0.68787223 0.430776 0.666667 0.326636 1.0 0.78330016 0.36939 0.42 0.3444 1.0 0.90258443 0.091517 0.26 0.0 1.0 0.99999994 Cell_Type 4 Distance_ 0 PointGen 0 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 16 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 0.8 0.8 0.0 1.0 1.0 Cell_Type 0 Distance_ 0 PointGen 0 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 26 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 6 0.5764706 0.5411765 0.5019608 1.0 0.004830897 0.36862746 0.3529412 0.32156864 1.0 0.20772946 0.18998075 0.16630016 0.11761947 1.0 0.37681162 0.006127451 0.006127451 0.006127451 1.0 0.64734304 0.42352942 0.39607844 0.3529412 1.0 0.82608694 0.34901962 0.29803923 0.2627451 1.0 1.0 ScaleX 4.0 ScaleY 5.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 8 Seed 22 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 12 1.0 1.0 1.0 1.0 0.09178744 0.0 0.4 0.4 1.0 0.13043478 0.0 0.4 0.4 1.0 0.17874396 1.0 1.0 1.0 1.0 0.22705314 1.0 1.0 1.0 1.0 0.44444445 0.0 0.4 0.4 1.0 0.49758455 0.0 0.4 0.4 1.0 0.5410628 1.0 1.0 1.0 1.0 0.589372 1.0 1.0 1.0 1.0 0.7487923 0.0 0.4 0.4 1.0 0.8115942 0.0 0.4 0.4 1.0 0.8647343 1.0 1.0 1.0 1.0 0.9178744 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.6875 StartBand 1 EndBand 10 Seed 17 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 9 1.0 1.0 1.0 1.0 0.09178744 0.6 0.6 0.0 1.0 0.14975846 1.0 1.0 1.0 1.0 0.22705314 1.0 1.0 1.0 1.0 0.44444445 0.6 0.6 0.0 1.0 0.5169082 1.0 1.0 1.0 1.0 0.589372 1.0 1.0 1.0 1.0 0.7487923 0.6 0.6 0.0 1.0 0.8357488 1.0 1.0 1.0 1.0 0.9178744 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.6875 StartBand 1 EndBand 4 Seed 15 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 6 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 0.5636701 0.89 0.329199 0.177758 1.0 0.7153562 1.0 1.0 0.0 1.0 0.8352055 0.91 0.574437 0.0 1.0 0.8820228 0.727273 0.127938 0.14837 1.0 0.99999994 Cell_Type 4 Distance_ 0 PointGen 2 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 23 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternBrick\nColor_Mapping 4 0.0 0.0 0.0 1.0 0.0 0.7254902 0.36078432 0.36078432 1.0 0.08695652 0.44313726 0.21176471 0.21176471 1.0 0.531401 1.0 0.4 0.4 1.0 1.0 NumX 4 NumY 6 Shift 0.5 RandShift 0.1 GapX 0.03 GapY 0.03 Smooth 0.05 RandColor true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternBrick\nColor_Mapping 6 0.003921569 0.003921569 0.003921569 1.0 0.0 0.003921569 0.003921569 0.003921569 1.0 0.08695652 0.654902 0.4862745 0.23529412 1.0 0.16425121 0.34 0.128091 0.107291 1.0 0.44927537 0.74509805 0.39215687 0.16862746 1.0 0.7198068 0.204545 0.121376 0.046011 1.0 1.0 NumX 14 NumY 1 Shift 0.5 RandShift 0.1 GapX 0.005000001 GapY 0.0 Smooth 0.009375 RandColor true transformation 0.5 0.0 0.0 0.0 0.5 0.375 0.0 0.0 1.0 endparameters\n";
 	final String defaultNTEPresets = "18\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 5 1.0 1.0 1.0 1.0 0.0 0.83137256 0.827451 0.827451 1.0 0.37198067 0.0 0.0 0.0 1.0 0.5458937 0.78039217 0.7764706 0.7764706 1.0 0.65700483 1.0 0.99607843 0.99607843 1.0 1.0 ScaleX 3.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.5 StartBand 1 EndBand 3 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 8 0.7882353 0.49803922 0.023529412 1.0 0.0 0.91764706 0.8784314 0.05490196 1.0 0.10628019 0.89 0.329199 0.177758 1.0 0.15458937 0.5562499 0.20574935 0.11109874 1.0 0.21256039 0.0 0.0 0.0 1.0 0.28985506 0.14565827 0.13333333 0.11988795 1.0 0.4589372 0.50980395 0.46666667 0.41960785 1.0 0.68599033 0.8156863 0.8117647 0.8117647 1.0 1.0 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.875 StartBand 2 EndBand 8 Seed -1 Periodic true transformation 1.0 0.0 -0.625 0.0 1.0 0.5625 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 9 0.198883 0.3 0.135 1.0 0.0 0.406805 0.613636 0.276136 1.0 0.10337928 0.324169 0.454545 0.114714 1.0 0.29771367 0.098346 0.136364 0.085909 1.0 0.44657052 0.196692 0.272727 0.171818 1.0 0.5964217 0.272727 0.21499 0.203431 1.0 0.68787223 0.430776 0.666667 0.326636 1.0 0.78330016 0.36939 0.42 0.3444 1.0 0.90258443 0.091517 0.26 0.0 1.0 0.99999994 Cell_Type 4 Distance_ 0 PointGen 0 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 16 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 0.8 0.8 0.0 1.0 1.0 Cell_Type 0 Distance_ 0 PointGen 0 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 26 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 6 0.5764706 0.5411765 0.5019608 1.0 0.004830897 0.36862746 0.3529412 0.32156864 1.0 0.20772946 0.18998075 0.16630016 0.11761947 1.0 0.37681162 0.006127451 0.006127451 0.006127451 1.0 0.64734304 0.42352942 0.39607844 0.3529412 1.0 0.82608694 0.34901962 0.29803923 0.2627451 1.0 1.0 ScaleX 4.0 ScaleY 5.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 8 Seed 22 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 12 1.0 1.0 1.0 1.0 0.09178744 0.0 0.4 0.4 1.0 0.13043478 0.0 0.4 0.4 1.0 0.17874396 1.0 1.0 1.0 1.0 0.22705314 1.0 1.0 1.0 1.0 0.44444445 0.0 0.4 0.4 1.0 0.49758455 0.0 0.4 0.4 1.0 0.5410628 1.0 1.0 1.0 1.0 0.589372 1.0 1.0 1.0 1.0 0.7487923 0.0 0.4 0.4 1.0 0.8115942 0.0 0.4 0.4 1.0 0.8647343 1.0 1.0 1.0 1.0 0.9178744 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.6875 StartBand 1 EndBand 10 Seed 17 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 9 1.0 1.0 1.0 1.0 0.09178744 0.6 0.6 0.0 1.0 0.14975846 1.0 1.0 1.0 1.0 0.22705314 1.0 1.0 1.0 1.0 0.44444445 0.6 0.6 0.0 1.0 0.5169082 1.0 1.0 1.0 1.0 0.589372 1.0 1.0 1.0 1.0 0.7487923 0.6 0.6 0.0 1.0 0.8357488 1.0 1.0 1.0 1.0 0.9178744 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.6875 StartBand 1 EndBand 4 Seed 15 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 6 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 0.5636701 0.89 0.329199 0.177758 1.0 0.7153562 1.0 1.0 0.0 1.0 0.8352055 0.91 0.574437 0.0 1.0 0.8820228 0.727273 0.127938 0.14837 1.0 0.99999994 Cell_Type 4 Distance_ 0 PointGen 2 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 23 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternBrick\nColor_Mapping 4 0.0 0.0 0.0 1.0 0.0 0.7254902 0.36078432 0.36078432 1.0 0.08695652 0.44313726 0.21176471 0.21176471 1.0 0.531401 1.0 0.4 0.4 1.0 1.0 NumX 4 NumY 6 Shift 0.5 RandShift 0.1 GapX 0.03 GapY 0.03 Smooth 0.05 RandColor true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternBrick\nColor_Mapping 6 0.003921569 0.003921569 0.003921569 1.0 0.0 0.003921569 0.003921569 0.003921569 1.0 0.08695652 0.654902 0.4862745 0.23529412 1.0 0.16425121 0.34 0.128091 0.107291 1.0 0.44927537 0.74509805 0.39215687 0.16862746 1.0 0.7198068 0.204545 0.121376 0.046011 1.0 1.0 NumX 14 NumY 1 Shift 0.5 RandShift 0.1 GapX 0.005000001 GapY 0.0 Smooth 0.009375 RandColor true transformation 0.5 0.0 0.0 0.0 0.5 0.375 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternFunction\nColor_Mapping 6 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 0.5636701 0.89 0.329199 0.177758 1.0 0.7153562 1.0 1.0 0.0 1.0 0.8352055 0.91 0.574437 0.0 1.0 0.8820228 0.727273 0.127938 0.14837 1.0 0.99999994 FunctionU 0 FunctionV 0 Combiner 0 ScaleX 13.0 ScaleY 3.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternFunction\nColor_Mapping 4 0.0 0.0 0.0 1.0 0.0 0.2 0.2 0.2 1.0 0.62801933 0.0 0.8 0.8 1.0 0.9130435 1.0 1.0 1.0 1.0 1.0 FunctionU 0 FunctionV 0 Combiner 2 ScaleX 4.0 ScaleY 4.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternPerlinNoise\nColor_Mapping 2 0.0 0.0 1.0 1.0 0.2657005 1.0 1.0 1.0 1.0 0.68599033 ScaleX 2.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 10 Seed 2 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternTile\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 BorderX 0.1 BorderY 0.1 Smooth 0.025 transformation 2.0 0.0 0.0 0.0 2.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 1.0 1.0 0.0 1.0 0.096618354 0.0 0.0 0.0 1.0 0.28502417 Cell_Type 0 Distance_ 0 PointGen 1 Seed 0 Intensity 1.0 Jitter 0.625 NumPoints 64 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternCellular\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.2173913 1.0 1.0 1.0 1.0 0.41062802 Cell_Type 4 Distance_ 0 PointGen 2 Seed 0 Intensity 1.0 Jitter 0.0 NumPoints 32 RandColor false Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternChecker\nColor_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 1.0 ScaleY 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\nengine.graphics.synthesis.texture.PatternConstantColor\nColor 0.8 0.4 0.7 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters\n";
 	String NTEPresetString;
 
 	Vector<Class<?>> allPatterns = new Vector<Class<?>>();
 	Vector<Class<?>> allChannels = new Vector<Class<?>>();
-	
+
 	ColorChooserDialog m_ColorChooser;
 	JFileChooser m_TextureFileChooser_SaveLoadGraph;
 	JFileChooser m_TextureFileChooser_SaveLoadImage;
 	ProgressDialog m_ProgressDialog;
 
-
 	// String title = "NeoTextureEdit - Revision " + svnRevisionNumber;
 	String title = "NeoTextureEdit - Version " + programVersionNumber;
 
-	String help_message = "NeoTextureEdit " + programVersionNumber + " Help Overview\n\n" + "Right Click on empty space: create texture channels and patterns\n"
-			+ "Middle Click: Drag the Graph Canvas\n" + "Left Click on channel/pattern: select and drag\n" + "Richt Click on channel/pattern: additional options\n"
-			+ "\n" + "Parameter editor (right side for selected channel/pattern)\n" + "         Shift-Click on increment/decrement buttons uses smaller value.\n"
-			+ "\n" + "Gradient Editor:\n" + "         Double Click inserts or edits a color node\n"
-			+ "         Shift Click and drag on color node edits alpha value\n";
+	String help_message = "NeoTextureEdit " + programVersionNumber + " Help Overview\n\n"
+			+ "Right Click on empty space: create texture channels and patterns\n" + "Middle Click: Drag the Graph Canvas\n"
+			+ "Left Click on channel/pattern: select and drag\n" + "Richt Click on channel/pattern: additional options\n" + "\n"
+			+ "Parameter editor (right side for selected channel/pattern)\n"
+			+ "         Shift-Click on increment/decrement buttons uses smaller value.\n" + "\n" + "Gradient Editor:\n"
+			+ "         Double Click inserts or edits a color node\n" + "         Shift Click and drag on color node edits alpha value\n";
 
-	String about_message = "NeoTextureEdit\n\n" + "Version: " + programVersionNumber + "\n" + "(c) Copyright Holger Dammertz 2010. All rights reserved.\n"
-			+ "Visit http://sourceforge.net/projects/neotextureedit/\n\n" +
-			  		"NeoTextureEdit and the runtime generation library NeoTexture are\n" +
-			  		"licensed under the GNU LGPL v.3. See the files COPYING and\n" +
-			  		"COPYING.LESSER for details.\n\n" +
-					"This program is distributed in the hope that it will be useful,\n" +
-    "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
-			// + "Send comments, suggestions, bugs to holger.dammertz@googlemail.com";
+	String about_message = "NeoTextureEdit\n\n" + "Version: " + programVersionNumber + "\n"
+			+ "(c) Copyright Holger Dammertz 2010. All rights reserved.\n" + "Visit http://sourceforge.net/projects/neotextureedit/\n\n"
+			+ "NeoTextureEdit and the runtime generation library NeoTexture are\n"
+			+ "licensed under the GNU LGPL v.3. See the files COPYING and\n" + "COPYING.LESSER for details.\n\n"
+			+ "This program is distributed in the hope that it will be useful,\n"
+			+ "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" + "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
 
-	
+	// + "Send comments, suggestions, bugs to holger.dammertz@googlemail.com";
+
 	private void tempTest_FindAllPatternsAndChannelClasses() {
 		String packName = Channel.class.getPackage().getName();
 		String[] files = null;
-		/*String dir = "/" + packName.replace('.', '/');
-		try {
-			URL url = Channel.class.getResource(dir);
-			if (url != null) {
-				File f = new File(url.toURI());
-				files = f.list();
-			} 
-			else */{
-				//System.err.println("WARNING: automatic loading of patterns/channels failed; adding hardcoded set");
-				String[] f = {"FilterBlend.class", "FilterBrightnessContrast.class", "FilterColorize.class", "FilterEmboss.class",
-						"FilterMask.class", "FilterNormalMap.class", "FilterWarp.class", "Pattern.class", "PatternBrick.class", "PatternCellular.class",
-						"PatternChecker.class", "PatternConstantColor.class", "PatternGradient.class", "PatternPerlinNoise.class", "PatternTile.class",
-						"PatternFunction.class", "PatternBitmap.class", "FilterIlluminate.class"};
-				files = f;
-			}
+		/*
+		 * String dir = "/" + packName.replace('.', '/'); try { URL url =
+		 * Channel.class.getResource(dir); if (url != null) { File f = new
+		 * File(url.toURI()); files = f.list(); } else
+		 */{
+			// System.err.println("WARNING: automatic loading of patterns/channels failed; adding hardcoded set");
+			String[] f = { "FilterBlend.class", "FilterBrightnessContrast.class", "FilterColorize.class", "FilterEmboss.class",
+					"FilterMask.class", "FilterNormalMap.class", "FilterWarp.class", "Pattern.class", "PatternBrick.class",
+					"PatternCellular.class", "PatternChecker.class", "PatternConstantColor.class", "PatternGradient.class",
+					"PatternPerlinNoise.class", "PatternTile.class", "PatternFunction.class", "PatternBitmap.class", "FilterIlluminate.class" };
+			files = f;
+		}
 
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].endsWith(".class")) {
-					String className = files[i].substring(0, files[i].length() - 6);
-					try {
-						Class<?> c = Class.forName(packName + "." + className);
-						Object o = c.newInstance();
-						if (o instanceof Pattern) {
-							if (c != Pattern.class)
-								allPatterns.add(c);
-						} else if (o instanceof Channel)
-							allChannels.add(c);
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].endsWith(".class")) {
+				String className = files[i].substring(0, files[i].length() - 6);
+				try {
+					Class<?> c = Class.forName(packName + "." + className);
+					Object o = c.newInstance();
+					if (o instanceof Pattern) {
+						if (c != Pattern.class)
+							allPatterns.add(c);
+					} else if (o instanceof Channel)
+						allChannels.add(c);
 
-						// output of loaded classes for easy copy-paste for jar
-						// version
-						//if (url != null)
-						//	System.out.print("\"" + files[i] + "\",");
+					// output of loaded classes for easy copy-paste for jar
+					// version
+					// if (url != null)
+					// System.out.print("\"" + files[i] + "\",");
 
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					} catch (InstantiationException e) {
-						// e.printStackTrace(); // happens because of possible
-						// abstract classes or interfaces
-					} catch (IllegalAccessException e) {
-						// e.printStackTrace(); also happens
-					}
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					// e.printStackTrace(); // happens because of possible
+					// abstract classes or interfaces
+				} catch (IllegalAccessException e) {
+					// e.printStackTrace(); also happens
 				}
-				// Class.forName()
 			}
-		/*} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}*/
+			// Class.forName()
+		}
+		/*
+		 * } catch (URISyntaxException e) { e.printStackTrace(); }
+		 */
 	}
 
 	/**
-	 * This is the graphical representation of a Pattern Preset in the PatternSelectorPanel
+	 * This is the graphical representation of a Pattern Preset in the
+	 * PatternSelectorPanel
+	 * 
 	 * @author Holger Dammertz
-	 *
+	 * 
 	 */
 	class PatternPresetLabel extends JLabel {
 		private static final long serialVersionUID = -6943441006941948327L;
@@ -212,8 +213,9 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 	/**
 	 * This panel is used to show, select and delete the presets of Patterns.
+	 * 
 	 * @author Holger Dammertz
-	 *
+	 * 
 	 */
 	class PatternSelectorPanel extends JPanel implements ActionListener, MouseListener {
 		private static final long serialVersionUID = 5732720988651708823L;
@@ -264,8 +266,8 @@ public class TextureEditor extends JFrame implements ActionListener {
 		}
 
 		/**
-		 * Loads a list presets from the NTEPresetString variable using a scanner. For each preset
-		 * the addPatternPreset method is called.
+		 * Loads a list presets from the NTEPresetString variable using a
+		 * scanner. For each preset the addPatternPreset method is called.
 		 */
 		void loadPresets() {
 			Scanner s = new Scanner(NTEPresetString);
@@ -281,8 +283,9 @@ public class TextureEditor extends JFrame implements ActionListener {
 		}
 
 		/**
-		 * Saves all entries in the preset list to the global string NTEPresetString using a
-		 * StringWriter and the TextureGraphNode.saveChannel method (Presets are just Patterns).
+		 * Saves all entries in the preset list to the global string
+		 * NTEPresetString using a StringWriter and the
+		 * TextureGraphNode.saveChannel method (Presets are just Patterns).
 		 */
 		void savePresets() {
 			try {
@@ -299,7 +302,8 @@ public class TextureEditor extends JFrame implements ActionListener {
 		}
 
 		/**
-		 * Adds a given Pattern p to the list of presets 
+		 * Adds a given Pattern p to the list of presets
+		 * 
 		 * @param p
 		 */
 		public void addPatternPreset(Pattern p) {
@@ -331,6 +335,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 		/**
 		 * Deletes a given preset from the list of presets.
+		 * 
 		 * @param p
 		 */
 		public void removePatternPreset(PatternPresetLabel p) {
@@ -341,8 +346,8 @@ public class TextureEditor extends JFrame implements ActionListener {
 			patternPanel.revalidate();
 			repaint();
 		}
-		
-		
+
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
 
@@ -357,15 +362,19 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 		}
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
 		}
 
+		@Override
 		public void mouseEntered(MouseEvent e) {
 		}
 
+		@Override
 		public void mouseExited(MouseEvent e) {
 		}
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 			Object c = e.getSource();
 			if ((e.getButton() == MouseEvent.BUTTON3) && (c instanceof PatternPresetLabel)) {
@@ -376,14 +385,16 @@ public class TextureEditor extends JFrame implements ActionListener {
 			}
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e) {
 		}
 	}
 
 	/**
 	 * This is the file selection filter used in the open/save dialogs.
+	 * 
 	 * @author Holger Dammertz
-	 *
+	 * 
 	 */
 	class TextureEditorFilenameFilter extends FileFilter {
 		private String m_Extensions;
@@ -430,9 +441,9 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 	PatternSelectorPanel m_PatternSelector;
 	TextureGraphEditorPanel m_GraphDrawPanel;
-	public OpenGLPreviewPanel m_OpenGLPreviewPanel; //!!TODO: remove the public here
+	public OpenGLPreviewPanel m_OpenGLPreviewPanel; // !!TODO: remove the public
+													// here
 	JPanel m_CenterPanel;
-
 
 	class ProgressDialog extends JDialog implements ProgressBarInterface {
 		private static final long serialVersionUID = 4543000728695540838L;
@@ -468,7 +479,8 @@ public class TextureEditor extends JFrame implements ActionListener {
 		public void startProgress() {
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			getParent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			setLocation(getParent().getX() + getParent().getWidth() / 2 - getWidth() / 2, getParent().getY() + getParent().getHeight() / 2 - getHeight() / 2);
+			setLocation(getParent().getX() + getParent().getWidth() / 2 - getWidth() / 2, getParent().getY() + getParent().getHeight() / 2
+					- getHeight() / 2);
 			setVisible(true);
 		}
 
@@ -481,7 +493,8 @@ public class TextureEditor extends JFrame implements ActionListener {
 	}
 
 	public void exitTextureEditor() {
-		if (GL_ENABLED) m_OpenGLPreviewPanel.quit();
+		if (GL_ENABLED)
+			m_OpenGLPreviewPanel.quit();
 		m_GraphDrawPanel.save("exit.tgr");
 		saveExitParameters();
 		System.exit(0);
@@ -567,11 +580,13 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		String c = e.getActionCommand();
 		if (c.equals("file_new")) {
 			m_GraphDrawPanel.deleteFullGraph();
-			if (GL_ENABLED) m_OpenGLPreviewPanel.resetPreview();
+			if (GL_ENABLED)
+				m_OpenGLPreviewPanel.resetPreview();
 			setCurrentFileName(null);
 		} else if (c.equals("file_open")) {
 			m_TextureFileChooser_SaveLoadGraph.setDialogTitle("Loading texture graph from ...");
@@ -621,11 +636,14 @@ public class TextureEditor extends JFrame implements ActionListener {
 		}
 
 	}
-	
-	
+
 	class CommandLineOptions {
-		String filename; // this is the last given name in the list of filenames;
-		Vector<String> allFileNames = new Vector<String>(); // used so that wildcards work for example for export
+		String filename; // this is the last given name in the list of
+							// filenames;
+		Vector<String> allFileNames = new Vector<String>(); // used so that
+															// wildcards work
+															// for example for
+															// export
 		String exportPath = ".";
 		int exportResX = 512;
 		int exportResY = 512;
@@ -635,7 +653,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 		void parse(String[] args) {
 			for (int i = 0; i < args.length; i++) {
 				String a = args[i];
-				
+
 				if (!a.startsWith("-")) {
 					filename = a;
 					allFileNames.add(a);
@@ -656,7 +674,8 @@ public class TextureEditor extends JFrame implements ActionListener {
 				} else if (a.equalsIgnoreCase("--disableGL")) {
 					useOpenGL = false;
 				} else if (a.equalsIgnoreCase("--help") || a.equalsIgnoreCase("-h")) {
-					System.out.println("\nNeoTextureEdit " + "Version: " + programVersionNumber + " " + "(c) Copyright Holger Dammertz 2010. All rights reserved.\n");
+					System.out.println("\nNeoTextureEdit " + "Version: " + programVersionNumber + " "
+							+ "(c) Copyright Holger Dammertz 2010. All rights reserved.\n");
 					System.out.println("Usage: neotextureedit [filename] [options]");
 					System.out.println(" Options: ");
 					System.out.println("    -h, --help                this help");
@@ -670,22 +689,21 @@ public class TextureEditor extends JFrame implements ActionListener {
 			}
 		}
 	};
-	
-	
+
 	final CommandLineOptions commandLineOptions = new CommandLineOptions();
-	
-	
+
 	class StdOutProgressBar implements ProgressBarInterface {
 		float count = 0;
+
 		@Override
 		public void endProgress() {
-			System.out.println();			
+			System.out.println();
 		}
 
 		@Override
 		public void setProgress(float val) {
 			while (count < val) {
-				count += 1.0f/32.0f;
+				count += 1.0f / 32.0f;
 				System.out.print(".");
 			}
 		}
@@ -695,47 +713,46 @@ public class TextureEditor extends JFrame implements ActionListener {
 			count = 0;
 		}
 	}
-	
+
 	/**
-	 * Called when the command line option is given to export. Exits
-	 * after exporting all marked nodes in the given file.
+	 * Called when the command line option is given to export. Exits after
+	 * exporting all marked nodes in the given file.
 	 */
 	void exportTexturesToImages() {
 		if (commandLineOptions.allFileNames.size() == 0) {
 			System.out.println("Export error: need at least one filename of texture graph to load.");
 			System.exit(0);
 		}
-		
+
 		Channel.useCache = false;
-		
+
 		for (String filename : commandLineOptions.allFileNames) {
 			TextureGraphEditorPanel te = new TextureGraphEditorPanel();
 			te.load(filename, true);
-			
+
 			for (TextureGraphNode n : te.graph.getAllNodes()) {
 				if (n.getChannel().isMarkedForExport()) {
 					String exportname = n.getChannel().exportName.get();
 					String f = filename;
 					// ugly
-					String tmp_filename = f.substring(f.lastIndexOf("\\")+1, f.length()-4);
-					tmp_filename = tmp_filename.substring(tmp_filename.lastIndexOf("/")+1);
+					String tmp_filename = f.substring(f.lastIndexOf("\\") + 1, f.length() - 4);
+					tmp_filename = tmp_filename.substring(tmp_filename.lastIndexOf("/") + 1);
 					exportname = exportname.replaceAll("\\%f", tmp_filename);
-					exportname = exportname.replaceAll("\\%r", commandLineOptions.exportResX+"x"+commandLineOptions.exportResY);
-					exportname = commandLineOptions.exportPath+"/"+exportname+".png";
+					exportname = exportname.replaceAll("\\%r", commandLineOptions.exportResX + "x" + commandLineOptions.exportResY);
+					exportname = commandLineOptions.exportPath + "/" + exportname + ".png";
 					System.out.println("Exporting " + exportname);
 					try {
-						ImageIO.write(n.getChannel()
-								.createAndComputeImage(commandLineOptions.exportResX, commandLineOptions.exportResY, new StdOutProgressBar(), 0), "png", new File(exportname));
+						ImageIO.write(n.getChannel().createAndComputeImage(commandLineOptions.exportResX, commandLineOptions.exportResY,
+								new StdOutProgressBar(), 0), "png", new File(exportname));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		}
-		
+
 		System.exit(0);
 	}
-	
 
 	// GradientEditorPanel m_GradientEditorPanel;
 
@@ -745,20 +762,20 @@ public class TextureEditor extends JFrame implements ActionListener {
 		INSTANCE = this;
 		// now parse the command line
 		commandLineOptions.parse(args);
-		
+
 		if (commandLineOptions.exportOnly) {
 			exportTexturesToImages();
 		}
 
+		addKeyListener(this);
+
 		tempTest_FindAllPatternsAndChannelClasses();
-		
+
 		try {
 			globalSettings.load(new FileReader("TextureEditorSettings"));
 		} catch (IOException ioe) {
 			Logger.logWarning(this, "No TextureEditorSettings file found. Starting with default settings.");
 		}
-		
-		
 
 		setTitle(title);
 		setIconImage(new PatternChecker(2, 2).createAndComputeImage(16, 16, null, 0));
@@ -779,8 +796,10 @@ public class TextureEditor extends JFrame implements ActionListener {
 		if (commandLineOptions.useOpenGL) {
 			try {
 				m_OpenGLPreviewPanel = new OpenGLPreviewPanel();
-				if (!TextureEditor.GL_ENABLED) { // sth. went wrong on initializing openGL so we disable openGL preview
-					//m_OpenGLPreviewPanel = null;
+				if (!TextureEditor.GL_ENABLED) { // sth. went wrong on
+													// initializing openGL so we
+													// disable openGL preview
+					// m_OpenGLPreviewPanel = null;
 					Logger.logError(this, "Could not initialize OpenGL for Preview Rendering!");
 				}
 			} catch (NoClassDefFoundError ncdfe) {
@@ -793,8 +812,7 @@ public class TextureEditor extends JFrame implements ActionListener {
 		m_ProgressDialog = new ProgressDialog(this);
 		m_PatternSelector = new PatternSelectorPanel();
 		m_GraphDrawPanel = new TextureGraphEditorPanel();
-		
-		
+
 		GradientEditorPanel.colorChooser = m_ColorChooser;
 
 		m_TextureFileChooser_SaveLoadGraph = new JFileChooser(".");
@@ -802,35 +820,32 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 		m_TextureFileChooser_SaveLoadImage = new JFileChooser(".");
 		m_TextureFileChooser_SaveLoadImage.addChoosableFileFilter(new TextureEditorFilenameFilter("png", "Image Files (.png)"));
-		
-		
+
 		m_CenterPanel = new JPanel(new BorderLayout());
-		
 
 		m_CenterPanel.add(m_PatternSelector, BorderLayout.WEST);
 		m_CenterPanel.add(m_GraphDrawPanel, BorderLayout.CENTER);
-		
+
 		if (GL_ENABLED) {
 			m_CenterPanel.add(m_OpenGLPreviewPanel, BorderLayout.SOUTH);
 		}
-		
+
 		getContentPane().add(m_GraphDrawPanel.getParameterEditorPanel(), BorderLayout.EAST);
 		getContentPane().add(m_CenterPanel, BorderLayout.CENTER);
-		
-		
+
 		createMainMenu();
-		
+
 		loadAndSetExitParameters(commandLineOptions.filename);
-		
-		
+
 		m_PatternSelector.loadPresets();
 	}
 
 	private void saveExitParameters() {
-		m_PatternSelector.savePresets(); // stores them in a string in NTEPresetString
+		m_PatternSelector.savePresets(); // stores them in a string in
+											// NTEPresetString
 
 		saveStringP("NTEPresets", NTEPresetString);
-		
+
 		saveIntP("mainWindowPosX", getX());
 		saveIntP("mainWindowPosY", getY());
 		saveIntP("mainWindowSizeX", getWidth());
@@ -840,10 +855,12 @@ public class TextureEditor extends JFrame implements ActionListener {
 		saveIntP("m_ColorChooser.PosY", m_ColorChooser.getY());
 		saveIntP("m_TextureFileChooser_SaveLoadImage.PosX", m_TextureFileChooser_SaveLoadImage.getX());
 		saveIntP("m_TextureFileChooser_SaveLoadImage.PosY", m_TextureFileChooser_SaveLoadImage.getY());
-		saveStringP("m_TextureFileChooser_SaveLoadImage.directory", m_TextureFileChooser_SaveLoadImage.getCurrentDirectory().getAbsolutePath());
+		saveStringP("m_TextureFileChooser_SaveLoadImage.directory", m_TextureFileChooser_SaveLoadImage.getCurrentDirectory()
+				.getAbsolutePath());
 		saveIntP("m_TextureFileChooser_SaveLoadGraph.PosX", m_TextureFileChooser_SaveLoadGraph.getX());
 		saveIntP("m_TextureFileChooser_SaveLoadGraph.PosY", m_TextureFileChooser_SaveLoadGraph.getY());
-		saveStringP("m_TextureFileChooser_SaveLoadGraph.directory", m_TextureFileChooser_SaveLoadGraph.getCurrentDirectory().getAbsolutePath());
+		saveStringP("m_TextureFileChooser_SaveLoadGraph.directory", m_TextureFileChooser_SaveLoadGraph.getCurrentDirectory()
+				.getAbsolutePath());
 
 		saveStringP("m_CurrentFileName", m_CurrentFileName);
 
@@ -859,18 +876,16 @@ public class TextureEditor extends JFrame implements ActionListener {
 
 		setSize(getIntP("mainWindowSizeX", 1024), getIntP("mainWindowSizeY", 768));
 		setLocation(getIntP("mainWindowPosX", 0), getIntP("mainWindowPosY", 0));
-		
 
 		m_ColorChooser.setLocation(getIntP("m_ColorChooser.PosX", 0), getIntP("m_ColorChooser.PosY", 0));
-		m_TextureFileChooser_SaveLoadImage
-				.setLocation(getIntP("m_TextureFileChooser_SaveLoadImage.PosX", 0), getIntP("m_TextureFileChooser_SaveLoadImage.PosY", 0));
+		m_TextureFileChooser_SaveLoadImage.setLocation(getIntP("m_TextureFileChooser_SaveLoadImage.PosX", 0), getIntP(
+				"m_TextureFileChooser_SaveLoadImage.PosY", 0));
 		m_TextureFileChooser_SaveLoadImage.setCurrentDirectory(new File(getStringP("m_TextureFileChooser_SaveLoadImage.directory", ".")));
 
-		m_TextureFileChooser_SaveLoadGraph
-				.setLocation(getIntP("m_TextureFileChooser_SaveLoadGraph.PosX", 0), getIntP("m_TextureFileChooser_SaveLoadGraph.PosY", 0));
+		m_TextureFileChooser_SaveLoadGraph.setLocation(getIntP("m_TextureFileChooser_SaveLoadGraph.PosX", 0), getIntP(
+				"m_TextureFileChooser_SaveLoadGraph.PosY", 0));
 		m_TextureFileChooser_SaveLoadGraph.setCurrentDirectory(new File(getStringP("m_TextureFileChooser_SaveLoadGraph.directory", ".")));
-		
-		
+
 		if (cmdLine_fileNameToLoad != null) {
 			setCurrentFileName(cmdLine_fileNameToLoad);
 			if (!m_GraphDrawPanel.load(m_CurrentFileName, true)) {
@@ -878,7 +893,8 @@ public class TextureEditor extends JFrame implements ActionListener {
 			}
 		} else {
 			setCurrentFileName(getStringP("m_CurrentFileName", "examples/example_Bricks.tgr"));
-			if (m_CurrentFileName.equals("null")) setCurrentFileName(null); 
+			if (m_CurrentFileName.equals("null"))
+				setCurrentFileName(null);
 			else if (!m_GraphDrawPanel.load(m_CurrentFileName, true)) {
 				setCurrentFileName(null);
 			}
@@ -889,18 +905,18 @@ public class TextureEditor extends JFrame implements ActionListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		JPopupMenu.setDefaultLightWeightPopupEnabled(false); // needed for the gl canvas
+		JPopupMenu.setDefaultLightWeightPopupEnabled(false); // needed for the
+																// gl canvas
 		// font for the basic help dialogs
 		UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Monospaced", Font.PLAIN, 12)));
 
-		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			// UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 
@@ -974,7 +990,9 @@ public class TextureEditor extends JFrame implements ActionListener {
 	ImageIcon s_ButtonIconA_Selector;
 
 	/**
-	 * Creates and caches a procedural ImageIcon representing the RGB channel of an image.
+	 * Creates and caches a procedural ImageIcon representing the RGB channel of
+	 * an image.
+	 * 
 	 * @return the generated or cached ImageIcon
 	 */
 	public ImageIcon Get_IconRGB() {
@@ -993,7 +1011,9 @@ public class TextureEditor extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Creates and caches a procedural ImageIcon representing the RGBA channel of an image.
+	 * Creates and caches a procedural ImageIcon representing the RGBA channel
+	 * of an image.
+	 * 
 	 * @return the generated or cached ImageIcon
 	 */
 	public ImageIcon Get_IconRGBA() {
@@ -1026,7 +1046,9 @@ public class TextureEditor extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Creates and caches a procedural ImageIcon representing the alpha channel of an image.
+	 * Creates and caches a procedural ImageIcon representing the alpha channel
+	 * of an image.
+	 * 
 	 * @return the generated or cached ImageIcon
 	 */
 	public ImageIcon Get_IconA() {
@@ -1045,5 +1067,28 @@ public class TextureEditor extends JFrame implements ActionListener {
 		return s_ButtonIconA_Selector;
 	}
 
+	/**
+	 * Here is currently hard coded the keyboard handling of all key events in
+	 * NeoTextureEdit.
+	 */
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		System.out.println("BNL: " + arg0);
+		switch (arg0.getKeyCode()) {
+		case KeyEvent.VK_DELETE:
+			System.out.println("DELETE");
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+	}
 
 }

@@ -238,6 +238,7 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 		}
 	}
 
+	@Override
 	public void channelChanged(Channel source) {
 		//System.out.println("ChannelParameterEditor: Channel Change " + node);
 		if (node == null) {
@@ -254,6 +255,7 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 		repaint();
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		String c = e.getActionCommand();
 		if (c.equals("RGB")) {
