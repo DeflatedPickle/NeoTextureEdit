@@ -22,7 +22,7 @@ import engine.graphics.synthesis.texture.Channel;
  * 
  */
 public final class TextureGenerator {
-	static private String version = "0.6.1.1";
+	static private String version = "0.6.2git";
 	static private boolean useCache = false;
 
 	/**

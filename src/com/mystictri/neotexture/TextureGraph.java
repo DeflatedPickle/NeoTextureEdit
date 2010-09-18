@@ -167,6 +167,11 @@ public final class TextureGraph {
 		}
 	}
 	
+	public void addSelectedNode(TextureGraphNode node) {
+		if (node != null) {
+			if (!selectedNodes.contains(node)) selectedNodes.add(node);
+		}
+	}
 	
 	public TextureNodeConnection getConnectionAtInputPoint(TextureGraphNode.ConnectionPoint input) {
 		for (TextureNodeConnection c : allConnections) {
