@@ -29,7 +29,7 @@ import java.util.Vector;
  * @author Holger Dammertz
  *
  */
-public class EnumParam extends AbstractParam {
+public final class EnumParam extends AbstractParam {
 	private final Vector<String> enums = new Vector<String>();
 	
 	private int valuePos;

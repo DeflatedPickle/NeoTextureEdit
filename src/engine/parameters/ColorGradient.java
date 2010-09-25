@@ -22,9 +22,9 @@ import java.util.Vector;
 import engine.base.Vector4;
 
 //!!TODO: this can be optimized easily
-public class ColorGradient {
+public final class ColorGradient {
 
-	class Entry {
+	private static final class Entry {
 		public Vector4 color;
 		public float position;
 

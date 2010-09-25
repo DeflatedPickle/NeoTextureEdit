@@ -1073,7 +1073,6 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 	 */
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		System.out.println("BNL: " + arg0);
 		switch (arg0.getKeyCode()) {
 		case KeyEvent.VK_DELETE:
 			System.out.println("DELETE");

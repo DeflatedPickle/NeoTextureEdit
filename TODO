@@ -9,6 +9,12 @@ Feature Requests:
   
   Keyboard shortcuts,
   
+  
+Caching System and Derivative based nodes:
+  Idea: - perhaps store the derivative also in the cache buffer next to the color data
+        - for warp try: use the non-cache evaluation for the warped texture
+        - make the cache tileable (and the tile size configurable)
+        
 
 
 Refactoring:

@@ -23,7 +23,7 @@ import java.util.Scanner;
 
 import engine.base.Vector4;
 
-public class ColorGradientParam extends AbstractParam {
+public final class ColorGradientParam extends AbstractParam {
 	private final ColorGradient m_Gradient;
 	
 	private ColorGradientParam(String name) {

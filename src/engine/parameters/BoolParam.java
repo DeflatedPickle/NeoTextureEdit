@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Scanner;
 
-public class BoolParam extends AbstractParam {
+public final class BoolParam extends AbstractParam {
 	boolean value;
 	
 	private BoolParam(String name, boolean value) {

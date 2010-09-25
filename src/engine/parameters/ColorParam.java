@@ -23,7 +23,7 @@ import java.util.Scanner;
 
 import engine.base.Vector3;
 
-public class ColorParam extends AbstractParam {
+public final class ColorParam extends AbstractParam {
 	final Vector3 color = new Vector3();
 
 	private ColorParam(String name, float r, float g, float b) {
