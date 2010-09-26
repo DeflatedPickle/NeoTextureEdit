@@ -167,9 +167,15 @@ public final class TextureGraph {
 		}
 	}
 	
-	public void addSelectedNode(TextureGraphNode node) {
+	/**
+	 * Adds the given node to the selection if it is not already contained. Else it
+	 * is removed from the selection.
+	 * @param node
+	 */
+	public void addOrRemoveNodeToSelection(TextureGraphNode node) {
 		if (node != null) {
 			if (!selectedNodes.contains(node)) selectedNodes.add(node);
+			else selectedNodes.remove(node);
 		}
 	}
 	

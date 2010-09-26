@@ -32,6 +32,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -70,7 +72,7 @@ import engine.graphics.synthesis.texture.Pattern;
  * @author Holger Dammertz
  *
  */
-final class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener, ChannelChangeListener, TextureGraphListener {
+final class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ChannelChangeListener, TextureGraphListener {
 	private static final long serialVersionUID = 4535161419971720668L;
 	int dragStartX = 0;
 	int dragStartY = 0;
@@ -171,6 +173,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 		setLayout(null);
 
 		addMouseListener(this);
+		addMouseWheelListener(this);
 		addMouseMotionListener(this);
 
 		createPopupMenus();
@@ -474,7 +477,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 	}
 
 	public void addSelectedNode(TextureGraphNode node) {
-		graph.addSelectedNode(node);
+		graph.addOrRemoveNodeToSelection(node);
 	}
 	
 	public boolean isNodeInSelection(TextureGraphNode node) {
@@ -704,6 +707,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 
 		if (getWidth() != canvas.getWidth() || getHeight() != canvas.getHeight()) {
 			gr.drawImage(canvas.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
+			//gr.drawImage(canvas.getScaledInstance(getWidth(), getHeight(), Image.SCALE_FAST), 0, 0, null);
 		} else {
 			gr.drawImage(canvas, 0, 0, null);
 		}
@@ -828,7 +832,7 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 		int wsX = (int)((e.getX())*zoom) - desktopX;
 		int wsY = (int)((e.getY())*zoom) - desktopY;
 		
-		if (e.getButton() == 2 || (e.isAltDown())) { // Desktop Dragging
+		if (e.getButton() == 2 || (e.isControlDown())) { // Desktop Dragging
 			desktopDragging = true;
 		} else {
 			TextureGraphNode node = graph.getNodeAtPosition(wsX, wsY);
@@ -838,9 +842,8 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 					showSelectedChannelPopupMenu(node, e.getX(), e.getY());
 				} else { // if it was not a popup we look if we clicked on a connection point or on the rest of the node
 					int actionType = getActionTypeForMouseClick(wsX, wsY, node);
-					if (e.isControlDown()) { // add to selection of nodes
+					if (e.isShiftDown()) { // add to selection of nodes
 						addSelectedNode(node);
-						System.out.println(node);
 					} else if (actionType == 1) { // want to drag the position of the node
 						if (!isNodeInSelection(node)) setSelectedNode(node);
 						nodeDragging = true;
@@ -913,6 +916,26 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 	public void channelChanged(Channel source) {
 		if ((previewNode != null) && (previewNode.getChannel() == source)){
 			updatePreview();
+		}
+	}
+
+
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		if (e.getWheelRotation() < 0) {
+			if (zoom > 0.5f) {
+				//float x = e.getXOnScreen()*zoom;
+				//float y = e.getXOnScreen()*zoom;
+
+				zoom /= 2.0f;
+				repaint();
+			}
+		} else if (e.getWheelRotation() > 0) {
+			if (zoom < 4.0f) {
+				zoom *= 2.0f;
+				repaint();
+			}
 		}
 	}
 

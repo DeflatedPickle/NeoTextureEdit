@@ -1,5 +1,7 @@
 Currently working on:
  - Zoom
+    - fix: zoom to mouse cursor
+    - fix: make zoomed rendering faster
  - Curve class and CurveParam class
  - new tile-based caching system (with fallback for derivative based Filter)
  
