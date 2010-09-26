@@ -100,6 +100,13 @@ public class LocalParameterManager  implements ParamChangeListener {
 		return p;
 	}
 	
+	protected Matrix3x3Param CreateLocalMatrix3x3Param(String name) {
+		Matrix3x3Param p = Matrix3x3Param.Create(name);
+		m_LocalParameters.add(p);
+		p.addParamChangeListener(this);
+		return p;
+	}
+	
 	
 	public Vector<AbstractParam> getParameters() {
 		return m_LocalParameters;

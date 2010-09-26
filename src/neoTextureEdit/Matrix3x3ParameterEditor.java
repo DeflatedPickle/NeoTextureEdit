@@ -29,14 +29,13 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
-
 import engine.base.FMath;
 import engine.base.Matrix3x3;
-import engine.graphics.synthesis.texture.Channel;
+import engine.parameters.Matrix3x3Param;
 
 class Matrix3x3ParameterEditor extends AbstractParameterEditor implements DocumentListener, ActionListener {
 	private static final long serialVersionUID = -4845723469494814010L;
-	Matrix3x3 mat;
+	Matrix3x3Param mat;
 	final JTextField[] fields = new JTextField[9];
 	
 	JButton txInc, txDec, tyInc, tyDec, rotInc, rotDec, zoomInc, zoomDec, resetmat;
@@ -44,26 +43,26 @@ class Matrix3x3ParameterEditor extends AbstractParameterEditor implements Docume
 	static final int MAT_BUT_WIDTH = 32;
 	
 	boolean ignoreDocumentEvent = false; // some kind of hack to avoid notifying an event when updating all text fields at once after a matrix change through a button press
-	Channel texChannel; // used to notify of a parameter change
 	
 	/**
 	 * 
 	 * @param m
 	 * @param c TEMP: giving the channel here solves the problem of not having a Matrix3x3 parameter yet
 	 */
-	public Matrix3x3ParameterEditor(Matrix3x3 m, Channel c) {
-		texChannel = c;
+	public Matrix3x3ParameterEditor(Matrix3x3Param matrixParam) {
 		setPreferredSize(new Dimension(256-16, h*3+8+32));
 		setSize(getPreferredSize());
 		setLayout(null);
-		mat = m;
+		mat = matrixParam;
 		
 		setBorder(BorderFactory.createTitledBorder("Coordinate Transformation"));
 		
 		int x = 8;
 		int y = 8+20;
+		
+		Matrix3x3 m = mat.getMatrix();
 		for (int i = 0; i < 9; i++) {
-			fields[i] = new JTextField(""+mat.get(i));
+			fields[i] = new JTextField(""+m.get(i));
 			fields[i].setBounds(x, y, 40, h);
 			add(fields[i]);
 			fields[i].getDocument().addDocumentListener(this);
@@ -118,8 +117,8 @@ class Matrix3x3ParameterEditor extends AbstractParameterEditor implements Docume
 		try {
 			String txt = d.getText(0, d.getLength());
 			val = (Float.parseFloat(txt));
-			mat.set(idx, val);
-			texChannel.parameterChanged(null);
+			mat.getMatrix().set(idx, val);
+			mat.notifyParamChangeListener();
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		} catch (NumberFormatException nfe) {
@@ -129,11 +128,11 @@ class Matrix3x3ParameterEditor extends AbstractParameterEditor implements Docume
 	void updateTextFieldEntries() {
 		ignoreDocumentEvent = true;
 		for (int i = 0; i < 9; i++) {
-			fields[i].setText(String.format("%.4f",mat.get(i)));
+			fields[i].setText(String.format("%.4f",mat.getMatrix().get(i)));
 			fields[i].setCaretPosition(0);
 		}
 		ignoreDocumentEvent = false;
-		texChannel.parameterChanged(null);
+		mat.notifyParamChangeListener();
 	}
 	
 
@@ -152,15 +151,15 @@ class Matrix3x3ParameterEditor extends AbstractParameterEditor implements Docume
 			scale = 1.125f;
 		}
 		
-		if (e.getSource() == resetmat) mat.set(Matrix3x3.CreateIdentity());
-		if (e.getSource() == txInc) mat.mult_ip(Matrix3x3.Create2DHomogenous_Translate( translation, 0.0f));
-		if (e.getSource() == txDec) mat.mult_ip(Matrix3x3.Create2DHomogenous_Translate(-translation, 0.0f));
-		if (e.getSource() == tyInc) mat.mult_ip(Matrix3x3.Create2DHomogenous_Translate(0.0f, translation));
-		if (e.getSource() == tyDec) mat.mult_ip(Matrix3x3.Create2DHomogenous_Translate(0.0f, -translation));
-		if (e.getSource() == zoomInc) mat.mult_ip(Matrix3x3.Create2DHomogenous_Scale(1.0f/scale, 1.0f/scale));
-		if (e.getSource() == zoomDec) mat.mult_ip(Matrix3x3.Create2DHomogenous_Scale(scale, scale));
-		if (e.getSource() == rotInc) mat.mult_ip(Matrix3x3.Create2DHomogenous_Rotate(rotAngle));
-		if (e.getSource() == rotDec) mat.mult_ip(Matrix3x3.Create2DHomogenous_Rotate(-rotAngle));
+		if (e.getSource() == resetmat) mat.getMatrix().set(Matrix3x3.CreateIdentity());
+		if (e.getSource() == txInc) mat.getMatrix().mult_ip(Matrix3x3.Create2DHomogenous_Translate( translation, 0.0f));
+		if (e.getSource() == txDec) mat.getMatrix().mult_ip(Matrix3x3.Create2DHomogenous_Translate(-translation, 0.0f));
+		if (e.getSource() == tyInc) mat.getMatrix().mult_ip(Matrix3x3.Create2DHomogenous_Translate(0.0f, translation));
+		if (e.getSource() == tyDec) mat.getMatrix().mult_ip(Matrix3x3.Create2DHomogenous_Translate(0.0f, -translation));
+		if (e.getSource() == zoomInc) mat.getMatrix().mult_ip(Matrix3x3.Create2DHomogenous_Scale(1.0f/scale, 1.0f/scale));
+		if (e.getSource() == zoomDec) mat.getMatrix().mult_ip(Matrix3x3.Create2DHomogenous_Scale(scale, scale));
+		if (e.getSource() == rotInc) mat.getMatrix().mult_ip(Matrix3x3.Create2DHomogenous_Rotate(rotAngle));
+		if (e.getSource() == rotDec) mat.getMatrix().mult_ip(Matrix3x3.Create2DHomogenous_Rotate(-rotAngle));
 		
 		
 		updateTextFieldEntries();

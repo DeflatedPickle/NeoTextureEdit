@@ -2,43 +2,43 @@
 #BeginNodes 13
 325 -48
 engine.graphics.synthesis.texture.PatternBrick
-ExportName "" Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 NumX 3 NumY 6 Shift 0.5 RandShift 0.1 GapX 0.01 GapY 0.01 Smooth 0.050000004 RandColor false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 NumX 3 NumY 6 Shift 0.5 RandShift 0.1 GapX 0.01 GapY 0.01 Smooth 0.050000004 RandColor false endparameters
 221 -50
 engine.graphics.synthesis.texture.PatternPerlinNoise
-ExportName "" Color_Mapping 6 0.84 0.84 0.84 1.0 0.0 0.333333 0.333333 0.333333 1.0 0.2714604 0.9 0.9 0.9 1.0 0.32879364 0.333333 0.333333 0.333333 1.0 0.4428261 1.0 1.0 1.0 1.0 0.81216353 0.6 0.6 0.6 1.0 0.99999994 ScaleX 16.0 ScaleY 16.0 ValueScale 1.0 Persistence 1.0 StartBand 3 EndBand 8 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 6 0.84 0.84 0.84 1.0 0.0 0.333333 0.333333 0.333333 1.0 0.2714604 0.9 0.9 0.9 1.0 0.32879364 0.333333 0.333333 0.333333 1.0 0.4428261 1.0 1.0 1.0 1.0 0.81216353 0.6 0.6 0.6 1.0 0.99999994 ScaleX 16.0 ScaleY 16.0 ValueScale 1.0 Persistence 1.0 StartBand 3 EndBand 8 Seed -1 Periodic true endparameters
 437 -51
 engine.graphics.synthesis.texture.PatternPerlinNoise
-ExportName "" Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 4.0 ScaleY 4.0 ValueScale 1.0 Persistence 0.375 StartBand 1 EndBand 9 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 4.0 ScaleY 4.0 ValueScale 1.0 Persistence 0.375 StartBand 1 EndBand 9 Seed -1 Periodic true endparameters
 347 72
 engine.graphics.synthesis.texture.FilterWarp
-ExportName "" Strength 0.5 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Strength 0.5 endparameters
 610 -51
 engine.graphics.synthesis.texture.PatternPerlinNoise
-ExportName "" Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 5.0 ScaleY 5.0 ValueScale 1.0 Persistence 1.0 StartBand 1 EndBand 9 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 5.0 ScaleY 5.0 ValueScale 1.0 Persistence 1.0 StartBand 1 EndBand 9 Seed -1 Periodic true endparameters
 472 81
 engine.graphics.synthesis.texture.FilterColorize
-ExportName "" Gray_to_Color_Mapping 3 0.73333335 0.4745098 0.34509805 1.0 0.0 0.67058825 0.37254903 0.30588236 1.0 0.46376812 0.85490197 0.53333336 0.29803923 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Gray_to_Color_Mapping 3 0.73333335 0.4745098 0.34509805 1.0 0.0 0.67058825 0.37254903 0.30588236 1.0 0.46376812 0.85490197 0.53333336 0.29803923 1.0 1.0 endparameters
 201 201
 engine.graphics.synthesis.texture.FilterMask
-ExportName "" Invert false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Invert false endparameters
 506 218
 engine.graphics.synthesis.texture.FilterEmboss
-ExportName "" Strength 0.8 Angle 45.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Strength 0.8 Angle 45.0 endparameters
 455 492
 engine.graphics.synthesis.texture.FilterEmboss
-ExportName "" Strength 2.0 Angle 45.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Strength 2.0 Angle 45.0 endparameters
 686 84
 engine.graphics.synthesis.texture.PatternPerlinNoise
-ExportName "" Color_Mapping 3 0.9490196 0.94509804 0.94509804 0.265625 0.0 0.6086956 0.6086956 0.6086956 0.44293478 0.39130434 0.0 0.0 0.0 0.0 1.0 ScaleX 7.0 ScaleY 7.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 9 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 3 0.9490196 0.94509804 0.94509804 0.265625 0.0 0.6086956 0.6086956 0.6086956 0.44293478 0.39130434 0.0 0.0 0.0 0.0 1.0 ScaleX 7.0 ScaleY 7.0 ValueScale 1.0 Persistence 0.75 StartBand 1 EndBand 9 Seed -1 Periodic true endparameters
 546 367
 engine.graphics.synthesis.texture.FilterBlend
-ExportName "brick_d" Layer_Func. 0 Opacity 1.0 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "brick_d" Layer_Func. 0 Opacity 1.0 Inv._Alpha false endparameters
 272 360
 engine.graphics.synthesis.texture.FilterNormalMap
-ExportName "brick_n" Strength 1.5 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "brick_n" Strength 1.5 endparameters
 405 316
 engine.graphics.synthesis.texture.FilterBlend
-ExportName "" Layer_Func. 0 Opacity 0.125 Inv._Alpha false transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Layer_Func. 0 Opacity 0.125 Inv._Alpha false endparameters
 #EndNodes
 #BeginConnections 15
 0 3 0

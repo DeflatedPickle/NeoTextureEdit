@@ -45,12 +45,13 @@ import engine.parameters.FloatParam;
 import engine.parameters.ImageParam;
 import engine.parameters.InfoParam;
 import engine.parameters.IntParam;
+import engine.parameters.Matrix3x3Param;
 import engine.parameters.ParamChangeListener;
 import engine.parameters.TextParam;
 
 /**
  * The ChannelParameterEditorPanel is used by the TextureEditor to
- * show and edit all parameters of the selected Channel
+ * show and edit all parameters of the selected Channel.
  * @author Holger Dammertz
  *
  */
@@ -173,6 +174,8 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 			return new ImageParameterEditor((ImageParam) param);
 		else if (param.getClass() == InfoParam.class)
 			return new InfoLabel((InfoParam) param);
+		else if (param.getClass() == Matrix3x3Param.class)
+			return new Matrix3x3ParameterEditor((Matrix3x3Param) param);
 		else
 			return null;
 	}
@@ -210,10 +213,10 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 				scrollPaneContent.add(editor);
 			}
 			y += 8;
-			editor = new Matrix3x3ParameterEditor(c.transformation, c);
+			/*editor = new Matrix3x3ParameterEditor(c.transformation, c);
 			editor.setLocation(x, y);
 			y += editor.getHeight();
-			scrollPaneContent.add(editor);
+			scrollPaneContent.add(editor);*/
 
 			scrollPaneContent.setPreferredSize(new Dimension(previewImageSize, y));
 			scrollPaneContent.setSize(scrollPaneContent.getPreferredSize());

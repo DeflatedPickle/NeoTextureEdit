@@ -1,6 +1,7 @@
 Currently working on:
  - Zoom
  - Curve class and CurveParam class
+ - new tile-based caching system (with fallback for derivative based Filter)
  
 
 Feature Requests:
@@ -8,7 +9,7 @@ Feature Requests:
   Zoom,
   Export All Menu Item
   Blur Node
-  Color correction node:  Desaturation, Gamme Correction
+  Color correction node:  Desaturation, Gamma Correction
   
   UnDo stack
   
@@ -46,7 +47,6 @@ General:
    be to allow transformation only in Patterns
  - Make the Help-System using nice font and backgrounds and write a base dialog class for displaying such messages
  
- - Make Matrix a parameter
  
  - Make the parameter of a network accessible through commandline; this allows for simple animations 
  
@@ -93,7 +93,10 @@ Planned Features:
 -----------------------------------------------------------------------------------------------------------------------
 Releases (Notes):
 -----------------------------------------------------------------------------------------------------------------------
-0.6.1+ (Current):
+0.6.2+ (Current):
+ - Matrix a parameter and now only available in Patterns
+ 
+0.6.1:
  - external run time generation library now available
  - some changes to the file format
  - Export String (with replace options %f %r) for marking channels for export

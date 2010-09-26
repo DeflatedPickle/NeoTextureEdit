@@ -2,16 +2,16 @@
 #BeginNodes 4
 485 355
 engine.graphics.synthesis.texture.FilterIlluminate
-ExportName "brain" Theta 23.875 Phi 45.0 Shininess 100.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "brain" Theta 23.875 Phi 45.0 Shininess 100.0 endparameters
 566 215
 engine.graphics.synthesis.texture.FilterNormalMap
-ExportName "" Strength 5.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Strength 5.0 endparameters
 390 211
 engine.graphics.synthesis.texture.FilterColorize
-ExportName "" Gray_to_Color_Mapping 2 0.5803922 0.31764707 0.31764707 1.0 0.0 0.96862745 0.78039217 0.49411765 1.0 1.0 transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Gray_to_Color_Mapping 2 0.5803922 0.31764707 0.31764707 1.0 0.0 0.96862745 0.78039217 0.49411765 1.0 1.0 endparameters
 481 65
 engine.graphics.synthesis.texture.PatternPerlinNoise
-ExportName "" Color_Mapping 3 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 0.6183575 1.0 0.99607843 0.99607843 1.0 1.0 ScaleX 3.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.5 StartBand 3 EndBand 5 Seed -1 Periodic true transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 endparameters
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 3 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 0.6183575 1.0 0.99607843 0.99607843 1.0 1.0 ScaleX 3.0 ScaleY 2.0 ValueScale 1.0 Persistence 0.5 StartBand 3 EndBand 5 Seed -1 Periodic true endparameters
 #EndNodes
 #BeginConnections 4
 1 0 1
@@ -19,4 +19,4 @@ ExportName "" Color_Mapping 3 1.0 1.0 1.0 1.0 0.0 0.0 0.0 0.0 1.0 0.6183575 1.0 
 3 1 0
 3 2 0
 #EndConnections
-glpreview 2 1 -1 3 Object 0 Spec._Power 100.0 POM_Strength 0.125 Ambient 0.5 TexScale_U 2 TexScale_V 2 CamRotX 58.0 CamRotY 10.0 CamDist 0.8999994 endglpreview
+glpreview 2 1 -1 3 Object 0 Spec._Power 100.0 POM_Strength 0.125 Ambient 0.5 TexScale_U 2 TexScale_V 2 CamRotX 40.0 CamRotY 317.0 CamDist 0.8999994 endglpreview
