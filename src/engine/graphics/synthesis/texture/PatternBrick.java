@@ -25,7 +25,7 @@ import engine.parameters.ColorGradientParam;
 import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
 
-public class PatternBrick extends Pattern {
+public final class PatternBrick extends Pattern {
 	public String getName() {
 		return "Brick";
 	}

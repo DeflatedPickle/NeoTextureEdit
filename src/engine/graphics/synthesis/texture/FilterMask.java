@@ -26,7 +26,7 @@ import engine.parameters.BoolParam;
  * @author Holger Dammertz
  *
  */
-public class FilterMask extends Channel {
+public final class FilterMask extends Channel {
 	BoolParam invert = CreateLocalBoolParam("Invert", false);
 	
 	public String getHelpText() {

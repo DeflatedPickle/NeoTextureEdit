@@ -20,7 +20,7 @@ package engine.graphics.synthesis.texture;
 import engine.base.Vector4;
 import engine.parameters.ColorParam;
 
-public class PatternConstantColor extends Pattern {
+public final class PatternConstantColor extends Pattern {
 	public String getName() {
 		return "Constant Color";
 	}

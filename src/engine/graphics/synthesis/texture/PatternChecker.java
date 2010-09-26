@@ -21,7 +21,7 @@ import engine.base.Vector4;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.FloatParam;
 
-public class PatternChecker extends Pattern {
+public final class PatternChecker extends Pattern {
 	public String getName() {
 		return "Checker";
 	}

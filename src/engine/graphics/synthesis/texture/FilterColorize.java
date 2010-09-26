@@ -20,7 +20,7 @@ package engine.graphics.synthesis.texture;
 import engine.base.Vector4;
 import engine.parameters.ColorGradientParam;
 
-public class FilterColorize extends Channel {
+public final class FilterColorize extends Channel {
 
 	ColorGradientParam colorGradientParam;
 	

@@ -21,7 +21,7 @@ import engine.base.Vector4;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.FloatParam;
 
-public class PatternTile extends Pattern {
+public final class PatternTile extends Pattern {
 	public String getName() {
 		return "Tile";
 	}

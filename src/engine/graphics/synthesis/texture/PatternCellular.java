@@ -29,7 +29,7 @@ import engine.parameters.EnumParam;
 import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
 
-public class PatternCellular extends Pattern {
+public final class PatternCellular extends Pattern {
 	public String getName() {
 		return "Cellular";
 	}

@@ -24,7 +24,7 @@ import engine.parameters.IntParam;
  * @author Holger Dammertz
  * 
  */
-public class PatternSynthesis extends Pattern {
+public final class PatternSynthesis extends Pattern {
 	ImageParam image = CreateLocalImageParam("InputImg", "");
 	InfoParam resolutionInfo = CreateLocalInfoParam("InputRes", "Resolution: ");
 	IntParam targetResolution = CreateLocalIntParam("TargetRes", 32, 1, Integer.MAX_VALUE);

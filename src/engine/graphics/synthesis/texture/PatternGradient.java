@@ -24,7 +24,7 @@ import engine.parameters.ColorGradientParam;
 import engine.parameters.EnumParam;
 
 
-public class PatternGradient extends Pattern {
+public final class PatternGradient extends Pattern {
 	
 	ColorGradientParam colorGradientParam = CreateLocalColorGradientParam("Color Mapping");
 	EnumParam gradientType = CreateLocalEnumParam("Type", "Linear,Radial,Square");

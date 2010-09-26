@@ -22,7 +22,7 @@ import engine.base.Vector3;
 import engine.base.Vector4;
 import engine.parameters.FloatParam;
 
-public class FilterEmboss extends Channel {
+public final class FilterEmboss extends Channel {
 	FloatParam strength;
 	FloatParam angle;
 	

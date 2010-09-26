@@ -6,7 +6,7 @@ import engine.parameters.ColorGradientParam;
 import engine.parameters.EnumParam;
 import engine.parameters.FloatParam;
 
-public class PatternFunction extends Pattern {
+public final class PatternFunction extends Pattern {
 	public String getName() {
 		return "Function";
 	}

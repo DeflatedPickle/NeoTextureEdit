@@ -26,7 +26,7 @@ import engine.parameters.EnumParam;
 import engine.parameters.ImageParam;
 import engine.parameters.InfoParam;
 
-public class PatternBitmap extends Pattern {
+public final class PatternBitmap extends Pattern {
 	ImageParam image = CreateLocalImageParam("Image", "");
 	InfoParam resolutionInfo = CreateLocalInfoParam("Resolution", "Resolution: ");
 	EnumParam interpolation = CreateLocalEnumParam("Interpolation", "Nearest,Linear").setEnumPos(1);

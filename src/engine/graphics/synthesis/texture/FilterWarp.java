@@ -20,7 +20,7 @@ package engine.graphics.synthesis.texture;
 import engine.base.Vector4;
 import engine.parameters.FloatParam;
 
-public class FilterWarp extends Channel {
+public final class FilterWarp extends Channel {
 	FloatParam strength;
 
 	public String getName() {

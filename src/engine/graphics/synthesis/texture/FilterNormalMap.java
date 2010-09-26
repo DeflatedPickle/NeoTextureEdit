@@ -21,7 +21,7 @@ import engine.base.Vector3;
 import engine.base.Vector4;
 import engine.parameters.FloatParam;
 
-public class FilterNormalMap extends Channel {
+public final class FilterNormalMap extends Channel {
 	FloatParam strength = CreateLocalFloatParam("Strength", 1.0f, 0.0f, Float.MAX_VALUE).setDefaultIncrement(0.125f);
 	
 	public String getName() {

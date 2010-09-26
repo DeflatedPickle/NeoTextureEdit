@@ -25,7 +25,7 @@ import engine.parameters.ColorGradientParam;
 import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
 
-public class PatternPerlinNoise extends Pattern {
+public final class PatternPerlinNoise extends Pattern {
 
 	
 	
