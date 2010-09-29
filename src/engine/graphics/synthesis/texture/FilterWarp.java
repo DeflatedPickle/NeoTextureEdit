@@ -52,8 +52,10 @@ public final class FilterWarp extends Channel {
 	
 	
 	protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
-		float du = ce[1].du(u, v).XYZto1f() * strength.get();
-		float dv = ce[1].dv(u, v).XYZto1f() * strength.get();
+		//float du = ce[1].du(u, v).XYZto1f() * strength.get();
+		//float dv = ce[1].dv(u, v).XYZto1f() * strength.get();
+		float du = inputChannels[1].du1f(u, v).XYZto1f() * strength.get();
+		float dv = inputChannels[1].dv1f(u, v).XYZto1f() * strength.get();
 		
 		out.set(ce[0].sample(u+du, v+dv));
 	}
