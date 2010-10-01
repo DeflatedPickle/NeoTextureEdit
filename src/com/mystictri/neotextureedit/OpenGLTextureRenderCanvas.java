@@ -1,4 +1,4 @@
-package neoTextureEdit;
+package com.mystictri.neotextureedit;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

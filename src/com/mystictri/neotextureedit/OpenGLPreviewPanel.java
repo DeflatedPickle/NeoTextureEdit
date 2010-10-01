@@ -1,4 +1,4 @@
-package neoTextureEdit;
+package com.mystictri.neotextureedit;
 
 import java.awt.Color;
 import java.awt.Component;

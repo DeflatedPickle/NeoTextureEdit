@@ -4,7 +4,7 @@
     <options buildIfNeeded="true" compress="true" descriptionLocation="/NeoTextureEdit/Export_NeoTextureEdit.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
-    <manifest generateManifest="true" mainClassHandleIdentifier="=NeoTextureEdit/src&lt;neoTextureEdit{TextureEditor.java[TextureEditor" manifestLocation="/NeoTextureEdit/Export_Manifest" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+    <manifest generateManifest="true" mainClassHandleIdentifier="=NeoTextureEdit/src&lt;com.mystictri.neotextureedit{TextureEditor.java[TextureEditor" manifestLocation="/NeoTextureEdit/Export_Manifest" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
         <sealing sealJar="false">
             <packagesToSeal/>
             <packagesToUnSeal/>
