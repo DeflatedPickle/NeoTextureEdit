@@ -51,14 +51,14 @@ public final class ColorParam extends AbstractParam {
 		return new Vector3(color);
 	}
 	
-	public static ColorParam Create(String name, float r, float g, float b) {
+	public static ColorParam create(String name, float r, float g, float b) {
 		ColorParam ret = new ColorParam(name, r, g, b);
 		return ret;
 	}
 
 	
-	public static ColorParam CreateManaged(String name, float r, float g, float b) {
-		ColorParam ret = Create(name, r, g, b);
+	public static ColorParam createManaged(String name, float r, float g, float b) {
+		ColorParam ret = create(name, r, g, b);
 		ParameterManager.add(ret);
 		return ret;
 	}

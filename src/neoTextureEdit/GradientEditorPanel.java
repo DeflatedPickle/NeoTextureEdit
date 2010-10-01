@@ -100,7 +100,7 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 			for (int x = 0; x < img.getWidth(); x++) {
 				float pos = (float) x / (float) img.getWidth();
 				Vector4 col = grad.getColor(pos);
-				float bg = ((((x + y) / 8) % 2) == 1) ? 1.0f : 0.75f;
+				float bg = ((((x + y) / 8) % 2) != 0) ? 1.0f : 0.75f;
 				col.x = col.x * col.w + bg * (1.0f - col.w);
 				col.y = col.y * col.w + bg * (1.0f - col.w);
 				col.z = col.z * col.w + bg * (1.0f - col.w);
@@ -177,7 +177,7 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 
 }
 
-	class ColorMarker {
+	static class ColorMarker {
 		public Color color;
 		public float pos;
 		int x, y, width2, height2;
@@ -271,7 +271,7 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 					float c = (col.x + col.y + col.z) * (1.0f / 3.0f);
 					col.x = col.y = col.z = c;
 				} else { // if (y < 16) { // color with alpha preview
-					float bg = ((((x + y) / 8) % 2) == 1) ? 1.0f : 0.75f;
+					float bg = ((((x + y) / 8) % 2) != 0) ? 1.0f : 0.75f;
 					col.x = col.x * col.w + bg * (1.0f - col.w);
 					col.y = col.y * col.w + bg * (1.0f - col.w);
 					col.z = col.z * col.w + bg * (1.0f - col.w);

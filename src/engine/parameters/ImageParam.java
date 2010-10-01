@@ -90,13 +90,13 @@ public class ImageParam extends AbstractParam {
 	}
 	
 	
-	public static ImageParam Create(String name, String filename) {
+	public static ImageParam create(String name, String filename) {
 		ImageParam ret = new ImageParam(name, filename);
 		return ret;
 	}
 	
-	public static ImageParam CreateManaged(String name, String filename) {
-		ImageParam ret = Create(name, filename);
+	public static ImageParam createManaged(String name, String filename) {
+		ImageParam ret = create(name, filename);
 		ParameterManager.add(ret);
 		return ret;
 	}

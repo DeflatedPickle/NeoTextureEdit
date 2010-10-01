@@ -40,13 +40,13 @@ public class TextParam extends AbstractParam {
 		return value;
 	}
 	
-	public static TextParam Create(String name, String value) {
+	public static TextParam create(String name, String value) {
 		TextParam ret = new TextParam(name, value);
 		return ret;
 	}
 	
-	public static TextParam CreateManaged(String name, String value) {
-		TextParam ret = Create(name, value);
+	public static TextParam createManaged(String name, String value) {
+		TextParam ret = create(name, value);
 		ParameterManager.add(ret);
 		return ret;
 	}

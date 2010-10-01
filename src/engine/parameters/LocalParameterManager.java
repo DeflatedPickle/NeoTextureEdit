@@ -37,35 +37,35 @@ public class LocalParameterManager  implements ParamChangeListener {
 	}
 	
 	protected TextParam CreateLocalTextParam(String name, String value) {
-		TextParam p = TextParam.Create(name, value);
+		TextParam p = TextParam.create(name, value);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
 	}
 	
 	protected FloatParam CreateLocalFloatParam(String name, float value, float min, float max) {
-		FloatParam p = FloatParam.Create(name, value, min, max);
+		FloatParam p = FloatParam.create(name, value, min, max);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
 	}
 	
 	protected IntParam CreateLocalIntParam(String name, int value, int min, int max) {
-		IntParam p = IntParam.Create(name, value, min, max);
+		IntParam p = IntParam.create(name, value, min, max);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
 	}
 	
 	protected ColorParam CreateLocalColorParam(String name, float r, float g, float b) {
-		ColorParam p = ColorParam.Create(name, r, g, b);
+		ColorParam p = ColorParam.create(name, r, g, b);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
 	}
 	
 	protected ColorGradientParam CreateLocalColorGradientParam(String name) {
-		ColorGradientParam p = ColorGradientParam.Create(name);
+		ColorGradientParam p = ColorGradientParam.create(name);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
@@ -73,35 +73,35 @@ public class LocalParameterManager  implements ParamChangeListener {
 	
 
 	protected EnumParam CreateLocalEnumParam(String name, String enumList) {
-		EnumParam p = EnumParam.Create(name, enumList);
+		EnumParam p = EnumParam.create(name, enumList);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
 	}
 	
 	protected BoolParam CreateLocalBoolParam(String name, boolean value) {
-		BoolParam p = BoolParam.Create(name, value);
+		BoolParam p = BoolParam.create(name, value);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
 	}
 	
 	protected ImageParam CreateLocalImageParam(String name, String filename) {
-		ImageParam p = ImageParam.Create(name, filename);
+		ImageParam p = ImageParam.create(name, filename);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
 	}
 	
 	protected InfoParam CreateLocalInfoParam(String name, String message) {
-		InfoParam p = InfoParam.Create(name, message);
+		InfoParam p = InfoParam.create(name, message);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;
 	}
 	
 	protected Matrix3x3Param CreateLocalMatrix3x3Param(String name) {
-		Matrix3x3Param p = Matrix3x3Param.Create(name);
+		Matrix3x3Param p = Matrix3x3Param.create(name);
 		m_LocalParameters.add(p);
 		p.addParamChangeListener(this);
 		return p;

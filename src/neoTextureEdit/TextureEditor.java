@@ -190,7 +190,7 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 	 * @author Holger Dammertz
 	 * 
 	 */
-	class PatternPresetLabel extends JLabel {
+	static class PatternPresetLabel extends JLabel {
 		private static final long serialVersionUID = -6943441006941948327L;
 		Image previewImage;
 		ImageIcon icon;
@@ -396,7 +396,7 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 	 * @author Holger Dammertz
 	 * 
 	 */
-	class TextureEditorFilenameFilter extends FileFilter {
+	static class TextureEditorFilenameFilter extends FileFilter {
 		private String m_Extensions;
 		private String m_Description;
 
@@ -445,7 +445,7 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 													// here
 	JPanel m_CenterPanel;
 
-	class ProgressDialog extends JDialog implements ProgressBarInterface {
+	static class ProgressDialog extends JDialog implements ProgressBarInterface {
 		private static final long serialVersionUID = 4543000728695540838L;
 
 		JProgressBar progbar;
@@ -637,7 +637,7 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 
 	}
 
-	class CommandLineOptions {
+	static class CommandLineOptions {
 		String filename; // this is the last given name in the list of
 							// filenames;
 		Vector<String> allFileNames = new Vector<String>(); // used so that
@@ -692,7 +692,7 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 
 	final CommandLineOptions commandLineOptions = new CommandLineOptions();
 
-	class StdOutProgressBar implements ProgressBarInterface {
+	static class StdOutProgressBar implements ProgressBarInterface {
 		float count = 0;
 
 		@Override

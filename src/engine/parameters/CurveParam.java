@@ -26,14 +26,14 @@ public final class CurveParam  extends AbstractParam {
 		//setEnumPos(s.nextInt());
 	}
 	
-	public static CurveParam Create(String name, int numCP, float min, float max) {
+	public static CurveParam create(String name, int numCP, float min, float max) {
 		CurveParam ret = new CurveParam(name, numCP, min, max);
 		return ret;
 	}
 
 	
-	public static CurveParam CreateManaged(String name, int numCP, float min, float max) {
-		CurveParam ret = Create(name, numCP, min, max);
+	public static CurveParam createManaged(String name, int numCP, float min, float max) {
+		CurveParam ret = create(name, numCP, min, max);
 		ParameterManager.add(ret);
 		return ret;
 	}

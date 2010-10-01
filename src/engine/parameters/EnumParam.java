@@ -105,14 +105,14 @@ public final class EnumParam extends AbstractParam {
 	}
 	
 	
-	public static EnumParam Create(String name, String enumList) {
+	public static EnumParam create(String name, String enumList) {
 		EnumParam ret = new EnumParam(name,enumList);
 		return ret;
 	}
 
 	
-	public static EnumParam CreateManaged(String name, String enumList) {
-		EnumParam ret = Create(name, enumList);
+	public static EnumParam createManaged(String name, String enumList) {
+		EnumParam ret = create(name, enumList);
 		ParameterManager.add(ret);
 		return ret;
 	}

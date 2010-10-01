@@ -69,14 +69,14 @@ public class IntParam extends AbstractParam {
 		set(value - 1);
 	}
 	
-	public static IntParam Create(String name, int value, int min, int max) {
+	public static IntParam create(String name, int value, int min, int max) {
 		IntParam ret = new IntParam(name, value, min, max);
 		return ret;
 	}
 
 	
-	public static IntParam CreateManaged(String name, int value, int min, int max) {
-		IntParam ret = Create(name, value, min, max);
+	public static IntParam createManaged(String name, int value, int min, int max) {
+		IntParam ret = create(name, value, min, max);
 		ParameterManager.add(ret);
 		return ret;
 	}

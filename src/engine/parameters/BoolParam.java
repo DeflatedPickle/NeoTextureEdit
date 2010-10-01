@@ -54,13 +54,13 @@ public final class BoolParam extends AbstractParam {
 		return value;
 	}
 	
-	public static BoolParam Create(String name, boolean value) {
+	public static BoolParam create(String name, boolean value) {
 		BoolParam ret = new BoolParam(name, value);
 		return ret;
 	}
 	
-	public static BoolParam CreateManaged(String name, boolean value) {
-		BoolParam ret = Create(name, value);
+	public static BoolParam createManaged(String name, boolean value) {
+		BoolParam ret = create(name, value);
 		ParameterManager.add(ret);
 		return ret;
 	}

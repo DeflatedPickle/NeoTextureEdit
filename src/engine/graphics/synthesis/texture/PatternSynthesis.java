@@ -187,7 +187,7 @@ public final class PatternSynthesis extends Pattern {
 	 * @author Holger Dammertz
 	 *
 	 */
-	class FeaturePoint extends NdVector {
+	static class FeaturePoint extends NdVector {
 		public int color = -1;
 
 		public FeaturePoint(int d) {

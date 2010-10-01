@@ -61,14 +61,14 @@ public final class ColorGradientParam extends AbstractParam {
 	}
 	
 
-	public static ColorGradientParam Create(String name) {
+	public static ColorGradientParam create(String name) {
 		ColorGradientParam ret = new ColorGradientParam(name);
 		return ret;
 	}
 
 	
-	public static ColorGradientParam CreateManaged(String name) {
-		ColorGradientParam ret = Create(name);
+	public static ColorGradientParam createManaged(String name) {
+		ColorGradientParam ret = create(name);
 		ParameterManager.add(ret);
 		return ret;
 	}

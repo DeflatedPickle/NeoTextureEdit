@@ -38,13 +38,13 @@ public class InfoParam extends AbstractParam {
 		return message;
 	}
 	
-	public static InfoParam Create(String name, String message) {
+	public static InfoParam create(String name, String message) {
 		InfoParam ret = new InfoParam(name, message);
 		return ret;
 	}
 	
-	public static InfoParam CreateManaged(String name, String message) {
-		InfoParam ret = Create(name, message);
+	public static InfoParam createManaged(String name, String message) {
+		InfoParam ret = create(name, message);
 		ParameterManager.add(ret);
 		return ret;
 	}

@@ -89,7 +89,7 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 	
 	JPopupMenu settingsPopupMenu;
 	
-	class GLPreviewParameters extends LocalParameterManager {
+	static class GLPreviewParameters extends LocalParameterManager {
 		public EnumParam previewObject = CreateLocalEnumParam("Object", "Square,Cube,Cylinder"); // Sphere
 		public FloatParam specularPower = CreateLocalFloatParam("Spec. Power", 20.0f, 0.f, 200.0f);
 		public FloatParam pomStrength = CreateLocalFloatParam("POM Strength", 0.25f, 0.f, 1.0f).setDefaultIncrement(0.125f);

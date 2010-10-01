@@ -387,7 +387,7 @@ public abstract class Channel extends LocalParameterManager {
 					if (mode == 0)
 						color.set(col.getVector3());
 					else if (mode == 1) {
-						float bg = ((((x + y) / 8) % 2) == 1) ? 1.0f : 0.75f;
+						float bg = ((((x + y) / 8) % 2) != 0) ? 1.0f : 0.75f;
 						col.x = col.x * col.w + bg * (1.0f - col.w);
 						col.y = col.y * col.w + bg * (1.0f - col.w);
 						col.z = col.z * col.w + bg * (1.0f - col.w);

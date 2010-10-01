@@ -186,7 +186,7 @@ public final class Utils {
 	
 	
 	// solve eigenvectors ;)
-	public class EigenVectorValues2D {
+	public static class EigenVectorValues2D {
 		public float lambda1, lambda2;
 		public float v1x, v1y, v2x, v2y;
 	}

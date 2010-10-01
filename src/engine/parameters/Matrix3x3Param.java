@@ -32,13 +32,13 @@ public class Matrix3x3Param extends AbstractParam {
 	}
 	
 	
-	public static Matrix3x3Param Create(String name) {
+	public static Matrix3x3Param create(String name) {
 		Matrix3x3Param ret = new Matrix3x3Param(name);
 		return ret;
 	}
 	
-	public static Matrix3x3Param CreateManaged(String name) {
-		Matrix3x3Param ret = Create(name);
+	public static Matrix3x3Param createManaged(String name) {
+		Matrix3x3Param ret = create(name);
 		ParameterManager.add(ret);
 		return ret;
 	}

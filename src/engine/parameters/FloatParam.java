@@ -97,14 +97,14 @@ public class FloatParam extends AbstractParam {
 		return String.format("%.3f", value);
 	}
 	
-	public static FloatParam Create(String name, float value, float min, float max) {
+	public static FloatParam create(String name, float value, float min, float max) {
 		FloatParam ret = new FloatParam(name, value, min, max);
 		return ret;
 	}
 
 	
-	public static FloatParam CreateManaged(String name, float value, float min, float max) {
-		FloatParam ret = Create(name, value, min, max);
+	public static FloatParam createManaged(String name, float value, float min, float max) {
+		FloatParam ret = create(name, value, min, max);
 		ParameterManager.add(ret);
 		return ret;
 	}
