@@ -88,7 +88,7 @@ import engine.graphics.synthesis.texture.ProgressBarInterface;
  * @author Holger Dammertz
  * 
  */
-public class TextureEditor extends JFrame implements ActionListener, KeyListener {
+public class TextureEditor implements ActionListener, KeyListener {
 	private static final long serialVersionUID = -5567955539436014517L;
 	public static boolean GL_ENABLED = false; // on init this is set to true if
 												// we can successfully
@@ -444,6 +444,24 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 	public OpenGLPreviewPanel m_OpenGLPreviewPanel; // !!TODO: remove the public
 													// here
 	JPanel m_CenterPanel;
+	
+	JFrame m_MainFrame;
+	JMenuBar m_MainMenuBar;
+	JMenuItem m_File_Save_Item;
+	
+	
+	public PatternSelectorPanel getPatternSelectorPanel() {
+		return m_PatternSelector;
+	}
+	
+	public TextureGraphEditorPanel getTextureGraphEditorPanel() {
+		return m_GraphDrawPanel;
+	}
+	
+	public OpenGLPreviewPanel getOpenGLPreviewPanel() {
+		return m_OpenGLPreviewPanel;
+	}
+	
 
 	static class ProgressDialog extends JDialog implements ProgressBarInterface {
 		private static final long serialVersionUID = 4543000728695540838L;
@@ -500,9 +518,7 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 		System.exit(0);
 	}
 
-	JMenuBar m_MainMenuBar;
-	JMenuItem m_File_Save_Item;
-
+	
 	JMenuItem createMenuItem(JMenu menu, String name, String action, char mnemonic, KeyStroke ks) {
 		JMenuItem ret;
 		ret = new JMenuItem(name);
@@ -560,24 +576,26 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 		createMenuItem(help, "Help", "help_dialog", 'H', KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		help.addSeparator();
 		createMenuItem(help, "About", "about_dialog", 'A', null);
-
-		setJMenuBar(m_MainMenuBar);
 	}
 
 	public void setCurrentFileName(String name) {
 		if (name == null) {
-			m_File_Save_Item.setEnabled(false);
+			if (m_File_Save_Item != null) m_File_Save_Item.setEnabled(false);
 			setTitle(" - " + title);
 			return;
 		}
 		m_CurrentFileName = name;
-		m_File_Save_Item.setEnabled(true);
+		if (m_File_Save_Item != null) m_File_Save_Item.setEnabled(true);
 
 		// !!TODO: use a file object for m_CurrentFileName
 		String shortFilename = m_CurrentFileName.substring(m_CurrentFileName.lastIndexOf('\\') + 1);
 		shortFilename = shortFilename.substring(m_CurrentFileName.lastIndexOf('/') + 1);
 		setTitle(shortFilename + " - " + title);
 
+	}
+	
+	public void setTitle(String title) {
+		if (m_MainFrame != null) m_MainFrame.setTitle(title);
 	}
 
 	@Override
@@ -590,14 +608,14 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 			setCurrentFileName(null);
 		} else if (c.equals("file_open")) {
 			m_TextureFileChooser_SaveLoadGraph.setDialogTitle("Loading texture graph from ...");
-			if (m_TextureFileChooser_SaveLoadGraph.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+			if (m_TextureFileChooser_SaveLoadGraph.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				String name = m_TextureFileChooser_SaveLoadGraph.getSelectedFile().getAbsolutePath();
 				m_GraphDrawPanel.load(name, true);
 				setCurrentFileName(name);
 			}
 		} else if (c.equals("file_import")) {
 			m_TextureFileChooser_SaveLoadGraph.setDialogTitle("Import (append) texture graph from ...");
-			if (m_TextureFileChooser_SaveLoadGraph.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+			if (m_TextureFileChooser_SaveLoadGraph.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				String name = m_TextureFileChooser_SaveLoadGraph.getSelectedFile().getAbsolutePath();
 				m_GraphDrawPanel.load(name, false);
 			}
@@ -606,7 +624,7 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 				m_GraphDrawPanel.save(m_CurrentFileName);
 		} else if (c.equals("file_saveas")) {
 			m_TextureFileChooser_SaveLoadGraph.setDialogTitle("Saving texture graph as ...");
-			if (m_TextureFileChooser_SaveLoadGraph.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+			if (m_TextureFileChooser_SaveLoadGraph.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 				String name = m_TextureFileChooser_SaveLoadGraph.getSelectedFile().getAbsolutePath();
 				if (!name.endsWith(".tgr"))
 					name += ".tgr";
@@ -614,7 +632,7 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 				setCurrentFileName(name);
 			}
 		} else if (c.equals("file_exit")) {
-			this.dispose();
+			if (m_MainFrame != null) m_MainFrame.dispose();
 		} else if (c.equals("view_center")) {
 			m_GraphDrawPanel.centerDesktop();
 		} else if (c.equals("view_clearPreview")) {
@@ -630,9 +648,9 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 			Channel.useCache = !Channel.useCache;
 
 		} else if (c.equals("help_dialog")) {
-			JOptionPane.showMessageDialog(this, help_message, "NeoTextureEdit - Help", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, help_message, "NeoTextureEdit - Help", JOptionPane.PLAIN_MESSAGE);
 		} else if (c.equals("about_dialog")) {
-			JOptionPane.showMessageDialog(this, about_message, "About NeoTextureEdit", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, about_message, "About NeoTextureEdit", JOptionPane.PLAIN_MESSAGE);
 		}
 
 	}
@@ -753,6 +771,46 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 
 		System.exit(0);
 	}
+	
+	/**
+	 * This method creates the main window for a stand alone NeoTextureEdit application 
+	 */
+	public void createMainFrame() {
+		m_MainFrame = new JFrame();
+		m_MainFrame.addKeyListener(this);
+
+		setTitle(title);
+		m_MainFrame.setIconImage(new PatternChecker(2, 2).createAndComputeImage(16, 16, null, 0));
+		m_MainFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				Window win = e.getWindow();
+				win.dispose();
+			}
+
+			public void windowClosed(WindowEvent je) {
+				exitTextureEditor();
+				System.exit(0);
+			}
+		});
+
+		m_MainFrame.setLayout(new BorderLayout());
+		
+		m_CenterPanel = new JPanel(new BorderLayout());
+
+		m_CenterPanel.add(m_PatternSelector, BorderLayout.WEST);
+		m_CenterPanel.add(m_GraphDrawPanel, BorderLayout.CENTER);
+
+		if (GL_ENABLED) {
+			m_CenterPanel.add(m_OpenGLPreviewPanel, BorderLayout.SOUTH);
+		}
+
+		m_MainFrame.getContentPane().add(m_GraphDrawPanel.getParameterEditorPanel(), BorderLayout.EAST);
+		m_MainFrame.getContentPane().add(m_CenterPanel, BorderLayout.CENTER);
+
+		createMainMenu();
+		
+		m_MainFrame.setJMenuBar(m_MainMenuBar);
+	}
 
 	// GradientEditorPanel m_GradientEditorPanel;
 
@@ -767,7 +825,6 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 			exportTexturesToImages();
 		}
 
-		addKeyListener(this);
 
 		tempTest_FindAllPatternsAndChannelClasses();
 
@@ -777,21 +834,6 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 			Logger.logWarning(this, "No TextureEditorSettings file found. Starting with default settings.");
 		}
 
-		setTitle(title);
-		setIconImage(new PatternChecker(2, 2).createAndComputeImage(16, 16, null, 0));
-		this.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				Window win = e.getWindow();
-				win.dispose();
-			}
-
-			public void windowClosed(WindowEvent je) {
-				exitTextureEditor();
-				System.exit(0);
-			}
-		});
-
-		setLayout(new BorderLayout());
 
 		if (commandLineOptions.useOpenGL) {
 			try {
@@ -808,8 +850,8 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 			}
 		}
 
-		m_ColorChooser = new ColorChooserDialog(this);
-		m_ProgressDialog = new ProgressDialog(this);
+		m_ColorChooser = new ColorChooserDialog(null);
+		m_ProgressDialog = new ProgressDialog(null);
 		m_PatternSelector = new PatternSelectorPanel();
 		m_GraphDrawPanel = new TextureGraphEditorPanel();
 
@@ -821,22 +863,17 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 		m_TextureFileChooser_SaveLoadImage = new JFileChooser(".");
 		m_TextureFileChooser_SaveLoadImage.addChoosableFileFilter(new TextureEditorFilenameFilter("png", "Image Files (.png)"));
 
-		m_CenterPanel = new JPanel(new BorderLayout());
+		
+		
 
-		m_CenterPanel.add(m_PatternSelector, BorderLayout.WEST);
-		m_CenterPanel.add(m_GraphDrawPanel, BorderLayout.CENTER);
-
-		if (GL_ENABLED) {
-			m_CenterPanel.add(m_OpenGLPreviewPanel, BorderLayout.SOUTH);
-		}
-
-		getContentPane().add(m_GraphDrawPanel.getParameterEditorPanel(), BorderLayout.EAST);
-		getContentPane().add(m_CenterPanel, BorderLayout.CENTER);
-
-		createMainMenu();
-
+	}
+	
+	/**
+	 * If you create a stand alone frame using the method createMainFrame this method needs to be
+	 * called afterwards
+	 */
+	public void initialize() {
 		loadAndSetExitParameters(commandLineOptions.filename);
-
 		m_PatternSelector.loadPresets();
 	}
 
@@ -846,10 +883,12 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 
 		saveStringP("NTEPresets", NTEPresetString);
 
-		saveIntP("mainWindowPosX", getX());
-		saveIntP("mainWindowPosY", getY());
-		saveIntP("mainWindowSizeX", getWidth());
-		saveIntP("mainWindowSizeY", getHeight());
+		if (m_MainFrame != null) {
+			saveIntP("mainWindowPosX", m_MainFrame.getX());
+			saveIntP("mainWindowPosY", m_MainFrame.getY());
+			saveIntP("mainWindowSizeX", m_MainFrame.getWidth());
+			saveIntP("mainWindowSizeY", m_MainFrame.getHeight());
+		}
 
 		saveIntP("m_ColorChooser.PosX", m_ColorChooser.getX());
 		saveIntP("m_ColorChooser.PosY", m_ColorChooser.getY());
@@ -874,8 +913,10 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 	private void loadAndSetExitParameters(String cmdLine_fileNameToLoad) {
 		NTEPresetString = getStringP("NTEPresets", defaultNTEPresets);
 
-		setSize(getIntP("mainWindowSizeX", 1024), getIntP("mainWindowSizeY", 768));
-		setLocation(getIntP("mainWindowPosX", 0), getIntP("mainWindowPosY", 0));
+		if (m_MainFrame != null) {
+			m_MainFrame.setSize(getIntP("mainWindowSizeX", 1024), getIntP("mainWindowSizeY", 768));
+			m_MainFrame.setLocation(getIntP("mainWindowPosX", 0), getIntP("mainWindowPosY", 0));
+		}
 
 		m_ColorChooser.setLocation(getIntP("m_ColorChooser.PosX", 0), getIntP("m_ColorChooser.PosY", 0));
 		m_TextureFileChooser_SaveLoadImage.setLocation(getIntP("m_TextureFileChooser_SaveLoadImage.PosX", 0), getIntP(
@@ -934,9 +975,10 @@ public class TextureEditor extends JFrame implements ActionListener, KeyListener
 			System.err.println("LookAndFeel Exception: " + e);
 		}
 
-		TextureEditor te = new TextureEditor(args);
-		te.setVisible(true);
-
+		TextureEditor te = new TextureEditor(args); // new String[]{"--disableGL"}
+		te.createMainFrame();
+		te.initialize();
+		te.m_MainFrame.setVisible(true);
 	}
 
 	public void saveIntP(String key, int v) {

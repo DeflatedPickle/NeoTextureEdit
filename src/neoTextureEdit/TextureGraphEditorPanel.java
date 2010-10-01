@@ -19,6 +19,7 @@ package neoTextureEdit;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -72,7 +73,7 @@ import engine.graphics.synthesis.texture.Pattern;
  * @author Holger Dammertz
  *
  */
-final class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ChannelChangeListener, TextureGraphListener {
+public final class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ChannelChangeListener, TextureGraphListener {
 	private static final long serialVersionUID = 4535161419971720668L;
 	int dragStartX = 0;
 	int dragStartY = 0;
@@ -186,6 +187,8 @@ final class TextureGraphEditorPanel extends JPanel implements MouseListener, Mou
 			e.printStackTrace();
 		}
 		setDropTarget(t);
+		
+		setPreferredSize(new Dimension(512, 512));
 		
 	}
 

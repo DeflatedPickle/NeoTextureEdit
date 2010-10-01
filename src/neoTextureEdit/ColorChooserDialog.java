@@ -47,9 +47,9 @@ class ColorChooserDialog extends JDialog {
 		buttonPanel.add(okButton);
 		buttonPanel.add(cancelButton);
 		add(buttonPanel, BorderLayout.SOUTH);
-		pack();
+		
 		//setLocation(MainWindow.getIntP("colorDialogX", 200), MainWindow.getIntP("colorDialogY", 200));
-
+		
 		
 		okButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -63,11 +63,13 @@ class ColorChooserDialog extends JDialog {
 				setVisible(false);
 			}
 		});
+		
 	}
 	
 	public Color getColorSelection(Color currentColor) {
 		chooser.setColor(currentColor);
 		returnColor = currentColor;
+		pack();
 		setVisible(true);
 		return returnColor;
 	}
