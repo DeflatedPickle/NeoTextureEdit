@@ -70,13 +70,18 @@ public final class FilterEmboss extends Channel {
 	}
 	
 	protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
-		out.set(_function(ce[0].sample(u, v), ce[1].du(u, v).XYZto1f(), ce[1].dv(u, v).XYZto1f()));
+		//float du = ce[1].du(u, v).XYZto1f();
+		//float dv = ce[1].dv(u, v).XYZto1f();
+		float du = inputChannels[1].du1f(u, v).XYZto1f();
+		float dv = inputChannels[1].dv1f(u, v).XYZto1f();
+		out.set(_function(ce[0].sample(u, v), du, dv));
 	}
 	
 
 	protected Vector4 _valueRGBA(float u, float v) {
-		
-		return _function(inputChannels[0].valueRGBA(u, v), inputChannels[1].du1f(u, v).XYZto1f(), inputChannels[1].dv1f(u, v).XYZto1f());
+		float du = inputChannels[1].du1f(u, v).XYZto1f();
+		float dv = inputChannels[1].dv1f(u, v).XYZto1f();
+		return _function(inputChannels[0].valueRGBA(u, v), du, dv);
 		
 		/*Vector3 n = new Vector3(inputChannels[1].du1f(u, v)*strength.get(), inputChannels[1].dv1f(u, v)*strength.get(), 0.0f);
 		

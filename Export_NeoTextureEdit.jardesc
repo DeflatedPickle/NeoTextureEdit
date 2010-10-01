@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
 <jardesc>
     <jar path="jar_export/NeoTextureEdit/NeoTextureEdit.jar"/>
-    <options buildIfNeeded="true" compress="true" descriptionLocation="/NeoTextureEdit/Export_NeoTextureEdit.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/NeoTextureEdit/Export_NeoTextureEdit.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
     <manifest generateManifest="true" mainClassHandleIdentifier="=NeoTextureEdit/src&lt;neoTextureEdit{TextureEditor.java[TextureEditor" manifestLocation="/NeoTextureEdit/Export_Manifest" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
