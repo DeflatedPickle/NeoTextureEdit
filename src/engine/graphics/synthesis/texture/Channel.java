@@ -465,7 +465,14 @@ public abstract class Channel extends LocalParameterManager {
 	public static Channel loadChannel(Scanner s) {
 		try {
 			AbstractParam.SILENT = true;
-			Channel c = (Channel) Class.forName(s.next()).newInstance();
+			
+			String name = s.next();
+			
+			// This is an internal conversion to be still compatible with older file formats and name changes
+			// !!TODO: as soon as the file format is final or a huge change happened this should be removed
+			name = name.replace("FilterBrightnessContrast", "FilterColorCorrect");
+			
+			Channel c = (Channel) Class.forName(name).newInstance();
 			// Logger.log(null, "loadChannel " + c);
 
 			String t;

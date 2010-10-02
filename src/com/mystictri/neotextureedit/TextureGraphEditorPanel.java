@@ -587,7 +587,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	static final int helpY = 0;
 	
 	
-	public void drawConnectionPoint(Graphics g, int ox, int oy, ConnectionPoint p) {
+	public void drawConnectionPoint(Graphics2D g, int ox, int oy, ConnectionPoint p) {
 		if (p.channelIndex == -1) { // input
 			g.setColor(Color.green);
 			g.fillRect(ox+p.x, oy+p.y, p.width, p.height);
@@ -597,8 +597,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		}
 	}
 	
-	public void drawNode(Graphics g, TextureGraphNode node) {
-		
+	public void drawNode(Graphics2D g, TextureGraphNode node) {
+		final int roundRad = 16;
 		if (node.userData == null) node.userData = new NodePreviewImage(node);
 
 		
@@ -607,7 +607,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		int y = node.getY() + desktopY;
 		int w = TextureGraphNode.width;
 		int h = TextureGraphNode.height;
-		g.fillRect(x, y, w, h);
+		g.fillRoundRect(x, y, w, h, roundRad, roundRad);
 		
 		//if (threadIsRecomputing) return;
 		
@@ -619,7 +619,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		g.drawString(node.getChannel().getName(), x+2, y+12+8);
 
 		g.setColor(Color.white);
-		g.drawRect(x, y, w-1, h-1);
+		
+		g.drawRoundRect(x, y, w, h, roundRad, roundRad);
 		
 		
 		for (ConnectionPoint p : node.getAllConnectionPointsVector()) {
@@ -681,7 +682,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		g.setColor(Color.yellow);
 		for (TextureGraphNode n : graph.selectedNodes) {
 			//Rectangle r = new n.getBounds();
-			g.drawRect(desktopX + n.getX() - 2, desktopY + n.getY() - 2, TextureGraphNode.width + 4, TextureGraphNode.height + 4);
+			g.fillRoundRect(desktopX + n.getX() - 3, desktopY + n.getY() - 3, TextureGraphNode.width + 6, TextureGraphNode.height + 6, 20, 20);
 		}
 		
 		g.setColor(Color.blue);
