@@ -171,7 +171,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		public void drop(DropTargetDropEvent e) {
 			TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(TextureEditor.INSTANCE.dragndropChannel));
 			addTextureNode(n, e.getLocation().x - desktopX, e.getLocation().y - desktopY);
-			setSelectedNode(n);
 			repaint();
 		}
 	}
@@ -357,10 +356,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 				} else { // try to replace an existing node as good as possible
 					TextureGraphNode node = graph.selectedNodes.get(0);
 					if (node != null) {
-						Channel chan = (Channel) mi.classType.newInstance();
-						TextureGraphNode newNode = new TextureGraphNode(chan);
-						graph.replaceNode(node, newNode);
-						graph.setSelectedNode(newNode);
+						TextureGraphNode newNode = new TextureGraphNode((Channel) mi.classType.newInstance());
+						replaceTextureNode(node, newNode);
 						repaint();
 					} else {
 						Logger.logWarning(this, "No node selected for replace.");
@@ -388,7 +385,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			if (toCopyTextureGraphNode == null) {
 				Logger.logError(this, "No node copied to replace paste.");
 			} else if (graph.selectedNodes.size() > 0) {
-				graph.replaceNode(graph.selectedNodes.get(0), toCopyTextureGraphNode.cloneThisNode());
+				replaceTextureNode(graph.selectedNodes.get(0), toCopyTextureGraphNode.cloneThisNode());
 				repaint();
 			} else {
 				Logger.logError(this, "no selection in insert-replaceChannel popup menu.");
@@ -403,7 +400,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			if (graph.selectedNodes.size() > 0) {
 				TextureGraphNode orig = graph.selectedNodes.get(0);
 				TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(graph.selectedNodes.get(0).getChannel()));
-				addTextureNode(n, orig.getX()+32 - desktopX, orig.getY()+32 - desktopY);
+				addTextureNode(n, orig.getX()+32, orig.getY()+32);
 				repaint();
 			} else {
 				Logger.logError(this, "no selection in cloneChannel popup menu.");
@@ -485,7 +482,12 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	
 	void addTextureNode(TextureGraphNode n, int x, int y) {
 		graph.addNode(n, x, y);
-		
+		setSelectedNode(n);
+	}
+	
+	void replaceTextureNode(TextureGraphNode oldNode, TextureGraphNode newNode) {
+		graph.replaceNode(oldNode, newNode);
+		setSelectedNode(newNode);
 	}
 
 	public void setSelectedNode(TextureGraphNode node) {
@@ -780,8 +782,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (desktopDragging) {
-			int dx =  (int)((e.getXOnScreen()*zoom) - dragStartX); dragStartX = (int)(e.getXOnScreen() * zoom);
-			int dy =  (int)((e.getYOnScreen()*zoom) - dragStartY); dragStartY = (int)(e.getYOnScreen() * zoom);
+			int dx = (int)((e.getXOnScreen()*zoom) - dragStartX); dragStartX = (int)(e.getXOnScreen() * zoom);
+			int dy = (int)((e.getYOnScreen()*zoom) - dragStartY); dragStartY = (int)(e.getYOnScreen() * zoom);
 			moveDesktop(dx, dy);
 		} else if (nodeDragging) {
 			for (TextureGraphNode node : graph.selectedNodes) {
@@ -791,6 +793,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			dragStartY = (int)(e.getYOnScreen()*zoom);
 			repaint();
 		} else if (connectionDragging) {
+			dragStartX = (int)(e.getXOnScreen()*zoom);
+			dragStartY = (int)(e.getYOnScreen()*zoom);
 			//connectionTarget = e.getPoint();
 			connectionTarget.x = (int)(e.getX()*zoom);
 			connectionTarget.y = (int)(e.getY()*zoom);
@@ -882,8 +886,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 							connectionOrigin = new Point(connectionSource.getWorldSpaceX(), connectionSource.getWorldSpaceY());
 							// pat.updatePreviewImage();
 							connectionTarget = e.getPoint();
-							connectionTarget.x += node.getX();
-							connectionTarget.y += node.getY();
+							//connectionTarget.x += node.getX();
+							//connectionTarget.y += node.getY();
 						}
 					}
 				}

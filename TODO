@@ -8,18 +8,19 @@ Currently working on:
 
 Feature Requests:
 
-  Zoom,
-  Export All Menu Item
-  Blur Node
-  Color correction node:  Desaturation,
+  - Zoom,
+  - Export All Menu Item
+  - Blur Node
+  - UnDo stack
   
-  UnDo stack
+  - Keyboard shortcuts
   
-  Keyboard shortcuts,
+  - Preview Node Zoom (showing a region of the texture (info should contain target resolution); 
+     needs proper tiled caching to be reasonable fast
   
-  Preview Node Zoom (showing a region of the texture (info should contain target resolution); 
-    needs propper tiled caching to be reasonable fast
-  
+TODO:  
+
+- Change the file format to an XML format
   
   
 Caching System and Derivative based nodes:
@@ -28,7 +29,6 @@ Caching System and Derivative based nodes:
         - for warp, emboss, normal map try: use the non-cache evaluation for the warped texture
         - make the cache tileable (and the tile size configurable)
         
-
 
 Refactoring:
   - the package names are from a legacy project and need adjustment to better reflect the current
@@ -54,7 +54,6 @@ General:
    be to allow transformation only in Patterns
  - Make the Help-System using nice font and backgrounds and write a base dialog class for displaying such messages
  
- 
  - Make the parameter of a network accessible through commandline; this allows for simple animations 
  
  - Image Output Node (on change or on button press) writes out an image (can be used to store destination paths)
@@ -79,7 +78,7 @@ OpenGL Preview
  - Load the preview objects from external data or generate them procedurally
 
 Feature Requests:
- - Keyboard shortcuts for the Graph Editor 
+ 
  
 Known Bugs:
   - Check output of the kd-tree (in the cellular pattern) for non-euclidean distances (it should be wrong)
@@ -103,6 +102,8 @@ Releases (Notes):
 0.6.2+ (Current):
  - Matrix a parameter and now only available in Patterns
  - Gamma Correction available in the ColorCorrect filter (renamed from the Brightness/Contrast filter)
+ - Desaturation in ColorCorrect filter (using HSV color space)
+ - Selection of Multiple nodes
  
 0.6.1:
  - external run time generation library now available

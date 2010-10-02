@@ -138,7 +138,7 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 		int x = ox + n.getX() + TextureGraphNode.width + 2;
 		int y = oy + n.getY() + h*(ofs+1);
 		
-		g.setColor(new Color(0x00505084));
+		g.setColor(new Color(0x008080B4));
 		g.fillRect(x, y-h, 12, h);
 		g.setColor(Color.white);
 		
