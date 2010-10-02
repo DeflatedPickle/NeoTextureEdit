@@ -25,6 +25,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
@@ -78,6 +79,19 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	int dragStartX = 0;
 	int dragStartY = 0;
 
+	// node drawing settings
+	private static final Color col_NodeBG = new Color(128, 128, 128);
+	private static final Color col_NodeBorder = new Color(255, 255, 255);
+	private static final Color col_NodeSelected = new Color(255, 255, 0);
+	private static final Color col_NodeOutPort = new Color(0, 230, 64);
+	private static final Color col_NodeInPort = new Color(230, 64, 0);
+	//private static final Color ms_PatternColor = new Color(0x929AAF);
+	//private static final Color ms_SlowColor = new Color(128,16,16);
+	private static final Font font = new Font("Sans", Font.PLAIN, 10);
+	private static final int helpW = 16;
+	private static final int helpH = 16;
+	private static final int helpX = TextureGraphNode.width - helpW;
+	private static final int helpY = 0;
 
 	boolean nodeDragging = false;
 	boolean desktopDragging = false;
@@ -542,10 +556,11 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	}
 	
 	// utility method to draw a conneciton line.
-	public static void drawConnectionLine(Graphics g, int x0, int y0, int x1, int y1) {
-		g.drawLine(x0, y0, x0, y0 - 8);
-		g.drawLine(x0, y0 - 8, x1, y1 + 8);
-		g.drawLine(x1, y1 + 8, x1, y1);
+	public static void drawConnectionLine(Graphics2D g, int x0, int y0, int x1, int y1) {
+		final int ofs = 12;
+		g.drawLine(x0, y0, x0, y0 - ofs);
+		g.drawLine(x0, y0 - ofs, x1, y1 + ofs);
+		g.drawLine(x1, y1 + ofs, x1, y1);
 	}
 	
 	
@@ -577,22 +592,15 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	}
 	
 	
-	public static final Color ms_PatternColor = new Color(0x929AAF);
-	public static final Color ms_SlowColor = new Color(128,16,16);
-	Color bgColor = Color.gray;
-	static final Font font = new Font("Sans", Font.PLAIN, 10);
-	static final int helpW = 16;
-	static final int helpH = 16;
-	static final int helpX = TextureGraphNode.width - helpW;
-	static final int helpY = 0;
+	
 	
 	
 	public void drawConnectionPoint(Graphics2D g, int ox, int oy, ConnectionPoint p) {
 		if (p.channelIndex == -1) { // input
-			g.setColor(Color.green);
+			g.setColor(col_NodeInPort);
 			g.fillRect(ox+p.x, oy+p.y, p.width, p.height);
 		} else { // output
-			g.setColor(Color.red);
+			g.setColor(col_NodeOutPort);
 			g.fillRect(ox+p.x, oy+p.y, p.width, p.height);
 		}
 	}
@@ -602,7 +610,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		if (node.userData == null) node.userData = new NodePreviewImage(node);
 
 		
-		g.setColor(bgColor);
+		g.setColor(col_NodeBG);
 		int x = node.getX() + desktopX;
 		int y = node.getY() + desktopY;
 		int w = TextureGraphNode.width;
@@ -618,7 +626,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		g.setColor(Color.white);
 		g.drawString(node.getChannel().getName(), x+2, y+12+8);
 
-		g.setColor(Color.white);
+		g.setColor(col_NodeBorder);
 		
 		g.drawRoundRect(x, y, w, h, roundRad, roundRad);
 		
@@ -659,6 +667,9 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		}
 			
 		Graphics2D g = (Graphics2D)canvas.getGraphics();
+		
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
 		g.setBackground(Color.DARK_GRAY);
 		g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		
@@ -679,7 +690,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			drawConnectionLine(g, desktopX + c.target.getWorldSpaceX(), desktopY + c.target.getWorldSpaceY(), desktopX + c.source.getWorldSpaceX(), desktopY + c.source.getWorldSpaceY());
 		}
 
-		g.setColor(Color.yellow);
+		g.setColor(col_NodeSelected);
 		for (TextureGraphNode n : graph.selectedNodes) {
 			//Rectangle r = new n.getBounds();
 			g.fillRoundRect(desktopX + n.getX() - 3, desktopY + n.getY() - 3, TextureGraphNode.width + 6, TextureGraphNode.height + 6, 20, 20);
@@ -708,6 +719,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			g.drawLine(previewNode.getX() + desktopX, previewNode.getY() + desktopY, previewImage.getWidth()/2, previewImage.getHeight()/2);
 			g.drawImage(previewImage, 0, 0, this);
 		}
+		
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
 		if (getWidth() != canvas.getWidth() || getHeight() != canvas.getHeight()) {
 			gr.drawImage(canvas.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
