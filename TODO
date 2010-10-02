@@ -11,7 +11,7 @@ Feature Requests:
   Zoom,
   Export All Menu Item
   Blur Node
-  Color correction node:  Desaturation, Gamma Correction
+  Color correction node:  Desaturation,
   
   UnDo stack
   
@@ -19,6 +19,7 @@ Feature Requests:
   
   Preview Node Zoom (showing a region of the texture (info should contain target resolution); 
     needs propper tiled caching to be reasonable fast
+  
   
   
 Caching System and Derivative based nodes:
@@ -101,6 +102,7 @@ Releases (Notes):
 -----------------------------------------------------------------------------------------------------------------------
 0.6.2+ (Current):
  - Matrix a parameter and now only available in Patterns
+ - Gamma Correction available in the ColorCorrect filter (renamed from the Brightness/Contrast filter)
  
 0.6.1:
  - external run time generation library now available

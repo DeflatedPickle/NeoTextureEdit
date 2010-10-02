@@ -13,7 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package engine.base;
 
@@ -30,11 +30,11 @@ import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
-
 /**
  * A Collection of utility functions that are used in different projects.
+ * 
  * @author Holger Dammertz
- *
+ * 
  */
 public final class Utils {
 
@@ -83,50 +83,126 @@ public final class Utils {
 		result[14] = a[12] * b[2] + a[13] * b[6] + a[14] * b[10] + a[15] * b[14];
 		result[15] = a[12] * b[3] + a[13] * b[7] + a[14] * b[11] + a[15] * b[15];
 	}
-	
+
 	public static float length3f(float[] v) {
-		return FMath.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+		return FMath.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 	}
-	
-	
+
 	public static final int floatRGBToINTColor(float fr, float fg, float fb) {
-		int r = ((int)(fr*255.0f)) & 0xFF;
-		int g = ((int)(fg*255.0f)) & 0xFF;
-		int b = ((int)(fb*255.0f)) & 0xFF;
+		int r = ((int) (fr * 255.0f)) & 0xFF;
+		int g = ((int) (fg * 255.0f)) & 0xFF;
+		int b = ((int) (fb * 255.0f)) & 0xFF;
 		return (0xFF000000 | (r << 16) | (g << 8) | (b << 0));
 	}
-	
+
 	public static final int floatRGBAToINTColor(float fr, float fg, float fb, float fa) {
-		int r = ((int)(fr*255.0f)) & 0xFF;
-		int g = ((int)(fg*255.0f)) & 0xFF;
-		int b = ((int)(fb*255.0f)) & 0xFF;
-		int a = ((int)(fa*255.0f)) & 0xFF;
+		int r = ((int) (fr * 255.0f)) & 0xFF;
+		int g = ((int) (fg * 255.0f)) & 0xFF;
+		int b = ((int) (fb * 255.0f)) & 0xFF;
+		int a = ((int) (fa * 255.0f)) & 0xFF;
 		return ((a << 24) | (r << 16) | (g << 8) | (b << 0));
 	}
-	
+
 	public static final int vector3ToINTColor(Vector3 c) {
-		int r = ((int)(c.x*255.0f)) & 0xFF;
-		int g = ((int)(c.y*255.0f)) & 0xFF;
-		int b = ((int)(c.z*255.0f)) & 0xFF;
+		int r = ((int) (c.x * 255.0f)) & 0xFF;
+		int g = ((int) (c.y * 255.0f)) & 0xFF;
+		int b = ((int) (c.z * 255.0f)) & 0xFF;
 		return (0xFF000000 | (r << 16) | (g << 8) | (b << 0));
 	}
-	
+
 	public static final int vector4ToINTColor(Vector4 c) {
-		int r = ((int)(c.x*255.0f)) & 0xFF;
-		int g = ((int)(c.y*255.0f)) & 0xFF;
-		int b = ((int)(c.z*255.0f)) & 0xFF;
-		int a = ((int)(c.w*255.0f)) & 0xFF;
+		int r = ((int) (c.x * 255.0f)) & 0xFF;
+		int g = ((int) (c.y * 255.0f)) & 0xFF;
+		int b = ((int) (c.z * 255.0f)) & 0xFF;
+		int a = ((int) (c.w * 255.0f)) & 0xFF;
 		return ((a << 24) | (r << 16) | (g << 8) | (b << 0));
 	}
 
 	public static Vector4 RGBAToVector4(int c) {
-		float a = ((c>>24)&0xFF)/255.0f;
-		float r = ((c>>16)&0xFF)/255.0f;
-		float g = ((c>>8)&0xFF)/255.0f;
-		float b = ((c>>0)&0xFF)/255.0f;
+		float a = ((c >> 24) & 0xFF) / 255.0f;
+		float r = ((c >> 16) & 0xFF) / 255.0f;
+		float g = ((c >> 8) & 0xFF) / 255.0f;
+		float b = ((c >> 0) & 0xFF) / 255.0f;
 		return new Vector4(r, g, b, a);
 	}
+
+	/*
+	 * public static Vector3 rgbToHSV_ip(Vector3 rgb) { float rgb_max =
+	 * rgb.getMax(); float rgb_min = rgb.getMin();
+	 * 
+	 * float v = rgb_max; if (v == 0) return rgb; float inv_v = 1.0f / rgb_max;
+	 * rgb_max *= inv_v; rgb_min *= inv_v; float s = rgb_max - rgb_min; if (s ==
+	 * 0) return rgb.set(0, 0, v);
+	 * 
+	 * rgb.mult_ip(inv_v); float inv_s = 1.0f / s;
+	 * 
+	 * rgb.sub_ip(rgb_min).mult_ip(inv_s); rgb_max *= inv_s; rgb_min *= inv_s;
+	 * 
+	 * float h = 0.0f; if (rgb_max == rgb.x) { h = 0.0f + 60.0f * (rgb.y -
+	 * rgb.z); if (h < 0.0) { h += 360.0; } } else if (rgb_max == rgb.y) { h =
+	 * 120.0f + 60.0f * (rgb.z - rgb.x); } else { h = 240.0f + 60.0f * (rgb.x -
+	 * rgb.y); }
+	 * 
+	 * return rgb.set(h, s, v); }
+	 */
 	
+	
+//	private static final ColorSpace colorSpace = ColorSpace.getInstance(ColorSpace.CS_);
+//	public static Vector3 rgbToHSV_ip(Vector3 rgb) {
+//		//float [] temp = Color.RGBtoHSB(rgb.x, rgb.y, rgb.z, new float[3]);
+//		//rgb.set(temp[0], temp[1], temp[2]);
+//		colorSpace.
+//	}
+
+	public static Vector3 rgbToHSV_ip(Vector3 rgb) {
+		Vector3 temp = new Vector3(rgb);
+		int maxi = temp.maxIdx();
+		int mini = temp.minIdx();
+
+		rgb.z = temp.get(maxi);
+		if (temp.get(maxi) == 0) {
+			rgb.x = rgb.y = 0;
+		} else if (temp.get(maxi) == temp.get(mini)) {
+			rgb.x = rgb.y = 0;
+		} else {
+			rgb.y = 255.0f * (1.0f - (temp.get(mini) / temp.get(maxi)));
+			rgb.x = 60.0f * ((maxi * 2) + (temp.get((maxi + 1) % 3) - temp.get((maxi + 2) % 3)) / (temp.get(maxi) - temp.get(mini)));
+		}
+		if (rgb.x < 0)
+			rgb.x += 360.0f;
+
+		return rgb;
+	}
+
+	public static Vector3 hsvToRGB_ip(Vector3 hsv) {
+		int maxc = 0;
+		
+		if (hsv.x > 300) hsv.x -= 360.0f;
+		if (hsv.x < 60)
+			maxc = 0;
+		else if (hsv.x >= 180)
+			maxc = 2;
+		else
+			maxc = 1;
+
+		Vector3 temp = new Vector3();
+
+		temp.set(maxc, hsv.z);
+
+		float min = (hsv.z * (255.0f - hsv.y)) / 255.0f;
+		float temphue = (((hsv.x / 60.0f) - (2 * maxc)) * (hsv.z - min));
+		
+		if (temphue > 0) {
+			temp.set((maxc + 2) % 3, min);
+			temp.set((maxc + 1) % 3, min + temphue);
+		} else {
+			temp.set((maxc + 1) % 3, min);
+			temp.set((maxc + 2) % 3, min - temphue);
+		}
+
+		return hsv.set(temp);
+	}
+
 	public static final void saveINTImage(String filename, int[] pixels, int resX, int resY) {
 		BufferedImage image = new BufferedImage(resX, resY, BufferedImage.TYPE_INT_ARGB);
 		image.setRGB(0, 0, resX, resY, pixels, 0, resX);
@@ -138,59 +214,49 @@ public final class Utils {
 		}
 
 	}
-	
-	
-	
+
 	public static Vector3 createSphereSample_Uniform(float u, float v) {
 		Vector3 dir = new Vector3();
 		u = 2.0f * FMath.PI * u;
-		dir.x = 2.0f * FMath.cos(u) * FMath.sqrt(v*(1.0f-v));
-		dir.y = 2.0f * FMath.sin(u) * FMath.sqrt(v*(1.0f-v));
-		dir.z = (1.0f - 2.0f*v);
+		dir.x = 2.0f * FMath.cos(u) * FMath.sqrt(v * (1.0f - v));
+		dir.y = 2.0f * FMath.sin(u) * FMath.sqrt(v * (1.0f - v));
+		dir.z = (1.0f - 2.0f * v);
 		return dir;
 	}
-	
+
 	public static Vector3 createHemisphereSample_Uniform(float u, float v) {
 		Vector3 dir = new Vector3();
-		float r1 = v * 2.0f*FMath.PI;
+		float r1 = v * 2.0f * FMath.PI;
 		float r2 = 1.0f - u;
-		float sp = FMath.sqrt(1.0f - r2*r2);
-		dir.x = FMath.cos(r1)*sp;
-		dir.y = FMath.sin(r1)*sp;
+		float sp = FMath.sqrt(1.0f - r2 * r2);
+		dir.x = FMath.cos(r1) * sp;
+		dir.y = FMath.sin(r1) * sp;
 		dir.z = r2;
 		return dir;
 	}
 
 	public static Vector3 createHemisphereSample_Cosinus(float u, float v) {
 		Vector3 dir = new Vector3();
-		float r1 = v * 2.0f*FMath.PI;
+		float r1 = v * 2.0f * FMath.PI;
 		float r2 = FMath.sqrt(1.0f - u);
-		float sp = FMath.sqrt(1.0f - r2*r2); 
+		float sp = FMath.sqrt(1.0f - r2 * r2);
 		dir.x = FMath.cos(r1) * sp;
 		dir.y = FMath.sin(r1) * sp;
 		dir.z = r2;
 		return dir;
 	}
-	
+
 	/*
-	public static Vector3 createHemisphereSample_CosinusPowK(float u, float v) {
-		Vector3 dir = new Vector3();
-		//TODO
-		return dir;
-	}
-	*/
+	 * public static Vector3 createHemisphereSample_CosinusPowK(float u, float
+	 * v) { Vector3 dir = new Vector3(); //TODO return dir; }
+	 */
 
-	
-	
-
-	
-	
 	// solve eigenvectors ;)
 	public static class EigenVectorValues2D {
 		public float lambda1, lambda2;
 		public float v1x, v1y, v2x, v2y;
 	}
-	
+
 	EigenVectorValues2D solve_EigenVectorValues_2D(float A, float B, float C, float D) {
 		EigenVectorValues2D ev = new EigenVectorValues2D();
 		if (B * C <= 0.1e-20) {
@@ -240,36 +306,34 @@ public final class Utils {
 		}
 		return ev;
 	}
-	
-	
-	
+
 	static byte intToUnsignedByte(int i) {
-		return (byte)((i<=0x7F)?i:i-0x100);
+		return (byte) ((i <= 0x7F) ? i : i - 0x100);
 	}
-	
-	static void	float2rgbe(ByteBuffer buf, float red, float green, float blue)	{
+
+	static void float2rgbe(ByteBuffer buf, float red, float green, float blue) {
 		float v;
 		int e;
 
 		v = red;
-		if (green > v) v = green;
-		if (blue > v) v = blue;
+		if (green > v)
+			v = green;
+		if (blue > v)
+			v = blue;
 		if (v < 1e-32) {
-			buf.put(0, (byte)0);
-			buf.put(1, (byte)0);
-			buf.put(2, (byte)0);
-			buf.put(3, (byte)0);
-		}
-		else {
+			buf.put(0, (byte) 0);
+			buf.put(1, (byte) 0);
+			buf.put(2, (byte) 0);
+			buf.put(3, (byte) 0);
+		} else {
 			e = FMath.getExp(v);
-			v = FMath.getManissa(v) * 256.0f/v;
-			buf.put(0, intToUnsignedByte((int)(red * v)));
-			buf.put(1, intToUnsignedByte((int)(green * v)));
-			buf.put(2, intToUnsignedByte((int)(blue * v)));
-			buf.put(3, intToUnsignedByte((int)(e + 128)));
+			v = FMath.getManissa(v) * 256.0f / v;
+			buf.put(0, intToUnsignedByte((int) (red * v)));
+			buf.put(1, intToUnsignedByte((int) (green * v)));
+			buf.put(2, intToUnsignedByte((int) (blue * v)));
+			buf.put(3, intToUnsignedByte((int) (e + 128)));
 		}
 	}
-
 
 	// HDR Export
 	static void saveHDRImage(String filename, float[] image, int width, int height) {
@@ -280,13 +344,13 @@ public final class Utils {
 			out.write("FORMAT=32-bit_rgbe\n\n".getBytes());
 			out.write(String.format("-Y %d +X %d\n", height, width).getBytes());
 
-			for (int y = height-1; y >= 0; y--) {
+			for (int y = height - 1; y >= 0; y--) {
 				for (int i = 0; i < width; i++) {
-					float2rgbe(buf, image[y*width*3 + i*3+0], image[y*width*3 + i*3+1], image[y*width*3 + i*3+2]);
+					float2rgbe(buf, image[y * width * 3 + i * 3 + 0], image[y * width * 3 + i * 3 + 1], image[y * width * 3 + i * 3 + 2]);
 					out.write(buf.array());
 				}
 			}
-			
+
 			System.out.println("Saved " + filename);
 			out.close();
 		} catch (FileNotFoundException e) {
@@ -294,6 +358,14 @@ public final class Utils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void main(String[] args) {
+		Vector3 col = new Vector3(0.4392157f, 0.6745098f, 0.71372549f);
+		col = new Vector3(135/255.0f, 33/255.0f, 38/255.0f);
+		System.out.println(col);
+		System.out.println(rgbToHSV_ip(col));
+		System.out.println(hsvToRGB_ip(col));
 	}
 
 }

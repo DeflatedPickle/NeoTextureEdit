@@ -171,6 +171,14 @@ public class Vector4 implements Serializable {
 		return this;
 	}
 	
+	public Vector4 pow_ip(float e) {
+		x = FMath.pow(x, e);
+		y = FMath.pow(y, e);
+		z = FMath.pow(z, e);
+		w = FMath.pow(w, e);
+		return this;
+	}
+	
 	public Vector4 mult_ip(float f) {
 		x *= f;
 		y *= f;

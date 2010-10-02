@@ -143,7 +143,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		 * File(url.toURI()); files = f.list(); } else
 		 */{
 			// System.err.println("WARNING: automatic loading of patterns/channels failed; adding hardcoded set");
-			String[] f = { "FilterBlend.class", "FilterBrightnessContrast.class", "FilterColorize.class", "FilterEmboss.class",
+			String[] f = { "FilterBlend.class", "FilterColorCorrect.class", "FilterColorize.class", "FilterEmboss.class",
 					"FilterMask.class", "FilterNormalMap.class", "FilterWarp.class", "Pattern.class", "PatternBrick.class",
 					"PatternCellular.class", "PatternChecker.class", "PatternConstantColor.class", "PatternGradient.class",
 					"PatternPerlinNoise.class", "PatternTile.class", "PatternFunction.class", "PatternBitmap.class", "FilterIlluminate.class" };

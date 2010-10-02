@@ -86,6 +86,13 @@ public class Vector3 implements Serializable {
 		return z;
 	}
 	
+	// ??Optimize??
+	public void set(int idx, float f) {
+		if (idx == 0) x = f;
+		else if (idx == 1) y = f;
+		else z = f;
+	}
+	
 	public float sumComponents() {
 		return x + y + z;
 	}
@@ -99,24 +106,34 @@ public class Vector3 implements Serializable {
 		return (FMath.abs(x) + FMath.abs(y) + FMath.abs(z));
 	}
 
-	public void set(Vector3 v) {
+	public Vector3 set(Vector3 v) {
 		set(v.x, v.y, v.z);
+		return this;
 	}
 
-	public void set(float f) {
+	public Vector3 set(float f) {
 		x = y = z = f;
+		return this;
 	}
 
-	public void set(float x, float y, float z) {
+	public Vector3 set(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		return this;
 	}
 
 	public void add_ip(Vector3 v) {
 		x += v.x;
 		y += v.y;
 		z += v.z;
+	}
+	
+	public Vector3 sub_ip(float f) {
+		x -= f;
+		y -= f;
+		z -= f;
+		return this;
 	}
 
 	public void sub_ip(Vector3 v) {
@@ -257,6 +274,16 @@ public class Vector3 implements Serializable {
 			else return 2;
 		}
 	}
+	
+	public float getMax() {
+		if (x > y) {
+			if (x > z) return x;
+			else return z;
+		} else {
+			if (y > z) return y;
+			else return z;
+		}
+	}
 
 	public int minIdx() {
 		if (x < y) {
@@ -265,6 +292,16 @@ public class Vector3 implements Serializable {
 		} else {
 			if (y < z) return 1;
 			else return 2;
+		}
+	}
+	
+	public float getMin() {
+		if (x < y) {
+			if (x < z) return x;
+			else return z;
+		} else {
+			if (y < z) return y;
+			else return z;
 		}
 	}
 	
