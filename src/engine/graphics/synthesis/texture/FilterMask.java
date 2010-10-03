@@ -18,6 +18,7 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.Vector4;
+import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.BoolParam;
 
 /**
@@ -64,9 +65,9 @@ public final class FilterMask extends Channel {
 		out.mult_add_ip(w, in1);
 	}
 	
-	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
-		_function(out, ce[0].sample(u, v), ce[1].sample(u, v), ce[2].sample(u, v));
-	}*/
+	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+		_function(out, caches[0].sample(localX, localY), caches[1].sample(localX, localY), caches[2].sample(localX, localY));
+	}
 		
 	
 	protected float _value1f(float u, float v) {

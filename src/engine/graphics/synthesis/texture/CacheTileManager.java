@@ -7,6 +7,7 @@ import engine.base.FMath;
 import engine.base.Vector4;
 
 /**
+ * !!TODO: need to make sure that no memory leaks appear when a channel is deleted
  * 
  * @author Holger Dammertz
  * 
@@ -60,7 +61,7 @@ public final class CacheTileManager {
 			data.put(i * 4 + 3, val.w);
 		}		
 		
-		public Vector4 sampleCache(int x, int y) {
+		public Vector4 sample(int x, int y) {
 			int i = (x + y * xres) * 4;
 			return new Vector4(data.get(i + 0), data.get(i + 1), data.get(i + 2), data.get(i + 3));
 			// ret.set(values.get(i+0), values.get(i+1), values.get(i+2),
@@ -129,6 +130,10 @@ public final class CacheTileManager {
 		for (TileCacheEntry e : channelMap.values()) {
 			e.setDirty();
 		}
+	}
+	
+	public static void removeChannel(Channel c) {
+		tiles.put(c, null);
 	}
 
 	public static TileCacheEntry getCache(Channel c, int px, int py, int xres, int yres, int border, int globalXres, int globalYres) {

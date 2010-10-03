@@ -20,6 +20,7 @@ package engine.graphics.synthesis.texture;
 import engine.base.Utils;
 import engine.base.Vector3;
 import engine.base.Vector4;
+import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.FloatParam;
 
 public final class FilterColorCorrect extends Channel {
@@ -79,9 +80,9 @@ public final class FilterColorCorrect extends Channel {
 		return c0;
 	}
 	
-	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
-		out.set(_function(ce[0].sample(u, v)));
-	}*/
+	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+		out.set(_function(caches[0].sample(localX, localY)));
+	}
 	
 	
 	protected float _value1f(float u, float v) {

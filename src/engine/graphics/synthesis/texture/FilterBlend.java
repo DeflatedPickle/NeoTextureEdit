@@ -18,6 +18,7 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.Vector4;
+import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.BoolParam;
 import engine.parameters.EnumParam;
 import engine.parameters.FloatParam;
@@ -28,7 +29,7 @@ import engine.parameters.FloatParam;
  * @author Holger Dammertz
  *
  */
-public class FilterBlend extends Channel {
+public final class FilterBlend extends Channel {
 	
 	EnumParam blendFunction = CreateLocalEnumParam("Layer Func.", "Normal,Multiply,Divide,Screen,Overlay,Dodge,Burn,Difference,Addition,Subtract");
 	FloatParam opacity = CreateLocalFloatParam("Opacity", 1.0f, 0.0f, 1.0f).setDefaultIncrement(0.125f);
@@ -119,9 +120,9 @@ public class FilterBlend extends Channel {
 	}
 	
 	
-	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
-		out.set(_function(ce[0].sample(u, v), ce[1].sample(u, v)));
-	}*/
+	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+		out.set(_function(caches[0].sample(localX, localY), caches[1].sample(localX, localY)));
+	}
 	
 	
 	

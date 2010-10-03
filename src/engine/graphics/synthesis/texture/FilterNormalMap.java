@@ -19,6 +19,7 @@ package engine.graphics.synthesis.texture;
 
 import engine.base.Vector3;
 import engine.base.Vector4;
+import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.FloatParam;
 
 public final class FilterNormalMap extends Channel {
@@ -51,9 +52,11 @@ public final class FilterNormalMap extends Channel {
 		return c;
 	}
 	
-	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
-		out.set(_function(ce[0].du(u, v).XYZto1f(), ce[0].dv(u, v).XYZto1f()));
-	}*/
+	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+		float du = inputChannels[1].du1f(u, v).XYZto1f();
+		float dv = inputChannels[1].dv1f(u, v).XYZto1f();
+		out.set(_function(du, dv));
+	}
 	
 	
 	protected float _value1f(float u, float v) {
