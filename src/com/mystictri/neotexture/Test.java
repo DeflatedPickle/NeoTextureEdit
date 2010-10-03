@@ -52,10 +52,10 @@ public class Test {
 		Channel c = new FilterColorize();
 		c.setInputChannel(0, c2);
 		
-		int cxres = 64;
-		int cyres = 64;
-		int globalXres = 256;
-		int globalYres = 256;
+		int cxres = 256;
+		int cyres = 256;
+		int globalXres = 2048;
+		int globalYres = 2048;
 		int border = 0;
 		
 		int[] imgData = new int[globalXres * globalYres];

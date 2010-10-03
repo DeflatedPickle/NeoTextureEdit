@@ -9,35 +9,53 @@ import engine.base.Vector4;
 /**
  * !!TODO: need to make sure that no memory leaks appear when a channel is deleted
  * 
+ * Current implementation caches only a single tile per local resolution and channel
+ * 
  * @author Holger Dammertz
  * 
  */
 public final class CacheTileManager {
 	// HashMap<K, V>
+	//private static final HashMap<Channel, HashMap<ResolutionTag, TileCacheEntry>> tiles = new HashMap<Channel, HashMap<ResolutionTag, TileCacheEntry>>();
 	private static final HashMap<Channel, HashMap<ResolutionTag, TileCacheEntry>> tiles = new HashMap<Channel, HashMap<ResolutionTag, TileCacheEntry>>();
 	
 	private static final class ResolutionTag {
-		final Integer globalXres;
-		final Integer globalYres;
 		final Integer xres; // the local x resolution of this tile (without border)
 		final Integer yres; // the local y resolution of this tile
-		final Integer px, py; // the location in the overall image
-
-		public ResolutionTag(int xres, int yres, int px, int py, int border, int globalXres, int globalYres) {
-			this.globalXres = globalXres;
-			this.globalYres = globalYres;
+		
+		public ResolutionTag(int xres, int yres) {
 			this.xres = xres;
 			this.yres = yres;
-			this.px = px;
-			this.py = py;
-			
 		}
 		
 		@Override
 		public int hashCode() {
-			return globalXres.hashCode() ^ globalYres.hashCode() ^ xres.hashCode() ^ yres.hashCode() ^ px.hashCode() ^ py.hashCode();
+			return xres.hashCode() ^ yres.hashCode();
 		}
 	}
+	
+//	private static final class ResolutionTag {
+//		final Integer globalXres;
+//		final Integer globalYres;
+//		final Integer xres; // the local x resolution of this tile (without border)
+//		final Integer yres; // the local y resolution of this tile
+//		final Integer px, py; // the location in the overall image
+//
+//		public ResolutionTag(int xres, int yres, int px, int py, int border, int globalXres, int globalYres) {
+//			this.globalXres = globalXres;
+//			this.globalYres = globalYres;
+//			this.xres = xres;
+//			this.yres = yres;
+//			this.px = px;
+//			this.py = py;
+//			
+//		}
+//		
+//		@Override
+//		public int hashCode() {
+//			return globalXres.hashCode() ^ globalYres.hashCode() ^ xres.hashCode() ^ yres.hashCode() ^ px.hashCode() ^ py.hashCode();
+//		}
+//	}
 
 	public static final class TileCacheEntry {
 		public final int globalXres;
@@ -129,7 +147,14 @@ public final class CacheTileManager {
 	}
 	
 	
+	public static void clearCache() {
+		tiles.clear();
+	}
+	
 	public static void setEntrysDirty(Channel c) {
+//		TileCacheEntry tile = tiles.get(c);
+//		if (tile != null) tile.setDirty();
+			
 		HashMap<ResolutionTag, TileCacheEntry> channelMap = tiles.get(c);
 		if (channelMap == null) return;
 		
@@ -143,19 +168,33 @@ public final class CacheTileManager {
 	}
 
 	public static TileCacheEntry getCache(Channel c, int px, int py, int xres, int yres, int border, int globalXres, int globalYres) {
+//		TileCacheEntry tile = tiles.get(c);
+//		
+//		if (tile == null) {
+//			tile = new TileCacheEntry(c, xres, yres, px, py, border, globalXres, globalYres);
+//			tiles.put(c, tile);
+//		}
+//		
+//		tile.relocateCache(px, py);
+//		tile.compute();
+//		return tile;
+		
+		System.out.println("Num Tiles: " + tiles.values().size());
+		
 		HashMap<ResolutionTag, TileCacheEntry> channelMap = tiles.get(c);
 		if (channelMap == null) {
 			channelMap = new HashMap<ResolutionTag, TileCacheEntry>();
 			tiles.put(c, channelMap);
 		}
 		
-		ResolutionTag tag = new ResolutionTag(xres, yres, px, py, border, globalXres, globalYres);
+		ResolutionTag tag = new ResolutionTag(xres, yres);
 		TileCacheEntry tile = channelMap.get(tag);
 		if (tile == null) {
 			tile = new TileCacheEntry(c, xres, yres, px, py, border, globalXres, globalYres);
 			channelMap.put(tag, tile);
 		}
 		
+		tile.relocateCache(px, py);
 		tile.compute();
 		return tile;
 	}
