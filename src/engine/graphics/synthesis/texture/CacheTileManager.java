@@ -40,11 +40,11 @@ public final class CacheTileManager {
 	}
 
 	public static final class TileCacheEntry {
-		final int globalXres;
-		final int globalYres;
-		final int xres; // the local x resolution of this tile (without border)
-		final int yres; // the local y resolution of this tile
-		final int px, py; // the location in the overall image
+		public final int globalXres;
+		public final int globalYres;
+		public final int xres; // the local x resolution of this tile (without border)
+		public final int yres; // the local y resolution of this tile
+		public int px, py; // the location in the overall image
 		boolean dirty;
 
 		final Channel c;
@@ -60,6 +60,13 @@ public final class CacheTileManager {
 			data.put(i * 4 + 2, val.z);
 			data.put(i * 4 + 3, val.w);
 		}		
+		
+		
+		public void relocateCache(int px, int py) {
+			if (this.px != px || this.py != py) setDirty();
+			this.px = px;
+			this.py = py;
+		}
 		
 		public Vector4 sample(int x, int y) {
 			int i = (x + y * xres) * 4;
@@ -92,8 +99,8 @@ public final class CacheTileManager {
 			if (c.getNumInputChannels() == 0) { // no input channels
 				for (int y = py*yres-border, idx = 0; y < (py+1)*yres+border; y++)
 					for (int x = px*xres-border; x < (px+1)*xres+border; x++, idx++) {
-						float u = (float)x/(float)xres;
-						float v = (float)y/(float)yres;
+						float u = (float)x/(float)globalXres;
+						float v = (float)y/(float)globalYres;
 						u = u - FMath.ffloor(u);
 						v = v - FMath.ffloor(v);
 						put (idx, c.valueRGBA(u, v));
@@ -107,14 +114,13 @@ public final class CacheTileManager {
 				
 				for (int y = py*yres-border, idx = 0, localY = 0; y < (py+1)*yres+border; y++, localY++)
 					for (int x = px*xres-border, localX = 0; x < (px+1)*xres+border; x++, idx++, localX++) {
-						float u = (float)x/(float)xres;
-						float v = (float)y/(float)yres;
+						float u = (float)x/(float)globalXres;
+						float v = (float)y/(float)globalYres;
 						u = u - FMath.ffloor(u);
 						v = v - FMath.ffloor(v);
 						Vector4 temp = new Vector4();
-						
 						c.cache_function(temp, tiles, localX, localY, u, v);
-						//put (idx, c.valueRGBA(u, v));
+						put(idx, temp);
 					}
 			}
 			

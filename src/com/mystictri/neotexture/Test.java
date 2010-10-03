@@ -9,6 +9,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import engine.base.Utils;
+import engine.graphics.synthesis.texture.CacheTileManager;
+import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
+import engine.graphics.synthesis.texture.Channel;
+import engine.graphics.synthesis.texture.FilterColorCorrect;
+import engine.graphics.synthesis.texture.FilterColorize;
+import engine.graphics.synthesis.texture.PatternBrick;
+
 /**
  * Just a temporary test class for the TextureGenerator
  * 
@@ -16,6 +24,17 @@ import javax.swing.JLabel;
  *
  */
 public class Test {
+	
+	
+	private static int[] tempGetImage(int[] img, int globalXres, int globalYres, TileCacheEntry e) {
+			for (int y = 0; y < e.yres; y++) {
+				for (int x = 0; x < e.xres; x++) {
+					img[x + e.px*e.xres + (y + e.py*e.yres) * globalXres] = Utils.vector4ToINTColor(e.sample(x, y));
+				}
+			}
+
+		return img;
+	}
 
 	public static void main(String[] args) {
 		try {
@@ -26,7 +45,41 @@ public class Test {
 
 		for (String s : TextureGenerator.getTextureNames())
 			System.out.println(s);
+		
+		
+		Channel c2 = new PatternBrick();
+		
+		Channel c = new FilterColorize();
+		c.setInputChannel(0, c2);
+		
+		int cxres = 64;
+		int cyres = 64;
+		int globalXres = 256;
+		int globalYres = 256;
+		int border = 0;
+		
+		int[] imgData = new int[globalXres * globalYres];
 
+		for (int py = 0; py < globalYres/cyres; py++) {
+			for (int px = 0; px < globalXres/cxres; px++) {
+				TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, border, globalXres, globalYres);
+				tempGetImage(imgData, globalXres, globalYres, e);
+			}
+		}
+
+		
+		BufferedImage img = new BufferedImage(globalXres, globalXres, BufferedImage.TYPE_INT_ARGB);
+		
+		JFrame f = new JFrame();
+		f.setLayout(new FlowLayout());
+		img.setRGB(0, 0, globalXres, globalYres, imgData, 0, globalXres);
+		f.add(new JLabel(new ImageIcon(img)));
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.pack();
+		f.setVisible(true);
+		
+		
+		/*
 		int size = 256;
 
 		TextureGenerator.setUseCache(true);
@@ -50,7 +103,7 @@ public class Test {
 
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
-		f.setVisible(true);
+		f.setVisible(true);*/
 	}
 
 }
