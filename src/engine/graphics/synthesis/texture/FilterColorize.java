@@ -55,9 +55,9 @@ public final class FilterColorize extends Channel {
 		out.set(colorGradientParam.get().getColor(in.XYZto1f()));
 	}
 	
-	protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
+	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
 		function(out, ce[0].sample(u, v));
-	}
+	}*/
 	
 	
 	protected float _value1f(float u, float v) {

@@ -58,9 +58,9 @@ public final class FilterIlluminate extends Channel {
 		return in0;
 	}
 
-	protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
+	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
 		out.set(_function(ce[0].sample(u, v), ce[1].sample(u, v)));
-	}
+	}*/
 
 	protected Vector4 _valueRGBA(float u, float v) {
 		return _function(inputChannels[0].valueRGBA(u, v), inputChannels[1].valueRGBA(u, v));

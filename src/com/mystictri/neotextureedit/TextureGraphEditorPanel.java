@@ -17,6 +17,7 @@
 
 package com.mystictri.neotextureedit;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -58,9 +59,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import com.mystictri.neotexture.TextureGraph;
+import com.mystictri.neotexture.TextureGraph.TextureNodeConnection;
 import com.mystictri.neotexture.TextureGraphListener;
 import com.mystictri.neotexture.TextureGraphNode;
-import com.mystictri.neotexture.TextureGraph.TextureNodeConnection;
 import com.mystictri.neotexture.TextureGraphNode.ConnectionPoint;
 
 import engine.base.Logger;
@@ -85,6 +86,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	private static final Color col_NodeSelected = new Color(255, 255, 0);
 	private static final Color col_NodeOutPort = new Color(0, 230, 64);
 	private static final Color col_NodeInPort = new Color(230, 64, 0);
+	//private static final BasicStroke connectionLineStroke = new BasicStroke(2.0f);
+	private static final BasicStroke connectionLineStroke = new BasicStroke(1.5f);
 	//private static final Color ms_PatternColor = new Color(0x929AAF);
 	//private static final Color ms_SlowColor = new Color(128,16,16);
 	private static final Font font = new Font("Sans", Font.PLAIN, 10);
@@ -560,6 +563,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	// utility method to draw a conneciton line.
 	public static void drawConnectionLine(Graphics2D g, int x0, int y0, int x1, int y1) {
 		final int ofs = 12;
+		
 		g.drawLine(x0, y0, x0, y0 - ofs);
 		g.drawLine(x0, y0 - ofs, x1, y1 + ofs);
 		g.drawLine(x1, y1 + ofs, x1, y1);
@@ -688,6 +692,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		// draw the connection lines
 		g.setColor(Color.white);
+		g.setStroke(connectionLineStroke);
 		for (TextureNodeConnection c : graph.allConnections) {
 			drawConnectionLine(g, desktopX + c.target.getWorldSpaceX(), desktopY + c.target.getWorldSpaceY(), desktopX + c.source.getWorldSpaceX(), desktopY + c.source.getWorldSpaceY());
 		}

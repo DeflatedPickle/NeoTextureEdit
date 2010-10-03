@@ -51,9 +51,9 @@ public final class FilterNormalMap extends Channel {
 		return c;
 	}
 	
-	protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
+	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
 		out.set(_function(ce[0].du(u, v).XYZto1f(), ce[0].dv(u, v).XYZto1f()));
-	}
+	}*/
 	
 	
 	protected float _value1f(float u, float v) {

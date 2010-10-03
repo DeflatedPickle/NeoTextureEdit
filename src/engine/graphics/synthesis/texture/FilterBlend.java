@@ -118,9 +118,10 @@ public class FilterBlend extends Channel {
 		return c0;
 	}
 	
-	protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
+	
+	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
 		out.set(_function(ce[0].sample(u, v), ce[1].sample(u, v)));
-	}
+	}*/
 	
 	
 	

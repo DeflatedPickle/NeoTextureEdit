@@ -64,9 +64,9 @@ public final class FilterMask extends Channel {
 		out.mult_add_ip(w, in1);
 	}
 	
-	protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
+	/*protected void cache_function(Vector4 out, CacheEntry[] ce, float u, float v) {
 		_function(out, ce[0].sample(u, v), ce[1].sample(u, v), ce[2].sample(u, v));
-	}
+	}*/
 		
 	
 	protected float _value1f(float u, float v) {

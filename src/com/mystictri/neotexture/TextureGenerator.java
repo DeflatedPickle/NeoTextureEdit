@@ -90,7 +90,7 @@ public final class TextureGenerator {
 	private static int[] getImage_ARGB(int xres, int yres, Channel c) {
 		int[] img = new int[xres * yres];
 
-		if (useCache) {
+		/*if (useCache) {
 			Channel.CacheEntry ce = c.valuesRGBA_Cached(xres, yres);
 			for (int y = 0; y < yres; y++) {
 				// if (progress != null)
@@ -107,7 +107,7 @@ public final class TextureGenerator {
 							.get(i + 3));
 				}
 			}
-		} else { // don't use cache
+		} else */{ // don't use cache
 			for (int y = 0; y < yres; y++) {
 				// if (progress != null)
 				// progress.setProgress(y/(float)img.getHeight());
@@ -129,7 +129,7 @@ public final class TextureGenerator {
 	 */
 	public static void clearCache() {
 		for (TextureGraphNode n : graph.allNodes) {
-			n.getChannel().clearCache();
+			//n.getChannel().clearCache();
 		}
 	}
 

@@ -24,7 +24,7 @@ import java.util.Random;
  * @author Holger Dammertz
  *
  */
-public class FMath {
+public final class FMath {
 	public static final float PI = 3.1415926535897932384626f;
 	static Random rnd = new Random();
 
