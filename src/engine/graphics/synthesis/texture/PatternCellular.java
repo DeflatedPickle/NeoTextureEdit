@@ -59,9 +59,6 @@ public final class PatternCellular extends Pattern {
 	//boolean useManhattanDist = false;
 	int distanceFunctionType = 0; // 0 euclid, 1 manhattan, 2 max
 
-	final PatternPoint[] p2 = new PatternPoint[2];
-	final PatternPoint[] p3 = new PatternPoint[3];
-
 	final class PatternPoint extends Vector2 implements NdPositionable {
 		public int index;
 
@@ -142,6 +139,9 @@ public final class PatternCellular extends Pattern {
 	
 	// !!TODO: still can be optimized a lot
 	protected Vector4 _valueRGBA(float u, float v) {
+		final PatternPoint[] p2 = new PatternPoint[2];
+		final PatternPoint[] p3 = new PatternPoint[3];
+
 		float minDistA = Float.MAX_VALUE;
 		PatternPoint lookup = new PatternPoint(u, v, -1);
 		PatternPoint nearest = null;

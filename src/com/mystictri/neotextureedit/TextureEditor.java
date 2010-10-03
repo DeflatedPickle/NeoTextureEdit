@@ -540,7 +540,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		menu.add(ret);
 		if (ks != null)
 			ret.setAccelerator(ks);
-		ret.setSelected(Channel.useCache);
+		ret.setSelected(ChannelUtils.useCache);
 		return ret;
 	}
 
@@ -645,7 +645,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 				m_CenterPanel.validate();
 			}
 		} else if (c.equals("options_toggle_usecache")) {
-			Channel.useCache = !Channel.useCache;
+			ChannelUtils.useCache = !ChannelUtils.useCache;
 
 		} else if (c.equals("help_dialog")) {
 			JOptionPane.showMessageDialog(null, help_message, "NeoTextureEdit - Help", JOptionPane.PLAIN_MESSAGE);
@@ -742,7 +742,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			System.exit(0);
 		}
 
-		Channel.useCache = false;
+		ChannelUtils.useCache = false;
 
 		for (String filename : commandLineOptions.allFileNames) {
 			TextureGraphEditorPanel te = new TextureGraphEditorPanel();

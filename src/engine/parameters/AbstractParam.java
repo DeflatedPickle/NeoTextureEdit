@@ -23,8 +23,10 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class AbstractParam {
-	public static boolean SILENT = false;
+	public static boolean GLOBAL_SILENT = false;
+	
 	protected String name;
+	protected boolean silent = false;
 	protected Vector<ParamChangeListener> changeListener = new Vector<ParamChangeListener>();
 	
 	public boolean hidden = false; // it is application dependent what hidden means; usually a hidden parameter does not appear in the editor 
@@ -48,10 +50,13 @@ public class AbstractParam {
 	public String getName() {
 		return name;
 	}
-	
+
+	public void setSilent(boolean silent) {
+		this.silent = silent;
+	}
 	
 	public void notifyParamChangeListener() {
-		if (SILENT) return;
+		if (GLOBAL_SILENT || silent) return;
 		for (int i = 0; i < changeListener.size(); i++) {
 			changeListener.get(i).parameterChanged(this);
 		}

@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import engine.base.Utils;
+import engine.graphics.synthesis.texture.CacheTileManager;
 import engine.graphics.synthesis.texture.Channel;
+import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 
 /**
  * This is the public interface to the NeoTexture procedural texture generation
@@ -24,6 +26,7 @@ import engine.graphics.synthesis.texture.Channel;
 public final class TextureGenerator {
 	static private String version = "0.6.2git";
 	static private boolean useCache = false;
+	static private int cacheTileResolution = 256;
 
 	/**
 	 * To simplify the interface and texture access only a single graph existis
@@ -65,6 +68,16 @@ public final class TextureGenerator {
 	public static void setUseCache(boolean v) {
 		useCache = v;
 	}
+	
+	/**
+	 * Sets the resolution of a single cache tile. For each node in the graph a cache
+	 * will be created. Default size is 256
+	 * 
+	 * @param res the x resolution in pixel
+	 */
+	public static void setCacheTileResolution(int res) {
+		cacheTileResolution = res;
+	}
 
 	/**
 	 * Scans the currently loaded TextureGraph for all export names in the
@@ -83,6 +96,22 @@ public final class TextureGenerator {
 
 		return l;
 	}
+	
+	
+	
+	private static int[] tempGetImage(int[] img, int globalXres, int globalYres, TileCacheEntry e) {
+		for (int y = 0; y < e.yres; y++) {
+			int gy = (y + e.py*e.yres);
+			if (gy >= globalYres) continue;
+			for (int x = 0; x < e.xres; x++) {
+				int gx = x + e.px*e.xres; 
+				if (gx >= globalXres) continue;
+				img[gx + gy * globalXres] = Utils.vector4ToINTColor(e.sample(x, y));
+			}
+		}
+
+	return img;
+}
 
 	// !!TODO; centralize the image computation method (join it with the one
 	// from the Channel class)
@@ -90,24 +119,20 @@ public final class TextureGenerator {
 	private static int[] getImage_ARGB(int xres, int yres, Channel c) {
 		int[] img = new int[xres * yres];
 
-		/*if (useCache) {
-			Channel.CacheEntry ce = c.valuesRGBA_Cached(xres, yres);
-			for (int y = 0; y < yres; y++) {
-				// if (progress != null)
-				// progress.setProgress(y/(float)img.getHeight());
-				for (int x = 0; x < xres; x++) {
-					// float u = (float)x/(float)xres;
-					// float v = (float)y/(float)yres;
-					// img[x+y*xres] = Utils.vector4ToINTColor(c.valueRGBA(u,
-					// v));
-					// img[x+y*xres] = Utils.vector4ToINTColor(ce.sample(u, v));
-
-					int i = (x + y * xres) * 4;
-					img[x + y * xres] = Utils.floatRGBAToINTColor(ce.values.get(i + 0), ce.values.get(i + 1), ce.values.get(i + 2), ce.values
-							.get(i + 3));
+		if (useCache) {
+			int cxres = cacheTileResolution;
+			int cyres = cacheTileResolution;
+			int globalXres = xres;
+			int globalYres = yres;
+			int border = 0;
+			
+			for (int py = 0; py < globalYres/(cyres+1) + 1; py++) {
+				for (int px = 0; px < globalXres/(cxres+1) + 1; px++) {
+					TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, border, globalXres, globalYres);
+					tempGetImage(img, globalXres, globalYres, e);
 				}
 			}
-		} else */{ // don't use cache
+		} else { // don't use cache
 			for (int y = 0; y < yres; y++) {
 				// if (progress != null)
 				// progress.setProgress(y/(float)img.getHeight());
@@ -125,12 +150,10 @@ public final class TextureGenerator {
 	/**
 	 * Clears the cache of each channel. Currently there is no internal maximum
 	 * of cache entries thus manual clearing of the cache might be necessary.
-	 * This will change in a future update
+	 * This will probably change in a future update...
 	 */
 	public static void clearCache() {
-		for (TextureGraphNode n : graph.allNodes) {
-			//n.getChannel().clearCache();
-		}
+		CacheTileManager.clearCache();
 	}
 
 	/**

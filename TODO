@@ -3,7 +3,13 @@ Currently working on:
     - fix: zoom to mouse cursor
     - fix: make zoomed rendering faster
  - Curve class and CurveParam class
- - new tile-based caching system (with fallback for derivative based Filter)
+
+
+ - Caching System:
+    - implement a Debug view that shows the accesses and current cache elements (especially to
+      find memory leaks)
+      
+
  
 
 Feature Requests:
@@ -19,6 +25,9 @@ Feature Requests:
      needs proper tiled caching to be reasonable fast
   
 TODO:  
+
+- Add a transform Node
+- Cache the derivatives!!
 
 - Change the file format to an XML format
   

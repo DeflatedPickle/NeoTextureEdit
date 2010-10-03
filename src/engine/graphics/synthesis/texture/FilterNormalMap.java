@@ -53,8 +53,8 @@ public final class FilterNormalMap extends Channel {
 	}
 	
 	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
-		float du = inputChannels[1].du1f(u, v).XYZto1f();
-		float dv = inputChannels[1].dv1f(u, v).XYZto1f();
+		float du = inputChannels[0].du1f(u, v).XYZto1f();
+		float dv = inputChannels[0].dv1f(u, v).XYZto1f();
 		out.set(_function(du, dv));
 	}
 	

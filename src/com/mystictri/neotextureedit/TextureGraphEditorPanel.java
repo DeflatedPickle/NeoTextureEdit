@@ -65,6 +65,7 @@ import com.mystictri.neotexture.TextureGraphNode;
 import com.mystictri.neotexture.TextureGraphNode.ConnectionPoint;
 
 import engine.base.Logger;
+import engine.graphics.synthesis.texture.CacheTileManager;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 import engine.graphics.synthesis.texture.Pattern;
@@ -509,6 +510,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		paramEditorPanel.setTextureNode(null);
 		setPreviewNode(null);
 		graph.deleteFullGraph();
+		CacheTileManager.clearCache();
 		repaint();
 		
 	}

@@ -6,8 +6,10 @@ import engine.base.Logger;
 import engine.base.Utils;
 import engine.base.Vector3;
 import engine.base.Vector4;
+import engine.graphics.synthesis.texture.CacheTileManager;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ProgressBarInterface;
+import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 
 /**
  * A collection of helper methods that use channels
@@ -15,7 +17,12 @@ import engine.graphics.synthesis.texture.ProgressBarInterface;
  *
  */
 public final class ChannelUtils {
+	public static boolean useCache = true;
+	
+	
+	public static final int minCacheSize = 64;
 
+	
 	// !!TODO: not thread save
 	public static long lastComputationTime;
 
@@ -44,15 +51,22 @@ public final class ChannelUtils {
 			progress.startProgress();
 		long time = System.currentTimeMillis();
 
-		{
-			for (int y = 0; y < img.getHeight(); y++) {
+		TileCacheEntry tce = null;
+		if (useCache && (img.getWidth() >= minCacheSize && img.getHeight() >= minCacheSize)) {
+			 tce = CacheTileManager.getCache(c, 0, 0, img.getWidth(), img.getHeight(), 0, img.getWidth(), img.getHeight());
+		}
+		
+		for (int y = 0; y < img.getHeight(); y++) {
 				if (progress != null)
 					progress.setProgress(y / (float) img.getHeight());
 				for (int x = 0; x < img.getWidth(); x++) {
 					float u = (float) x / (float) img.getWidth();
 					float v = (float) y / (float) img.getHeight();
 
-					final Vector4 col = c.valueRGBA(u, v);
+					final Vector4 col;
+					if (tce == null) col = c.valueRGBA(u, v);
+					else col = tce.sample(x, y);
+					
 					final Vector3 color = new Vector3();
 					// !!UGH TODO: optimize this!!
 					if (mode == 0)
@@ -71,7 +85,7 @@ public final class ChannelUtils {
 					img.setRGB(x, y, val);
 				}
 			}
-		}
+		
 
 		lastComputationTime = System.currentTimeMillis() - time;
 		if (progress != null)

@@ -133,7 +133,6 @@ public class PointKDTree<Type> {
 		else kp.right = -1;
 	}
 	
-	final int stack[] = new int[512];
 	
 	
 	public Type getNearestBruteFroce(NdPositionable pos) {
@@ -153,6 +152,7 @@ public class PointKDTree<Type> {
 	
 	
 	public Type getNearest(NdPositionable pos) {
+		final int stack[] = new int[128];
 		int top = 0;
 		stack[top] = 0;
 		float mindist = Float.MAX_VALUE;
@@ -227,8 +227,11 @@ public class PointKDTree<Type> {
 		return maxdist;
 	}
 
+	//final int stack[] = new int[512];
+
 	//!!TODO: currently this returns an unsorted list of the k-nearest
 	public void getKNearest(NdPositionable pos, Type[] k_nearest) {
+		final int stack[] = new int[128];
 		NdPositionable[] knearest = (NdPositionable[])k_nearest;
 		for (int i = 0; i < knearest.length; i++) knearest[i] = null;
 		int top = 0;

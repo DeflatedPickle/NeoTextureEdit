@@ -41,6 +41,10 @@ import engine.parameters.TextParam;
 public abstract class Channel extends LocalParameterManager {
 	public TextParam exportName = CreateLocalTextParam("ExportName", "");
 	Channel[] inputChannels;
+	
+	{
+		exportName.setSilent(true); // the exportName should not notify the change listener (at least currently)
+	}
 
 	/**
 	 * This is used for rendering and should be set in the constructor if it is
@@ -53,8 +57,6 @@ public abstract class Channel extends LocalParameterManager {
 	public ChannelVizType vizType = ChannelVizType.NORMAL;
 
 	
-
-
 	public String getName() {
 		return "Channel";
 	}
@@ -63,7 +65,7 @@ public abstract class Channel extends LocalParameterManager {
 	public boolean isMarkedForExport() {
 		return (exportName.get().length() > 0);
 	}
-
+	
 	public String getHelpText() {
 		return "No Help Text for this channel";
 	}
@@ -175,9 +177,7 @@ public abstract class Channel extends LocalParameterManager {
 
 	// ------------------------------------------------------
 
-	public static boolean useCache = true;
 
-	
 
 	/**
 	 * Creates a full copy of the given channel by using an internal
@@ -220,7 +220,7 @@ public abstract class Channel extends LocalParameterManager {
 
 	public static Channel loadChannel(Scanner s) {
 		try {
-			AbstractParam.SILENT = true;
+			AbstractParam.GLOBAL_SILENT = true;
 			
 			String name = s.next();
 			
@@ -240,7 +240,7 @@ public abstract class Channel extends LocalParameterManager {
 					Logger.logWarning(null, " loading of param " + t + " failed.");
 				}
 			}
-			AbstractParam.SILENT = false;
+			AbstractParam.GLOBAL_SILENT = false;
 			c.parameterChanged(null);
 			return c;
 		} catch (InstantiationException e) {
@@ -250,7 +250,7 @@ public abstract class Channel extends LocalParameterManager {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
-			AbstractParam.SILENT = false;
+			AbstractParam.GLOBAL_SILENT = false;
 		}
 		return null;
 	}

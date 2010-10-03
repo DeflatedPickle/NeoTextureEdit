@@ -16,8 +16,8 @@ ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 -0.6875 0.0 0.0 1.0 Color_Mappi
 engine.graphics.synthesis.texture.FilterBlend
 ExportName "" Layer_Func. 0 Opacity 1.0 Inv._Alpha false endparameters
 320 441
-engine.graphics.synthesis.texture.FilterBrightnessContrast
-ExportName "" Brightness -0.090625 Contrast 1.078125 endparameters
+engine.graphics.synthesis.texture.FilterColorCorrect
+ExportName "" Brightness -0.090625 Contrast 1.078125 Gamma 1.0 Desaturate 0.0 endparameters
 419 38
 engine.graphics.synthesis.texture.PatternPerlinNoise
 ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 8.0 ScaleY 8.0 ValueScale 0.875 Persistence 0.9 StartBand 1 EndBand 10 Seed -1 Periodic true endparameters
@@ -38,10 +38,10 @@ engine.graphics.synthesis.texture.FilterColorize
 ExportName "" Gray_to_Color_Mapping 3 0.6039216 0.34509805 0.23529412 0.0 0.5362319 0.88235295 0.6431373 0.5019608 0.265625 0.9130435 0.94509804 0.78039217 0.6862745 0.28125 1.0 endparameters
 604 561
 engine.graphics.synthesis.texture.FilterEmboss
-ExportName "" Strength 0.2 Angle 45.0 endparameters
+ExportName "%f_d" Strength 0.2 Angle 45.0 endparameters
 709 255
 engine.graphics.synthesis.texture.FilterNormalMap
-ExportName "" Strength 0.5 endparameters
+ExportName "%f_n" Strength 0.5 endparameters
 #EndNodes
 #BeginConnections 15
 2 4 0
