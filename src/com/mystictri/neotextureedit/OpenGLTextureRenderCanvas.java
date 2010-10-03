@@ -395,25 +395,25 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 		// Process the requests made from another thread:
 		
 		if (requestUpdateDiffuse) {
-			if (_updateDiffuse != null) update2dTexture(_updateDiffuse.createAndComputeImage(TEXTURE_RESX, TEXTURE_RESY, null, 0), texidDiffuse);
+			if (_updateDiffuse != null) update2dTexture(ChannelUtils.createAndComputeImage(_updateDiffuse, TEXTURE_RESX, TEXTURE_RESY, null, 0), texidDiffuse);
 			else update2dTexture_ConstanctColor(0x7F7FFFFF, texidDiffuse);
 			_updateDiffuse = null;
 			requestUpdateDiffuse = false;
 		}
 		if (requestUpdateNormal) {
-			if (_updateNormal != null) update2dTexture(_updateNormal.createAndComputeImage(TEXTURE_RESX, TEXTURE_RESY, null, 0), texidNormal);
+			if (_updateNormal != null) update2dTexture(ChannelUtils.createAndComputeImage(_updateNormal, TEXTURE_RESX, TEXTURE_RESY, null, 0), texidNormal);
 			else update2dTexture_ConstanctColor(0x7F7FFFFF, texidNormal);
 			_updateNormal = null;
 			requestUpdateNormal = false;
 		}
 		if (requestUpdateSpecWeight) {
-			if (_updateSpecWeight != null) update2dTexture(_updateSpecWeight.createAndComputeImage(TEXTURE_RESX, TEXTURE_RESY, null, 0), texidSpecWeight);
+			if (_updateSpecWeight != null) update2dTexture(ChannelUtils.createAndComputeImage(_updateSpecWeight, TEXTURE_RESX, TEXTURE_RESY, null, 0), texidSpecWeight);
 			else update2dTexture_ConstanctColor(0xFFFFFFFF, texidSpecWeight);
 			_updateSpecWeight = null;
 			requestUpdateSpecWeight = false;
 		}
 		if (requestUpdateHeightmap) {
-			if (_updateHeightmap != null) update2dTexture(_updateHeightmap.createAndComputeImage(TEXTURE_RESX, TEXTURE_RESY, null, 0), texidHeightmap);
+			if (_updateHeightmap != null) update2dTexture(ChannelUtils.createAndComputeImage(_updateHeightmap, TEXTURE_RESX, TEXTURE_RESY, null, 0), texidHeightmap);
 			else update2dTexture_ConstanctColor(0xFFFFFFFF, texidHeightmap);
 			_updateHeightmap = null;
 			requestUpdateHeightmap = false;

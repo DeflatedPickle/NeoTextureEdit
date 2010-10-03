@@ -152,9 +152,9 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		public void updatePreviewImage() {
 			if ((node.getChannel() != null) && (node.getChannel().chechkInputChannels())) {
 				if (previewImage == null)
-					previewImage = node.getChannel().createAndComputeImage(64, 64, null, 0);
+					previewImage = ChannelUtils.createAndComputeImage(node.getChannel(), 64, 64, null, 0);
 				else
-					node.getChannel().computeImage(previewImage, null, 0);
+					ChannelUtils.computeImage(node.getChannel(), previewImage, null, 0);
 			} else {
 				previewImage = null;
 			}
@@ -306,7 +306,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			ret = new CreateMenuItem(name, new ImageIcon(chan.createAndComputeImage(16, 16, null, 0)), replace);
+			ret = new CreateMenuItem(name, new ImageIcon(ChannelUtils.createAndComputeImage(chan, 16, 16, null, 0)), replace);
 		} else
 			ret = new CreateMenuItem(name, replace);
 		ret.classType = c;
@@ -324,8 +324,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			if (!name.endsWith(".png"))
 				name += ".png";
 			try {
-				ImageIO.write(graph.selectedNodes.lastElement().getChannel()
-						.createAndComputeImage(resX, resY, TextureEditor.INSTANCE.m_ProgressDialog, 0), "png", new File(name));
+				ImageIO.write(ChannelUtils.createAndComputeImage(graph.selectedNodes.lastElement().getChannel(), resX, resY, TextureEditor.INSTANCE.m_ProgressDialog, 0), "png", new File(name));
 				Logger.log(this, "Saved image to " + name + ".");
 			} catch (IOException exc) {
 				exc.printStackTrace();
@@ -588,7 +587,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	void updatePreview() {
 		if (previewNode != null) {
 			if (previewNode.getChannel().chechkInputChannels()) {
-				previewNode.getChannel().computeImage(previewImage, null, 0);
+				ChannelUtils.computeImage(previewNode.getChannel(), previewImage, null, 0);
 			} else {
 				Graphics g = previewImage.getGraphics();
 				g.fillRect(0, 0, previewImage.getWidth(), previewImage.getHeight());

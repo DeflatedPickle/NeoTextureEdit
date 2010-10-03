@@ -48,9 +48,9 @@ public class DrawableTextureGraphNode  extends JPanel implements ChannelChangeLi
 	public void updatePreviewImage() {
 		if ((node.getChannel() != null) && (node.getChannel().chechkInputChannels())) {
 			if (previewImage == null)
-				previewImage = node.getChannel().createAndComputeImage(64, 64, null, 0);
+				previewImage = ChannelUtils.createAndComputeImage(node.getChannel(), 64, 64, null, 0);
 			else
-				node.getChannel().computeImage(previewImage, null, 0);
+				ChannelUtils.computeImage(node.getChannel(), previewImage, null, 0);
 		} else {
 			previewImage = null;
 		}

@@ -17,18 +17,14 @@
 
 package engine.graphics.synthesis.texture;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Scanner;
 import java.util.Vector;
 
-
 import engine.base.FMath;
 import engine.base.Logger;
-import engine.base.Utils;
-import engine.base.Vector3;
 import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.AbstractParam;
@@ -58,8 +54,6 @@ public abstract class Channel extends LocalParameterManager {
 
 	
 
-	// !!TODO: not thread save
-	public static long lastComputationTime;
 
 	public String getName() {
 		return "Channel";

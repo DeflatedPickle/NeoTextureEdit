@@ -16,6 +16,9 @@ import engine.graphics.synthesis.texture.ProgressBarInterface;
  */
 public final class ChannelUtils {
 
+	// !!TODO: not thread save
+	public static long lastComputationTime;
+
 	
 	public static void computeImage(Channel c, final BufferedImage img, final ProgressBarInterface progress, final int mode) {
 		_computeImage(c, img, progress, mode);
@@ -25,10 +28,10 @@ public final class ChannelUtils {
 	 * Computes a image from the given channel; mode 0: RGB, 1: blended with
 	 * background; 2: alpha as grayscale
 	 */
-	private void _computeImage(Channel c, BufferedImage img, ProgressBarInterface progress, int mode) {
+	private static void _computeImage(Channel c, BufferedImage img, ProgressBarInterface progress, int mode) {
 
 		if (!c.chechkInputChannels()) {
-			Logger.logError(this, "Computing image from incomplete channel not possible!");
+			Logger.logError(null, "Computing image from incomplete channel not possible!");
 			return;
 		}
 		// HACK_cache.clear();
@@ -63,7 +66,7 @@ public final class ChannelUtils {
 					} else if (mode == 2) {
 						color.set(col.w);
 					} else
-						Logger.logError(this, "Wrong in computeImage");
+						Logger.logError(null, "Wrong in computeImage");
 					int val = Utils.vector3ToINTColor(color);
 					img.setRGB(x, y, val);
 				}
@@ -83,10 +86,10 @@ public final class ChannelUtils {
 	 * @param yres
 	 * @return
 	 */
-	public BufferedImage createAndComputeImage(int xres, int yres, ProgressBarInterface progress, int mode) {
+	public static BufferedImage createAndComputeImage(Channel c, int xres, int yres, ProgressBarInterface progress, int mode) {
 		BufferedImage ret = new BufferedImage(xres, yres, BufferedImage.TYPE_INT_RGB);
 
-		computeImage(ret, progress, mode);
+		computeImage(c, ret, progress, mode);
 
 		return ret;
 	}

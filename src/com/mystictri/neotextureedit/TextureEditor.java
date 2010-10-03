@@ -201,7 +201,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			Dimension size = new Dimension(64, 64);
 			setPreferredSize(size);
 			setSize(size);
-			previewImage = pat.createAndComputeImage(64, 64, null, 0);
+			previewImage = ChannelUtils.createAndComputeImage(pat, 64, 64, null, 0);
 			icon = new ImageIcon(previewImage);
 			this.setIcon(icon);
 		}
@@ -760,7 +760,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 					exportname = commandLineOptions.exportPath + "/" + exportname + ".png";
 					System.out.println("Exporting " + exportname);
 					try {
-						ImageIO.write(n.getChannel().createAndComputeImage(commandLineOptions.exportResX, commandLineOptions.exportResY,
+						ImageIO.write(ChannelUtils.createAndComputeImage(n.getChannel(), commandLineOptions.exportResX, commandLineOptions.exportResY,
 								new StdOutProgressBar(), 0), "png", new File(exportname));
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -780,7 +780,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		m_MainFrame.addKeyListener(this);
 
 		setTitle(title);
-		m_MainFrame.setIconImage(new PatternChecker(2, 2).createAndComputeImage(16, 16, null, 0));
+		m_MainFrame.setIconImage(ChannelUtils.createAndComputeImage(new PatternChecker(2, 2), 16, 16, null, 0));
 		m_MainFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				Window win = e.getWindow();

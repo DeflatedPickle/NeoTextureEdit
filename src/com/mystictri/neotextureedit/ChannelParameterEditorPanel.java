@@ -248,10 +248,10 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 			previewImage = null;
 		} else if (node.getChannel().chechkInputChannels()) {
 			if (previewImage == null)
-				previewImage = node.getChannel().createAndComputeImage(previewImageSize, previewImageSize, null, previewImageMode);
+				previewImage = ChannelUtils.createAndComputeImage(node.getChannel(), previewImageSize, previewImageSize, null, previewImageMode);
 			else
-				node.getChannel().computeImage(previewImage, null, previewImageMode);
-			benchmarkLabel.setText("Benchmark: "+Channel.lastComputationTime);
+				ChannelUtils.computeImage(node.getChannel(), previewImage, null, previewImageMode);
+			benchmarkLabel.setText("Benchmark: "+ChannelUtils.lastComputationTime);
 		} else {
 			previewImage = null;
 		}

@@ -143,7 +143,7 @@ public final class PatternSynthesis extends Pattern {
 		if (src == null)
 			return;
 
-		long time = System.currentTimeMillis();
+		//long time = System.currentTimeMillis();
 
 		System.out.println("initTargetBuffer:");
 		if (targetResolution.get() != _targetRes) {
@@ -177,8 +177,8 @@ public final class PatternSynthesis extends Pattern {
 		}
 		System.out.println();
 
-		lastComputationTime = System.currentTimeMillis() - time;
-		System.out.println("Time: " + (lastComputationTime) / 1000.0f);
+		//lastComputationTime = System.currentTimeMillis() - time;
+		//System.out.println("Time: " + (lastComputationTime) / 1000.0f);
 
 	}
 
