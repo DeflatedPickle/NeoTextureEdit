@@ -19,11 +19,22 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import com.mystictri.neotexture.TextureGraphNode;
+import com.mystictri.neotextureedit.ChannelParameterEditorPanel.InfoLabel;
 
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 import engine.parameters.AbstractParam;
+import engine.parameters.BoolParam;
+import engine.parameters.ColorGradientParam;
+import engine.parameters.ColorParam;
+import engine.parameters.EnumParam;
+import engine.parameters.FloatParam;
+import engine.parameters.ImageParam;
+import engine.parameters.InfoParam;
+import engine.parameters.IntParam;
+import engine.parameters.Matrix3x3Param;
+import engine.parameters.TextParam;
 
 
 /**
@@ -106,6 +117,32 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 	}
 	
 	
+	// !!TODO: ugly because it replicates the method in ChannelParameterEditorPanel
+	private Component getEditorForParam(AbstractParam param) {
+		if (param.getClass() == FloatParam.class)
+			return new FloatParameterEditor((FloatParam) param);
+		else if (param.getClass() == IntParam.class)
+			return new IntParameterEditor((IntParam) param);
+		else if (param.getClass() == TextParam.class)
+			return new TextParameterEditor((TextParam) param, null);
+		else if (param.getClass() == BoolParam.class)
+			return new BoolParameterEditor((BoolParam) param);
+		else if (param.getClass() == ColorParam.class)
+			return new ColorParameterEditor((ColorParam) param, TextureEditor.INSTANCE.m_ColorChooser);
+		else if (param.getClass() == EnumParam.class)
+			return new EnumParameterEditor((EnumParam) param);
+		else if (param.getClass() == ColorGradientParam.class)
+			return new GradientEditorPanel((ColorGradientParam) param);
+		else if (param.getClass() == ImageParam.class)
+			return new ImageParameterEditor((ImageParam) param);
+		else if (param.getClass() == InfoParam.class)
+			return new InfoLabel((InfoParam) param);
+		else if (param.getClass() == Matrix3x3Param.class)
+			return new Matrix3x3ParameterEditor((Matrix3x3Param) param);
+		else
+			return null;
+	}
+	
 	void createParameterPanel() {
 		if (!TextureEditor.GL_ENABLED) return; 
 		if (parameterPanel == null)	parameterPanel = new JPanel();
@@ -119,7 +156,7 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 		AbstractParameterEditor.NAME_WIDTH = 128;
 		for (AbstractParam param : glcanvas.params.m_LocalParameters) {
 			if (param.hidden) continue;
-			Component c = ChannelParameterEditorPanel.getEditorForParam(param);
+			Component c = getEditorForParam(param);
 			if (c != null) {
 				c.setLocation(x, y); y += c.getHeight();
 				parameterPanel.add(c);

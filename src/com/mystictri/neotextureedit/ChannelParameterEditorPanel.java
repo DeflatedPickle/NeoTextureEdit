@@ -55,7 +55,7 @@ import engine.parameters.TextParam;
  * @author Holger Dammertz
  *
  */
-class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListener, ActionListener {
+public final class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListener, ActionListener {
 	private static final long serialVersionUID = 6344417563998225104L;
 	private static final int previewImageSize = 256;
 	
@@ -64,6 +64,9 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 	private TextureGraphNode node; // the node that gets modified
 	private BufferedImage previewImage;
 	private JLabel benchmarkLabel;
+	
+	/** This is used to initialize the TextParam of the export name with a preselection of possible choices. */
+	private String[] exportNamePreSelection = null;
 	
 	JPanel scrollPaneContent;
 	JScrollPane scrollPane;
@@ -125,6 +128,13 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 		add(previewPanel);
 		previewPanel.setVisible(false);
 	}
+	
+	/** Sets the optional pre-selection that appears in a drop down list of the channel export name parameter
+	 * @param names an array of strings 
+	 */
+	public void setExportNamePreSelection(String[] names) {
+		exportNamePreSelection = names;
+	}
 
 	public TextureGraphNode getActiveTextureNode() {
 		return node;
@@ -155,13 +165,15 @@ class ChannelParameterEditorPanel extends JPanel implements ChannelChangeListene
 	 * @param param
 	 * @return null if the param was unknown
 	 */
-	public static Component getEditorForParam(AbstractParam param) {
+	private Component getEditorForParam(AbstractParam param) {
 		if (param.getClass() == FloatParam.class)
 			return new FloatParameterEditor((FloatParam) param);
 		else if (param.getClass() == IntParam.class)
 			return new IntParameterEditor((IntParam) param);
-		else if (param.getClass() == TextParam.class)
-			return new TextParameterEditor((TextParam) param);
+		else if (param.getClass() == TextParam.class) {
+			if (param.getName().equals("ExportName")) return new TextParameterEditor((TextParam) param, exportNamePreSelection);
+			return new TextParameterEditor((TextParam) param, null);
+		}
 		else if (param.getClass() == BoolParam.class)
 			return new BoolParameterEditor((BoolParam) param);
 		else if (param.getClass() == ColorParam.class)
