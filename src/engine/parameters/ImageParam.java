@@ -25,7 +25,10 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+import com.mystictri.neotextureedit.TextureEditor;
+
 import engine.base.Logger;
+import engine.base.Utils;
 
 //!!TODO: does not work when the path contains spaces!!
 public class ImageParam extends AbstractParam {
@@ -39,11 +42,17 @@ public class ImageParam extends AbstractParam {
 	}
 
 	/**
-	 * Saves only the path to the image not the image itself. To store the path
+	 * Saves only the relative path (relative to the path of the opened .tgr graph)
+	 * to the image not the image itself. To store the path
 	 * all spaces are replaced with colons (:) for easier string parsing.
 	 */
 	public void save(Writer w) throws IOException {
-		w.write(filename.replace(' ', ':') + " ");
+		String relativePath;
+		// store only the relative path to the image (relative to the .tgr files);
+		if (TextureEditor.INSTANCE.m_CurrentFile != null) relativePath = Utils.getRelativePath(TextureEditor.INSTANCE.m_CurrentFile.getParentFile(), new File(filename));
+		else relativePath = filename;
+		
+		w.write(relativePath.replace(' ', ':') + " ");
 	}
 
 	/**
@@ -51,7 +60,10 @@ public class ImageParam extends AbstractParam {
 	 * in the filename with a space and then tries to load the image from disk.
 	 */
 	public void load(Scanner s) {
-		loadImage(s.next().replace(':', ' '));
+		String path = s.next().replace(':', ' ');
+		if (TextureEditor.INSTANCE.m_CurrentFile != null) path = TextureEditor.INSTANCE.m_CurrentFile.getParent() + File.separator + path;
+		System.out.println(path);
+		loadImage(path);
 	}
 	
 	public BufferedImage getImage() {

@@ -950,20 +950,21 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		if (e.getWheelRotation() < 0) {
-			if (zoom > 0.5f) {
-				//float x = e.getXOnScreen()*zoom;
-				//float y = e.getXOnScreen()*zoom;
-
-				zoom /= 2.0f;
-				repaint();
-			}
-		} else if (e.getWheelRotation() > 0) {
-			if (zoom < 4.0f) {
-				zoom *= 2.0f;
-				repaint();
-			}
-		}
+		// zoom currently disabled
+//		if (e.getWheelRotation() < 0) {
+//			if (zoom > 0.5f) {
+//				//float x = e.getXOnScreen()*zoom;
+//				//float y = e.getXOnScreen()*zoom;
+//
+//				zoom /= 2.0f;
+//				repaint();
+//			}
+//		} else if (e.getWheelRotation() > 0) {
+//			if (zoom < 4.0f) {
+//				zoom *= 2.0f;
+//				repaint();
+//			}
+//		}
 	}
 
 

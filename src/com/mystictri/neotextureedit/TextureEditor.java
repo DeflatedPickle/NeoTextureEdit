@@ -98,7 +98,9 @@ public class TextureEditor implements ActionListener, KeyListener {
 	private final Properties globalSettings = new Properties();
 	static final String programVersionNumber = TextureGenerator.getVersion();// +"git";
 
-	String m_CurrentFileName = null;
+	//String m_CurrentFileName = null;
+	public File m_CurrentFile;
+	String m_CurrentPath = null;
 	public Channel dragndropChannel = null;
 
 	// The default Presets that are loaded when no preset file is found
@@ -584,14 +586,9 @@ public class TextureEditor implements ActionListener, KeyListener {
 			setTitle(" - " + title);
 			return;
 		}
-		m_CurrentFileName = name;
+		m_CurrentFile = new File(name);
 		if (m_File_Save_Item != null) m_File_Save_Item.setEnabled(true);
-
-		// !!TODO: use a file object for m_CurrentFileName
-		String shortFilename = m_CurrentFileName.substring(m_CurrentFileName.lastIndexOf('\\') + 1);
-		shortFilename = shortFilename.substring(m_CurrentFileName.lastIndexOf('/') + 1);
-		setTitle(shortFilename + " - " + title);
-
+		setTitle(m_CurrentFile.getName() + " " + title);
 	}
 	
 	public void setTitle(String title) {
@@ -620,8 +617,8 @@ public class TextureEditor implements ActionListener, KeyListener {
 				m_GraphDrawPanel.load(name, false);
 			}
 		} else if (c.equals("file_save")) {
-			if (m_CurrentFileName != null)
-				m_GraphDrawPanel.save(m_CurrentFileName);
+			if (m_CurrentFile != null)
+				m_GraphDrawPanel.save(m_CurrentFile.getAbsolutePath());
 		} else if (c.equals("file_saveas")) {
 			m_TextureFileChooser_SaveLoadGraph.setDialogTitle("Saving texture graph as ...");
 			if (m_TextureFileChooser_SaveLoadGraph.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -901,7 +898,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		saveStringP("m_TextureFileChooser_SaveLoadGraph.directory", m_TextureFileChooser_SaveLoadGraph.getCurrentDirectory()
 				.getAbsolutePath());
 
-		saveStringP("m_CurrentFileName", m_CurrentFileName);
+		saveStringP("m_CurrentFileName", m_CurrentFile.getAbsolutePath());
 
 		try {
 			globalSettings.store(new FileWriter("TextureEditorSettings"), "Exit Settings of NeoSpark TextureEditor");
@@ -929,14 +926,14 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 		if (cmdLine_fileNameToLoad != null) {
 			setCurrentFileName(cmdLine_fileNameToLoad);
-			if (!m_GraphDrawPanel.load(m_CurrentFileName, true)) {
+			if (!m_GraphDrawPanel.load(m_CurrentFile.getAbsolutePath(), true)) {
 				setCurrentFileName(null);
 			}
 		} else {
 			setCurrentFileName(getStringP("m_CurrentFileName", "examples/example_Bricks.tgr"));
-			if (m_CurrentFileName.equals("null"))
+			if (m_CurrentFile.equals("null"))
 				setCurrentFileName(null);
-			else if (!m_GraphDrawPanel.load(m_CurrentFileName, true)) {
+			else if (!m_GraphDrawPanel.load(m_CurrentFile.getAbsolutePath(), true)) {
 				setCurrentFileName(null);
 			}
 		}
