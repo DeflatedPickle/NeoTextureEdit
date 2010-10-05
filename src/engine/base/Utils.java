@@ -27,6 +27,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -145,14 +147,13 @@ public final class Utils {
 	 * 
 	 * return rgb.set(h, s, v); }
 	 */
-	
-	
-//	private static final ColorSpace colorSpace = ColorSpace.getInstance(ColorSpace.CS_);
-//	public static Vector3 rgbToHSV_ip(Vector3 rgb) {
-//		//float [] temp = Color.RGBtoHSB(rgb.x, rgb.y, rgb.z, new float[3]);
-//		//rgb.set(temp[0], temp[1], temp[2]);
-//		colorSpace.
-//	}
+
+	//	private static final ColorSpace colorSpace = ColorSpace.getInstance(ColorSpace.CS_);
+	//	public static Vector3 rgbToHSV_ip(Vector3 rgb) {
+	//		//float [] temp = Color.RGBtoHSB(rgb.x, rgb.y, rgb.z, new float[3]);
+	//		//rgb.set(temp[0], temp[1], temp[2]);
+	//		colorSpace.
+	//	}
 
 	public static Vector3 rgbToHSV_ip(Vector3 rgb) {
 		Vector3 temp = new Vector3(rgb);
@@ -176,8 +177,9 @@ public final class Utils {
 
 	public static Vector3 hsvToRGB_ip(Vector3 hsv) {
 		int maxc = 0;
-		
-		if (hsv.x > 300) hsv.x -= 360.0f;
+
+		if (hsv.x > 300)
+			hsv.x -= 360.0f;
 		if (hsv.x < 60)
 			maxc = 0;
 		else if (hsv.x >= 180)
@@ -191,7 +193,7 @@ public final class Utils {
 
 		float min = (hsv.z * (255.0f - hsv.y)) / 255.0f;
 		float temphue = (((hsv.x / 60.0f) - (2 * maxc)) * (hsv.z - min));
-		
+
 		if (temphue > 0) {
 			temp.set((maxc + 2) % 3, min);
 			temp.set((maxc + 1) % 3, min + temphue);
@@ -360,9 +362,90 @@ public final class Utils {
 		}
 	}
 
+
+	private static List<String> getPathList(File f) {
+		List<String> l = new ArrayList<String>();
+		File r;
+		try {
+			r = f.getCanonicalFile();
+			while (r != null) {
+				l.add(r.getName());
+				r = r.getParentFile();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			l = null;
+		}
+		return l;
+	}
+
+	/**
+	 * figure out a string representing the relative path of 'f' with respect to
+	 * 'r'
+	 * 
+	 * @param r
+	 *            home path
+	 * @param f
+	 *            path of file
+	 */
+	private static String matchPathLists(List<String> r, List<String> f) {
+		int i;
+		int j;
+		String s;
+		// start at the beginning of the lists
+		// iterate while both lists are equal
+		s = "";
+		i = r.size() - 1;
+		j = f.size() - 1;
+
+		// first eliminate common root
+		while ((i >= 0) && (j >= 0) && (r.get(i).equals(f.get(j)))) {
+			i--;
+			j--;
+		}
+
+		// for each remaining level in the home path, add a ..
+		for (; i >= 0; i--) {
+			s += ".." + File.separator;
+		}
+
+		// for each level in the file path, add the path
+		for (; j >= 1; j--) {
+			s += f.get(j) + File.separator;
+		}
+
+		// file name
+		s += f.get(j);
+
+		return s;
+	}
+
+	/**
+	 * get relative path of File 'f' with respect to 'home' directory example :
+	 * home = /a/b/c f = /a/d/e/x.txt s = getRelativePath(home,f) =
+	 * ../../d/e/x.txt
+	 * 
+	 * @param home
+	 *            base path, should be a directory, not a file, or it doesn't
+	 *            make sense
+	 * @param f
+	 *            file to generate path for
+	 * @return path from home to f as a string
+	 */
+	public static String getRelativePath(File home, File f) {
+		List<String> homelist;
+		List<String> filelist;
+		String s;
+
+		homelist = getPathList(home);
+		filelist = getPathList(f);
+		s = matchPathLists(homelist, filelist);
+		return s;
+	}
+
 	public static void main(String[] args) {
 		Vector3 col = new Vector3(0.4392157f, 0.6745098f, 0.71372549f);
-		col = new Vector3(135/255.0f, 33/255.0f, 38/255.0f);
+		col = new Vector3(135 / 255.0f, 33 / 255.0f, 38 / 255.0f);
 		System.out.println(col);
 		System.out.println(rgbToHSV_ip(col));
 		System.out.println(hsvToRGB_ip(col));

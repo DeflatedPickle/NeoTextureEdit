@@ -10,8 +10,6 @@ Currently working on:
       find memory leaks)
       
 
- 
-
 Feature Requests:
 
   - Zoom,
@@ -26,10 +24,19 @@ Feature Requests:
   
 TODO:  
 
+- Export All button
+
 - Add a transform Node
 - Cache the derivatives!!
+- Add a combiner node
 
 - Change the file format to an XML format
+
+
+
+JMonkeyPlatform Integration:
+ - List of possible
+ 
   
   
 Caching System and Derivative based nodes:
