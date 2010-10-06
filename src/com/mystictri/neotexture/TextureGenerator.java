@@ -114,7 +114,7 @@ public final class TextureGenerator {
 	}
 	
 	//!!TODO: merge with method above
-	private static int[] tempGetImage_RGBA(int[] img, int globalXres, int globalYres, TileCacheEntry e) {
+	private static int[] tempGetImage_ABGR(int[] img, int globalXres, int globalYres, TileCacheEntry e) {
 		for (int y = 0; y < e.yres; y++) {
 			int gy = (y + e.py * e.yres);
 			if (gy >= globalYres)
@@ -123,7 +123,7 @@ public final class TextureGenerator {
 				int gx = x + e.px * e.xres;
 				if (gx >= globalXres)
 					continue;
-				img[gx + gy * globalXres] = Utils.vector4ToINTColor_RGBA(e.sample(x, y));
+				img[gx + gy * globalXres] = Utils.vector4ToINTColor_ABGR(e.sample(x, y));
 			}
 		}
 
@@ -165,7 +165,7 @@ public final class TextureGenerator {
 	}
 
 	// !!TODO: merge this with the method above
-	private static int[] getImage_RGBA(int xres, int yres, Channel c) {
+	private static int[] getImage_ABGR(int xres, int yres, Channel c) {
 		int[] img = new int[xres * yres];
 
 		if (useCache) {
@@ -178,7 +178,7 @@ public final class TextureGenerator {
 			for (int py = 0; py < globalYres / (cyres + 1) + 1; py++) {
 				for (int px = 0; px < globalXres / (cxres + 1) + 1; px++) {
 					TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, border, globalXres, globalYres);
-					tempGetImage_RGBA(img, globalXres, globalYres, e);
+					tempGetImage_ABGR(img, globalXres, globalYres, e);
 				}
 			}
 		} else { // don't use cache
@@ -188,7 +188,7 @@ public final class TextureGenerator {
 				for (int x = 0; x < xres; x++) {
 					float u = (float) x / (float) xres;
 					float v = (float) y / (float) yres;
-					img[x + y * xres] = Utils.vector4ToINTColor_RGBA(c.valueRGBA(u, v));
+					img[x + y * xres] = Utils.vector4ToINTColor_ABGR(c.valueRGBA(u, v));
 				}
 			}
 		}
@@ -228,11 +228,11 @@ public final class TextureGenerator {
 		return null;
 	}
 	
-	public static int[] generateTexture_RGBA(String name, int xres, int yres) {
+	public static int[] generateTexture_ABGR(String name, int xres, int yres) {
 
 		for (TextureGraphNode n : graph.allNodes) {
 			if (n.texChannel.exportName.get().equals(name)) {
-				return getImage_RGBA(xres, yres, n.texChannel);
+				return getImage_ABGR(xres, yres, n.texChannel);
 			}
 		}
 

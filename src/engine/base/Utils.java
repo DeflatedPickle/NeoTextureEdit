@@ -120,12 +120,12 @@ public final class Utils {
 		return ((a << 24) | (r << 16) | (g << 8) | (b << 0));
 	}
 
-	public static final int vector4ToINTColor_RGBA(Vector4 c) {
+	public static final int vector4ToINTColor_ABGR(Vector4 c) {
 		int r = ((int) (c.x * 255.0f)) & 0xFF;
 		int g = ((int) (c.y * 255.0f)) & 0xFF;
 		int b = ((int) (c.z * 255.0f)) & 0xFF;
 		int a = ((int) (c.w * 255.0f)) & 0xFF;
-		return ((a << 0) | (r << 24) | (g << 16) | (b << 8));
+		return ((a << 24) | (b << 16) | (g << 8) | (r << 0));
 	}
 
 	public static Vector4 RGBAToVector4(int c) {
