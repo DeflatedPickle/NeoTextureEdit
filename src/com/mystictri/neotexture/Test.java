@@ -29,7 +29,7 @@ public class Test {
 		
 		
 		
-		int size = 512;
+		int size = 256;
 
 		TextureGenerator.setUseCache(false);
 		JFrame f = new JFrame();

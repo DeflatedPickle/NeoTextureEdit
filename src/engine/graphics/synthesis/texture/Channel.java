@@ -154,7 +154,7 @@ public abstract class Channel extends LocalParameterManager {
 	public Vector4 dv1f(float u, float v) {
 		return new Vector4(valueRGBA(u, v + deltaV)).sub_ip(valueRGBA(u, v - deltaV));
 	}
-
+	
 	
 	// these three methods need to be overwritten in the subclasses
 

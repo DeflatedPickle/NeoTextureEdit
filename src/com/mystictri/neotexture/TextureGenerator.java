@@ -37,15 +37,14 @@ public final class TextureGenerator {
 	static private final TextureGraph graph = new TextureGraph();
 
 	/**
-	 * Returns the current version string. Compatibility between the editor
-	 * and the runtime library is currently only guaranteed when the same version
-	 * is used.
+	 * Returns the current version string. Compatibility between the editor and
+	 * the runtime library is currently only guaranteed when the same version is
+	 * used.
 	 */
 	public static String getVersion() {
 		return version;
 	}
-	
-	
+
 	/**
 	 * Parses a well formatted texture graph as saved by TextureGraph.save
 	 * 
@@ -68,12 +67,13 @@ public final class TextureGenerator {
 	public static void setUseCache(boolean v) {
 		useCache = v;
 	}
-	
+
 	/**
-	 * Sets the resolution of a single cache tile. For each node in the graph a cache
-	 * will be created. Default size is 256
+	 * Sets the resolution of a single cache tile. For each node in the graph a
+	 * cache will be created. Default size is 256
 	 * 
-	 * @param res the x resolution in pixel
+	 * @param res
+	 *            the x resolution in pixel
 	 */
 	public static void setCacheTileResolution(int res) {
 		cacheTileResolution = res;
@@ -96,22 +96,39 @@ public final class TextureGenerator {
 
 		return l;
 	}
-	
-	
-	
+
 	private static int[] tempGetImage(int[] img, int globalXres, int globalYres, TileCacheEntry e) {
 		for (int y = 0; y < e.yres; y++) {
-			int gy = (y + e.py*e.yres);
-			if (gy >= globalYres) continue;
+			int gy = (y + e.py * e.yres);
+			if (gy >= globalYres)
+				continue;
 			for (int x = 0; x < e.xres; x++) {
-				int gx = x + e.px*e.xres; 
-				if (gx >= globalXres) continue;
-				img[gx + gy * globalXres] = Utils.vector4ToINTColor(e.sample(x, y));
+				int gx = x + e.px * e.xres;
+				if (gx >= globalXres)
+					continue;
+				img[gx + gy * globalXres] = Utils.vector4ToINTColor_ARGB(e.sample(x, y));
 			}
 		}
 
-	return img;
-}
+		return img;
+	}
+	
+	//!!TODO: merge with method above
+	private static int[] tempGetImage_RGBA(int[] img, int globalXres, int globalYres, TileCacheEntry e) {
+		for (int y = 0; y < e.yres; y++) {
+			int gy = (y + e.py * e.yres);
+			if (gy >= globalYres)
+				continue;
+			for (int x = 0; x < e.xres; x++) {
+				int gx = x + e.px * e.xres;
+				if (gx >= globalXres)
+					continue;
+				img[gx + gy * globalXres] = Utils.vector4ToINTColor_RGBA(e.sample(x, y));
+			}
+		}
+
+		return img;
+	}
 
 	// !!TODO; centralize the image computation method (join it with the one
 	// from the Channel class)
@@ -125,9 +142,9 @@ public final class TextureGenerator {
 			int globalXres = xres;
 			int globalYres = yres;
 			int border = 0;
-			
-			for (int py = 0; py < globalYres/(cyres+1) + 1; py++) {
-				for (int px = 0; px < globalXres/(cxres+1) + 1; px++) {
+
+			for (int py = 0; py < globalYres / (cyres + 1) + 1; py++) {
+				for (int px = 0; px < globalXres / (cxres + 1) + 1; px++) {
 					TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, border, globalXres, globalYres);
 					tempGetImage(img, globalXres, globalYres, e);
 				}
@@ -139,7 +156,39 @@ public final class TextureGenerator {
 				for (int x = 0; x < xres; x++) {
 					float u = (float) x / (float) xres;
 					float v = (float) y / (float) yres;
-					img[x + y * xres] = Utils.vector4ToINTColor(c.valueRGBA(u, v));
+					img[x + y * xres] = Utils.vector4ToINTColor_ARGB(c.valueRGBA(u, v));
+				}
+			}
+		}
+
+		return img;
+	}
+
+	// !!TODO: merge this with the method above
+	private static int[] getImage_RGBA(int xres, int yres, Channel c) {
+		int[] img = new int[xres * yres];
+
+		if (useCache) {
+			int cxres = cacheTileResolution;
+			int cyres = cacheTileResolution;
+			int globalXres = xres;
+			int globalYres = yres;
+			int border = 0;
+
+			for (int py = 0; py < globalYres / (cyres + 1) + 1; py++) {
+				for (int px = 0; px < globalXres / (cxres + 1) + 1; px++) {
+					TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, border, globalXres, globalYres);
+					tempGetImage_RGBA(img, globalXres, globalYres, e);
+				}
+			}
+		} else { // don't use cache
+			for (int y = 0; y < yres; y++) {
+				// if (progress != null)
+				// progress.setProgress(y/(float)img.getHeight());
+				for (int x = 0; x < xres; x++) {
+					float u = (float) x / (float) xres;
+					float v = (float) y / (float) yres;
+					img[x + y * xres] = Utils.vector4ToINTColor_RGBA(c.valueRGBA(u, v));
 				}
 			}
 		}
@@ -158,8 +207,7 @@ public final class TextureGenerator {
 
 	/**
 	 * Evaluates the node with the given name (it is the export name of the
-	 * node) and returns a new int array with the ARGB data. Currently it uses
-	 * no cache and thus needs to fully evaluate the graph for each pixel.
+	 * node) and returns a new int array with the ARGB8 data.
 	 * 
 	 * @param name
 	 *            the export name of the node that should be evaluated into an
@@ -174,6 +222,17 @@ public final class TextureGenerator {
 		for (TextureGraphNode n : graph.allNodes) {
 			if (n.texChannel.exportName.get().equals(name)) {
 				return getImage_ARGB(xres, yres, n.texChannel);
+			}
+		}
+
+		return null;
+	}
+	
+	public static int[] generateTexture_RGBA(String name, int xres, int yres) {
+
+		for (TextureGraphNode n : graph.allNodes) {
+			if (n.texChannel.exportName.get().equals(name)) {
+				return getImage_RGBA(xres, yres, n.texChannel);
 			}
 		}
 

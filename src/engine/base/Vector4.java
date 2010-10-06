@@ -224,5 +224,14 @@ public class Vector4 implements Serializable {
 		z = (1-f)*z + f*v.z;
 		w = (1-f)*w + f*v.w;
 	}
+	
+	public Vector4 swizzle_ip_wxyz() {
+		float temp = w;
+		w = z;
+		z = y;
+		y = x;
+		x = temp;
+		return this;
+	}
 
 }
