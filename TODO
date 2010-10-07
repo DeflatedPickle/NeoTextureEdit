@@ -123,6 +123,8 @@ Releases (Notes):
  - Gamma Correction available in the ColorCorrect filter (renamed from the Brightness/Contrast filter)
  - Desaturation in ColorCorrect filter (using HSV color space)
  - Selection of Multiple nodes
+ - Cache System Rewrite (Derivatives are currently slow but more exact)
+ - Combine Filter Node (RGBA rearrangement)
  
 0.6.1:
  - external run time generation library now available
