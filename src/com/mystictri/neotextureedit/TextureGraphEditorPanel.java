@@ -925,8 +925,16 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 				if (actionType < 0) { // we dragged onto an input node
 					int index = -actionType - 1;
 					
-					TextureGraphNode.ConnectionPoint inputPoint = targetPat.getInputConnectionPointByChannelIndex(index);
-					graph.addConnection(new TextureNodeConnection(connectionSource, inputPoint));
+					
+					if (e.isControlDown()) { // connect all inputs
+						for (int i = 0; i < targetPat.getChannel().getNumInputChannels(); i++) {
+							TextureGraphNode.ConnectionPoint ip = targetPat.getInputConnectionPointByChannelIndex(i);
+							graph.addConnection(new TextureNodeConnection(connectionSource, ip));
+						}
+					} else { // normal single connection
+						TextureGraphNode.ConnectionPoint inputPoint = targetPat.getInputConnectionPointByChannelIndex(index);
+						graph.addConnection(new TextureNodeConnection(connectionSource, inputPoint));
+					}
 				}
 			}			
 		} 

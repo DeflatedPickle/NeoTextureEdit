@@ -2,8 +2,7 @@ Currently working on:
  - Zoom
     - fix: zoom to mouse cursor
     - fix: make zoomed rendering faster
- - Curve class and CurveParam class
-
+ - Curve class and CurveParam class (for HDR output node)
 
  - Caching System:
     - implement a Debug view that shows the accesses and current cache elements (especially to
@@ -16,7 +15,6 @@ Feature Requests:
   - Export All Menu Item
   - Blur Node
   - UnDo stack
-  
   - Keyboard shortcuts
   
   - Preview Node Zoom (showing a region of the texture (info should contain target resolution); 
@@ -37,6 +35,11 @@ TODO:
 JMonkeyPlatform Integration:
  - List of possible
  
+ 
+Current Keyboard Shortcuts:
+ - Ctrl-click drags the desktop
+ - Dragging nodes: Ctrl-drag on target node connector connects to all nodes
+ - Alpha: Ctrl-drag on color gradient editor moves all nodes 
   
   
 Caching System and Derivative based nodes:
