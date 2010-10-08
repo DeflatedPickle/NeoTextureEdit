@@ -207,6 +207,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		setPreferredSize(new Dimension(512, 512));
 		
+		
+		
 	}
 
 	
@@ -667,7 +669,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	float zoom = 1.0f;
 	
 	public void paint(Graphics gr) {
-		//super.paint(gr);
+//		super.paint(gr);
 		
 		if (canvas == null || (int)(getWidth()*zoom) != canvas.getWidth() || (int)(getHeight()*zoom) != canvas.getHeight()) {
 			canvas = new BufferedImage((int)(getWidth()*zoom), (int)(getHeight()*zoom), BufferedImage.TYPE_INT_RGB);
@@ -736,6 +738,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		} else {
 			gr.drawImage(canvas, 0, 0, null);
 		}
+		
+		
 	}
 	
 	

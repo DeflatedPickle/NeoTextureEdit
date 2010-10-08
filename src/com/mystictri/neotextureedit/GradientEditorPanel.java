@@ -213,7 +213,7 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 		addMouseListener(this);
 		addMouseMotionListener(this);
 
-		gradientImage = new BufferedImage(256-16-32, 24, BufferedImage.TYPE_INT_RGB);
+		gradientImage = new BufferedImage(256 - 16 - 32, 24, BufferedImage.TYPE_INT_RGB);
 
 		createPopup();
 	}
@@ -349,11 +349,13 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 				System.out.println(dx);
 				for (int i = 0; i < m_ActiveGradient.getNumEntries(); i++) {
 					float pos = m_ActiveGradient.getEntryPosition(i);
-					pos = pos + dx;
-					if (pos < 0) pos = 0.0f;
-					if (pos > 1) pos = 1.0f;
-					markers.get(i).x = (int)(gradientImagePosX + pos * (gradientImage.getWidth() - 1));
-					m_ActiveGradient.updatePosition(i, pos);
+					if (pos > 0 && pos < 1) {
+						pos = pos + dx;
+						if (pos < 0) pos = 0.0f;
+						if (pos > 1) pos = 1.0f;
+						markers.get(i).x = (int)(gradientImagePosX + pos * (gradientImage.getWidth() - 1));
+						m_ActiveGradient.updatePosition(i, pos);
+					}
 				}
 				refreshGradientImage();
 			} else {

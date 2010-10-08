@@ -18,7 +18,7 @@ Feature Requests:
   - Keyboard shortcuts
   
   - Preview Node Zoom (showing a region of the texture (info should contain target resolution); 
-     needs proper tiled caching to be reasonable fast
+     create a simple (self-managed) internal frame that can be moved, closed and with zoom controls
   
 TODO:  
 
