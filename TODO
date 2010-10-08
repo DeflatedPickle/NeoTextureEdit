@@ -22,6 +22,12 @@ Feature Requests:
   
 TODO:  
 
+- Implement Interface public InputStream findData(String dataPath); inside the texture graph loader and bitmap
+  loader that can be replaced by some other loader (default loader uses file system; some other may use another
+  method).
+  
+  
+
 - Export All button
 
 - Add a transform Node
