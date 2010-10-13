@@ -22,6 +22,9 @@ Feature Requests:
   
 TODO:  
 
+
+- Caching memory leak fix: store the tile caches inside the individual channels instead of global! 
+
 - Implement Interface public InputStream findData(String dataPath); inside the texture graph loader and bitmap
   loader that can be replaced by some other loader (default loader uses file system; some other may use another
   method).
@@ -59,10 +62,6 @@ Refactoring:
   - the package names are from a legacy project and need adjustment to better reflect the current
     structure
     
-Check the allocation pattern of the channel cache; depending on graph this might consume a lot
-of memory
-A Tiled caching system might solve this problem
-
 
 FIXME: don't remove the glpreview string in the texture graph files when gl preview is disabled/could not be loaded on graph save
     
@@ -75,8 +74,6 @@ Export Settings:
 	be hardcoded in each export node)
 
 General:
- - Is the transformation matrix really needed in filter nodes? A simpler solution (especially for the caching system) would
-   be to allow transformation only in Patterns
  - Make the Help-System using nice font and backgrounds and write a base dialog class for displaying such messages
  
  - Make the parameter of a network accessible through commandline; this allows for simple animations 
@@ -92,10 +89,6 @@ General:
  
  - Higher order Interpolation in Gradient Editor (Hermite, ...)
   
-
-Caching System:
- - Try caching for the 64 preview resolution; find a solution for the derivative scaling problem... (?always on grid??)
-
 
 OpenGL Preview
  - Add a scrollbar to the parameter editor of the GL Preview (?)

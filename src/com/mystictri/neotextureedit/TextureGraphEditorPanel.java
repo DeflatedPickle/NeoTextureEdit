@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.TooManyListenersException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -134,6 +135,20 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	BufferedImage previewImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
 	
 	TextureGraph graph;
+	
+	
+	/**
+	 * This interface is used by the TextureGraphEditorPanel to notify about changes in the
+	 * graph when edit operations are performed.
+	 * @author Holger Dammertz
+	 *
+	 */
+	public static interface EditChangeListener {
+		/** Called on each edit operation that changes the graph or the graph layout */
+		public void graphWasEdited();
+	}
+	
+	final Vector<EditChangeListener> editChangeListener = new Vector<EditChangeListener>();
 	
 	/** 
 	 * Used in the draw method to generate a preview image that is cached
@@ -921,6 +936,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		int wsX = (int)((mousePosition.x)*zoom) - desktopX;
 		int wsY = (int)((mousePosition.y)*zoom) - desktopY;
 		
+		//!!TODO: this notifies already on selecting a node; it should fire only when the node was actually moved
+		if (nodeDragging || connectionDragging)	notifyEditChangeListener();
 		
 		if (connectionDragging) {
 			TextureGraphNode targetPat = graph.getNodeAtPosition(wsX, wsY);
@@ -949,13 +966,29 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		repaint();
 	}
+	
+	
+	public void addEditChangeListener(EditChangeListener listener) {
+		editChangeListener.add(listener);
+	}
+	
+	public boolean removeEditChangeListener(EditChangeListener listener) {
+		return editChangeListener.remove(listener);
+	}
 
+	//!!TODO: this is not yet correctly called when the parameter of a channel changes
+	protected void notifyEditChangeListener() {
+		//!!TODO: make the undo-stack here also
+		
+		for (EditChangeListener l : editChangeListener) l.graphWasEdited();
+	}
 
 	@Override
 	public void channelChanged(Channel source) {
 		if ((previewNode != null) && (previewNode.getChannel() == source)){
 			updatePreview();
 		}
+		notifyEditChangeListener();
 	}
 
 
