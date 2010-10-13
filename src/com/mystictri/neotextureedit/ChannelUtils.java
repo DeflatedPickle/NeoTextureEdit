@@ -53,7 +53,7 @@ public final class ChannelUtils {
 
 		TileCacheEntry tce = null;
 		if (useCache && (img.getWidth() >= minCacheSize && img.getHeight() >= minCacheSize)) {
-			 tce = CacheTileManager.getCache(c, 0, 0, img.getWidth(), img.getHeight(), 0, img.getWidth(), img.getHeight());
+			 tce = CacheTileManager.getCache(c, 0, 0, img.getWidth(), img.getHeight(), img.getWidth(), img.getHeight());
 		}
 		
 		for (int y = 0; y < img.getHeight(); y++) {

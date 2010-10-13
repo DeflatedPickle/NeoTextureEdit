@@ -144,15 +144,16 @@ public abstract class Channel extends LocalParameterManager {
 		return val;
 	}
 
-	public static float deltaU = 1.0f / 256.0f;
-	public static float deltaV = 1.0f / 256.0f;
+	public static float deltaFac = 4.0f;
+	public static float deltaU = 1.0f / (deltaFac*256.0f);
+	public static float deltaV = 1.0f / (deltaFac*256.0f);
 
 	public Vector4 du1f(float u, float v) {
-		return new Vector4(valueRGBA(u + deltaU, v)).sub_ip(valueRGBA(u - deltaU, v));
+		return new Vector4(valueRGBA(u + deltaU, v)).sub_ip(valueRGBA(u, v)).mult_ip(deltaFac);
 	}
 
 	public Vector4 dv1f(float u, float v) {
-		return new Vector4(valueRGBA(u, v + deltaV)).sub_ip(valueRGBA(u, v - deltaV));
+		return new Vector4(valueRGBA(u, v + deltaV)).sub_ip(valueRGBA(u, v)).mult_ip(deltaFac);
 	}
 	
 	

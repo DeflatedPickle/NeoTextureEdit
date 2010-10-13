@@ -26,13 +26,13 @@ TODO:
   loader that can be replaced by some other loader (default loader uses file system; some other may use another
   method).
   
+- Not all nodes are using the caching system (for example the transform node or parts of the warp node); we
+  need to evaluate how interpolated access could help improving the performance of these nodes
+- Fix the border in the caching system
+  
   
 
 - Export All button
-
-- Add a transform Node
-- Cache the derivatives!!
-- Add a combiner node
 
 - Change the file format to an XML format
 
@@ -165,6 +165,7 @@ Releases (Notes):
  
 
 Done:
+ - Add a transform Node
  - Loading of Bitmap files as input nodes
  - Move to new LWJGL Version 2.3
  - Add preview objects with tangents (probably best to export them as vertex array)

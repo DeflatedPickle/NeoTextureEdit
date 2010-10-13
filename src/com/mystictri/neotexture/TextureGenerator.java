@@ -141,11 +141,10 @@ public final class TextureGenerator {
 			int cyres = cacheTileResolution;
 			int globalXres = xres;
 			int globalYres = yres;
-			int border = 0;
 
 			for (int py = 0; py < globalYres / (cyres + 1) + 1; py++) {
 				for (int px = 0; px < globalXres / (cxres + 1) + 1; px++) {
-					TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, border, globalXres, globalYres);
+					TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, globalXres, globalYres);
 					tempGetImage(img, globalXres, globalYres, e);
 				}
 			}
@@ -173,11 +172,10 @@ public final class TextureGenerator {
 			int cyres = cacheTileResolution;
 			int globalXres = xres;
 			int globalYres = yres;
-			int border = 0;
 
 			for (int py = 0; py < globalYres / (cyres + 1) + 1; py++) {
 				for (int px = 0; px < globalXres / (cxres + 1) + 1; px++) {
-					TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, border, globalXres, globalYres);
+					TileCacheEntry e = CacheTileManager.getCache(c, px, py, cxres, cyres, globalXres, globalYres);
 					tempGetImage_ABGR(img, globalXres, globalYres, e);
 				}
 			}

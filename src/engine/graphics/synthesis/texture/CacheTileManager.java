@@ -102,11 +102,38 @@ public final class CacheTileManager {
 		}
 
 		public Vector4 sample(int x, int y) {
-			int i = (x + y * xres) * 4;
+			int i = ((x + border) + (y + border) * (xres + 2*border)) * 4;
 			return new Vector4(data.get(i + 0), data.get(i + 1), data.get(i + 2), data.get(i + 3));
-			// ret.set(values.get(i+0), values.get(i+1), values.get(i+2),
-			// values.get(i+3));
 		}
+		
+		//!!TODO: wrong on tile borders
+		public Vector4 sample_du(int x, int y) {
+			return sample((x+1)%xres, y).sub_ip(sample(x, y));
+		}
+
+		//!!TODO: wrong on tile borders
+		public Vector4 sample_dv(int x, int y) {
+			return sample(x, (y+1)%yres).sub_ip(sample(x, y));
+		}
+
+	
+		public Vector4 sample_Normalized(float u, float v) {
+			int x = ((int) (u * xres)) ;
+			int y = ((int) (v * yres));
+			while (x < 0)
+				x += xres;
+			while (y < 0)
+				y += yres;
+			while (x >= xres)
+				x -= xres;
+			while (y >= yres)
+				y -= xres;
+			int i = (x + border + (y +border) * (xres+2*border)) * 4;
+			return new Vector4(data.get(i + 0), data.get(i + 1), data.get(i + 2), data.get(i + 3));
+		}
+		
+		
+		
 
 		public TileCacheEntry(Channel c, int xres, int yres, int px, int py, int border, int globalXres, int globalYres) {
 			dirty = true;
@@ -133,6 +160,7 @@ public final class CacheTileManager {
 
 			final int startY = py * yres - border;
 			final int endY = (py + 1) * yres + border;
+			
 
 			if (c.getNumInputChannels() == 0) { // no input channels
 
@@ -150,11 +178,11 @@ public final class CacheTileManager {
 				final TileCacheEntry[] tiles = new TileCacheEntry[c.getNumInputChannels()];
 
 				for (int i = 0; i < tiles.length; i++) {
-					tiles[i] = getCache(c.inputChannels[i], px, py, xres, yres, border, globalXres, globalYres);
+					tiles[i] = getCache(c.inputChannels[i], px, py, xres, yres, globalXres, globalYres);
 				}
 
-				for (int y = startY, idx = 0, localY = 0; y < endY; y++, localY++) {
-					for (int x = px * xres - border, localX = 0; x < (px + 1) * xres + border; x++, idx++, localX++) {
+				for (int y = startY, idx = 0, localY = border; y < endY; y++, localY++) {
+					for (int x = px * xres - border, localX = border; x < (px + 1) * xres + border; x++, idx++, localX++) {
 						float u = (float) x / (float) globalXres;
 						float v = (float) y / (float) globalYres;
 						u = u - FMath.ffloor(u);
@@ -188,7 +216,7 @@ public final class CacheTileManager {
 		tiles.put(c, null);
 	}
 
-	public static TileCacheEntry getCache(Channel c, int px, int py, int xres, int yres, int border, int globalXres, int globalYres) {
+	public static TileCacheEntry getCache(Channel c, int px, int py, int xres, int yres, int globalXres, int globalYres) {
 		HashMap<ResolutionTag, TileCacheEntry> channelMap = tiles.get(c);
 		if (channelMap == null) {
 			channelMap = new HashMap<ResolutionTag, TileCacheEntry>();
@@ -198,6 +226,7 @@ public final class CacheTileManager {
 		ResolutionTag tag = new ResolutionTag(xres, yres);
 		TileCacheEntry tile = channelMap.get(tag);
 		if (tile == null) {
+			int border = 0;
 			tile = new TileCacheEntry(c, xres, yres, px, py, border, globalXres, globalYres);
 			channelMap.put(tag, tile);
 		}

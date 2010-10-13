@@ -55,8 +55,8 @@ public final class FilterWarp extends Channel {
 	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		//float du = ce[1].du(u, v).XYZto1f() * strength.get();
 		//float dv = ce[1].dv(u, v).XYZto1f() * strength.get();
-		float du = inputChannels[1].du1f(u, v).XYZto1f() * strength.get();
-		float dv = inputChannels[1].dv1f(u, v).XYZto1f() * strength.get();
+		float du = caches[0].sample_du(localX, localY).XYZto1f() * strength.get(); //inputChannels[1].du1f(u, v).XYZto1f() * strength.get();
+		float dv = caches[0].sample_dv(localX, localY).XYZto1f() * strength.get(); //inputChannels[1].dv1f(u, v).XYZto1f() * strength.get();
 		out.set(inputChannels[0].valueRGBA(u+du, v+dv));
 	}
 	
