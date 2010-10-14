@@ -20,6 +20,7 @@ package engine.graphics.synthesis.texture;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -39,6 +40,8 @@ import engine.parameters.TextParam;
  * 
  */
 public abstract class Channel extends LocalParameterManager {
+	HashMap<CacheTileManager.ResolutionTag, TileCacheEntry> cacheEntries = null;
+	
 	public TextParam exportName = CreateLocalTextParam("ExportName", "");
 	Channel[] inputChannels;
 	

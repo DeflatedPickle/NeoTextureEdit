@@ -22,8 +22,7 @@ Feature Requests:
   
 TODO:  
 
-
-- Caching memory leak fix: store the tile caches inside the individual channels instead of global! 
+- FIX: the problem with the emboss node and zoom (export does not look like Zoom!)
 
 - Implement Interface public InputStream findData(String dataPath); inside the texture graph loader and bitmap
   loader that can be replaced by some other loader (default loader uses file system; some other may use another
@@ -119,11 +118,13 @@ Releases (Notes):
 -----------------------------------------------------------------------------------------------------------------------
 0.6.2+ (Current):
  - Matrix a parameter and now only available in Patterns
+ - Transform Node as replacement
  - Gamma Correction available in the ColorCorrect filter (renamed from the Brightness/Contrast filter)
  - Desaturation in ColorCorrect filter (using HSV color space)
- - Selection of Multiple nodes
- - Cache System Rewrite (Derivatives are currently slow but more exact)
  - Combine Filter Node (RGBA rearrangement)
+ - Selection of Multiple nodes
+ - Cache System Rewrite 
+ - Improved Node Preview with arbitrary Zoom
  
 0.6.1:
  - external run time generation library now available

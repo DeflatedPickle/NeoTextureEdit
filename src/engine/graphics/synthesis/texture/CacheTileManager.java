@@ -7,26 +7,25 @@ import engine.base.FMath;
 import engine.base.Vector4;
 
 /**
- * !!TODO: need to make sure that no memory leaks appear when a channel is
- * deleted
- * 
- * Current implementation caches only a single tile per local resolution and
- * channel. 
  * 
  * @author Holger Dammertz
  * 
  */
 public final class CacheTileManager {
-	private static final HashMap<Channel, HashMap<ResolutionTag, TileCacheEntry>> tiles = new HashMap<Channel, HashMap<ResolutionTag, TileCacheEntry>>();
+	//private static final HashMap<Channel, HashMap<ResolutionTag, TileCacheEntry>> tiles = new HashMap<Channel, HashMap<ResolutionTag, TileCacheEntry>>();
 
-	private static final class ResolutionTag {
+	static final class ResolutionTag {
 		final Integer xres; // the local x resolution of this tile (without
 							// border)
 		final Integer yres; // the local y resolution of this tile
+		final Integer globalXres;
+		final Integer globalYres;
 
-		public ResolutionTag(int xres, int yres) {
+		public ResolutionTag(int xres, int yres, int gX, int gY) {
 			this.xres = xres;
 			this.yres = yres;
+			globalXres = gX;
+			globalYres = gY;
 		}
 
 		@Override
@@ -42,7 +41,9 @@ public final class CacheTileManager {
 				return false;
 			ResolutionTag tag = (ResolutionTag) o;
 
-			return (tag.xres.intValue() == xres.intValue() && tag.yres.intValue() == yres.intValue());
+			return (tag.xres.intValue() == xres.intValue() && tag.yres.intValue() == yres.intValue() &&
+					tag.globalXres.intValue() == globalXres.intValue() &&
+					tag.globalYres.intValue() == globalYres.intValue());
 		}
 	}
 
@@ -108,12 +109,12 @@ public final class CacheTileManager {
 		
 		//!!TODO: wrong on tile borders
 		public Vector4 sample_du(int x, int y) {
-			return sample((x+1)%xres, y).sub_ip(sample(x, y));
+			return sample((x+1)%xres, y).sub_ip(sample(x, y)).mult_ip((float)globalXres/xres);
 		}
 
 		//!!TODO: wrong on tile borders
 		public Vector4 sample_dv(int x, int y) {
-			return sample(x, (y+1)%yres).sub_ip(sample(x, y));
+			return sample(x, (y+1)%yres).sub_ip(sample(x, y)).mult_ip((float)globalYres/yres);
 		}
 
 	
@@ -199,11 +200,11 @@ public final class CacheTileManager {
 	}
 
 	public static void clearCache() {
-		tiles.clear();
+//		tiles.clear();
 	}
 
 	public static void setEntrysDirty(Channel c) {
-		HashMap<ResolutionTag, TileCacheEntry> channelMap = tiles.get(c);
+		HashMap<ResolutionTag, TileCacheEntry> channelMap = c.cacheEntries;
 		if (channelMap == null)
 			return;
 
@@ -212,19 +213,24 @@ public final class CacheTileManager {
 		}
 	}
 
-	public static void removeChannel(Channel c) {
-		tiles.put(c, null);
-	}
+	
+//	public static void removeChannel(Channel c) {
+//		tiles.put(c, null);
+//	}
 
 	public static TileCacheEntry getCache(Channel c, int px, int py, int xres, int yres, int globalXres, int globalYres) {
-		HashMap<ResolutionTag, TileCacheEntry> channelMap = tiles.get(c);
+		HashMap<ResolutionTag, TileCacheEntry> channelMap = c.cacheEntries;
 		if (channelMap == null) {
 			channelMap = new HashMap<ResolutionTag, TileCacheEntry>();
-			tiles.put(c, channelMap);
+			c.cacheEntries = channelMap;
+			//tiles.put(c, channelMap);
 		}
+		
+		//System.out.format("Cache: %d %d %d %d %n", xres, yres, globalXres, globalYres);
 
-		ResolutionTag tag = new ResolutionTag(xres, yres);
+		ResolutionTag tag = new ResolutionTag(xres, yres, globalXres, globalYres);
 		TileCacheEntry tile = channelMap.get(tag);
+		//System.out.println(tile);
 		if (tile == null) {
 			int border = 0;
 			tile = new TileCacheEntry(c, xres, yres, px, py, border, globalXres, globalYres);

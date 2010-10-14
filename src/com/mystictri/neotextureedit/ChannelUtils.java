@@ -28,14 +28,18 @@ public final class ChannelUtils {
 
 	
 	public static void computeImage(Channel c, final BufferedImage img, final ProgressBarInterface progress, final int mode) {
-		_computeImage(c, img, progress, mode);
+		_computeImage(c, img, progress, mode, img.getWidth(), img.getHeight(), 0, 0);
+	}
+	
+	public static void computeImage(Channel c, final BufferedImage img, final ProgressBarInterface progress, final int mode, int globalXres, int globalYres, int px, int py) {
+		_computeImage(c, img, progress, mode, globalXres, globalYres, px, py);
 	}
 
 	/**
 	 * Computes a image from the given channel; mode 0: RGB, 1: blended with
 	 * background; 2: alpha as grayscale
 	 */
-	private static void _computeImage(Channel c, BufferedImage img, ProgressBarInterface progress, int mode) {
+	private static void _computeImage(Channel c, BufferedImage img, ProgressBarInterface progress, int mode, int globalXres, int globalYres, int px, int py) {
 
 		if (!c.chechkInputChannels()) {
 			Logger.logError(null, "Computing image from incomplete channel not possible!");
@@ -53,15 +57,15 @@ public final class ChannelUtils {
 
 		TileCacheEntry tce = null;
 		if (useCache && (img.getWidth() >= minCacheSize && img.getHeight() >= minCacheSize)) {
-			 tce = CacheTileManager.getCache(c, 0, 0, img.getWidth(), img.getHeight(), img.getWidth(), img.getHeight());
+			 tce = CacheTileManager.getCache(c, px, py, img.getWidth(), img.getHeight(), globalXres, globalYres);
 		}
 		
 		for (int y = 0; y < img.getHeight(); y++) {
 				if (progress != null)
 					progress.setProgress(y / (float) img.getHeight());
 				for (int x = 0; x < img.getWidth(); x++) {
-					float u = (float) x / (float) img.getWidth();
-					float v = (float) y / (float) img.getHeight();
+					float u = (float) (x + px * img.getWidth()) / (float) globalXres;
+					float v = (float) (y + py * img.getHeight()) / (float) globalYres;
 
 					final Vector4 col;
 					if (tce == null) col = c.valueRGBA(u, v);

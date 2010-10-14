@@ -738,8 +738,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		}
 		
 		
-		for (PreviewWindow prevwindow : previewWindows) {
-			prevwindow.draw(g);
+		for (int i = previewWindows.size() - 1; i >= 0; i--) {
+			previewWindows.get(i).draw(g);
 		}
 		
 		
@@ -883,6 +883,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		if (e.getButton() == 2 || (e.isControlDown())) { // Desktop Dragging
 			desktopDragging = true;
 		} else if ((draggedWindow = getPreviewWindowAtPosition(mousePosition.x, mousePosition.y)) != null) {
+			previewWindows.setElementAt(previewWindows.firstElement(), previewWindows.indexOf(draggedWindow));
+			previewWindows.setElementAt(draggedWindow, 0);
 			if (draggedWindow.doClick(mousePosition.x, mousePosition.y)) {
 				draggedWindow = null;
 			}
@@ -1061,7 +1063,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		int posX;
 		int posY;
 		final BufferedImage previewNodeImage;
+		BufferedImage tempImage;
 		final TextureGraphNode previewNode;
+		
+		float zoom = 1.0f;
 		
 
 		//ad-hoc solution for button areas
@@ -1079,10 +1084,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			}
 			
 			public void draw(Graphics2D g, int ox, int oy) {
-				g.setColor(Color.black);
-				g.fillRect(px+ox, py+oy, w, h);
-				
-				g.setColor(Color.white);
 				g.drawString(t, px+ox+4, py+oy+h-4);
 			}
 			
@@ -1100,10 +1101,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			previewNodeImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
 			updatePreviewImage();
 			
-			miniButtons.add(new MiniButton(256-24,8,16,16, "X"));
+			miniButtons.add(new MiniButton(256-16,0,16,16, "X"));
 
-			miniButtons.add(new MiniButton(8,8,16,16, "+"));
-			miniButtons.add(new MiniButton(24+8,8,16,16, "-"));
+			miniButtons.add(new MiniButton(0,0,16,16, "+"));
+			miniButtons.add(new MiniButton(16,0,16,16, "-"));
 		}
 		
 		
@@ -1119,11 +1120,19 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		}
 		
 		public void draw(Graphics2D g) {
-			g.drawImage(previewNodeImage, posX, posY, null);
+			g.drawImage(previewNodeImage, posX, posY+16, null);
 			
+			g.setColor(Color.black);
+			g.fillRect(posX, posY, previewNodeImage.getWidth(), 16);
+			g.setColor(Color.white);
+			
+			g.drawRect(posX + -1, posY + -1, 258, 256+16+2);
+
 			for (MiniButton b : miniButtons) {
 				b.draw(g, posX, posY);
 			}
+			
+			g.drawString(String.format("Zoom: %.3f", zoom), posX + 48, posY + 12);
 			
 //			if (previewNode != null) {
 //				g.setColor(Color.blue);
@@ -1137,16 +1146,17 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		public boolean doClick(int x, int y) {
 			for (MiniButton b : miniButtons) {
 				if (b.inside(x - posX, y -posY)) {
-					System.out.println(b.t);
-					
 					if ("X".equals(b.t)) {
 						removePreviewWindow(this);
 					} else if ("+".equals(b.t)) {
-						
+						zoom *= 2.0f;
+						updatePreviewImage();
 					} else if ("-".equals(b.t)) {
-						
+						if (zoom > 0.125) {
+							zoom /= 2.0f;
+							updatePreviewImage();
+						}
 					}
-					
 					return true;
 				}
 			}
@@ -1157,7 +1167,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		public boolean isInside(int x, int y) {
 			int width = previewNodeImage.getWidth();
-			int height = previewNodeImage.getHeight();
+			int height = previewNodeImage.getHeight()+16;
 			return (x >= posX) && (x <= posX+width) && (y >= posY) && (y <= posY + height);
 		}
 
@@ -1167,7 +1177,26 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		void updatePreviewImage() {
 			if (previewNode != null) {
 				if (previewNode.getChannel().chechkInputChannels()) {
-					ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0);
+					
+					if (zoom == 1.0f) {
+						ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0);
+					} else if (zoom > 1.0f) {
+						System.out.println("Zoom is " + zoom);
+						ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0, (int)(previewNodeImage.getWidth()*zoom), (int)(previewNodeImage.getHeight()*zoom), 0, 0);
+					} else if (zoom < 1.0f) {
+						int lx = (int)(previewNodeImage.getWidth()*zoom);
+						int ly = (int)(previewNodeImage.getHeight()*zoom);
+						if (tempImage == null || tempImage.getWidth() != lx || tempImage.getHeight() != ly) {
+							tempImage = new BufferedImage(lx, ly, BufferedImage.TYPE_INT_RGB);
+						}
+						ChannelUtils.computeImage(previewNode.getChannel(), tempImage, null, 0);
+						Graphics g = previewNodeImage.getGraphics();
+						for (int py = 0; py < previewNodeImage.getHeight(); py += ly) {
+							for (int px = 0; px < previewNodeImage.getWidth(); px += lx) {
+								g.drawImage(tempImage, px, py, null);
+							}
+						}
+					}
 				} else {
 					Graphics g = previewNodeImage.getGraphics();
 					g.fillRect(0, 0, previewNodeImage.getWidth(), previewNodeImage.getHeight());
