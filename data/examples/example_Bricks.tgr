@@ -14,17 +14,17 @@ engine.graphics.synthesis.texture.FilterWarp
 ExportName "" Strength 0.5 endparameters
 610 -51
 engine.graphics.synthesis.texture.PatternPerlinNoise
-ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 5.0 ScaleY 5.0 ValueScale 1.0 Persistence 1.0 StartBand 1 EndBand 9 Seed -1 Periodic true endparameters
+ExportName "" Transformation 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 Color_Mapping 2 0.0 0.0 0.0 1.0 0.0 1.0 1.0 1.0 1.0 1.0 ScaleX 5.0 ScaleY 5.0 ValueScale 1.0 Persistence 0.8125 StartBand 1 EndBand 9 Seed -1 Periodic true endparameters
 472 81
 engine.graphics.synthesis.texture.FilterColorize
 ExportName "" Gray_to_Color_Mapping 3 0.73333335 0.4745098 0.34509805 1.0 0.0 0.67058825 0.37254903 0.30588236 1.0 0.46376812 0.85490197 0.53333336 0.29803923 1.0 1.0 endparameters
 201 201
 engine.graphics.synthesis.texture.FilterMask
 ExportName "" Invert false endparameters
-506 218
+517 221
 engine.graphics.synthesis.texture.FilterEmboss
-ExportName "" Strength 0.8 Angle 45.0 endparameters
-455 492
+ExportName "" Strength 0.5 Angle 45.0 endparameters
+454 492
 engine.graphics.synthesis.texture.FilterEmboss
 ExportName "" Strength 2.0 Angle 45.0 endparameters
 686 84
