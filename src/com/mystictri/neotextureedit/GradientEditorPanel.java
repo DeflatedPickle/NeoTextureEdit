@@ -346,7 +346,7 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 				refreshGradientImage();
 			} else if (allDrag) {
 				float dx = -(dragMarker.x - (e.getX() + dragDX)) / (float)(2*(gradientImage.getWidth() - 1));
-				System.out.println(dx);
+				//System.out.println(dx);
 				for (int i = 0; i < m_ActiveGradient.getNumEntries(); i++) {
 					float pos = m_ActiveGradient.getEntryPosition(i);
 					if (pos > 0 && pos < 1) {

@@ -883,7 +883,9 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		if (e.getButton() == 2 || (e.isControlDown())) { // Desktop Dragging
 			desktopDragging = true;
 		} else if ((draggedWindow = getPreviewWindowAtPosition(mousePosition.x, mousePosition.y)) != null) {
-			
+			if (draggedWindow.doClick(mousePosition.x, mousePosition.y)) {
+				draggedWindow = null;
+			}
 		} else {
 			TextureGraphNode node = graph.getNodeAtPosition(wsX, wsY);
 			if (node != null) {
@@ -1076,6 +1078,14 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 				t = type;
 			}
 			
+			public void draw(Graphics2D g, int ox, int oy) {
+				g.setColor(Color.black);
+				g.fillRect(px+ox, py+oy, w, h);
+				
+				g.setColor(Color.white);
+				g.drawString(t, px+ox+4, py+oy+h-4);
+			}
+			
 			boolean inside(int x, int y) {
 				return (x >= px && y >= py && x <= (px+w) && y <= (py+h));
 			}
@@ -1090,7 +1100,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			previewNodeImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
 			updatePreviewImage();
 			
-			//miniButtons.add(new MiniButton(8,8,16,16, "CLOSE"));
+			miniButtons.add(new MiniButton(256-24,8,16,16, "X"));
+
+			miniButtons.add(new MiniButton(8,8,16,16, "+"));
+			miniButtons.add(new MiniButton(24+8,8,16,16, "-"));
 		}
 		
 		
@@ -1108,6 +1121,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		public void draw(Graphics2D g) {
 			g.drawImage(previewNodeImage, posX, posY, null);
 			
+			for (MiniButton b : miniButtons) {
+				b.draw(g, posX, posY);
+			}
+			
 //			if (previewNode != null) {
 //				g.setColor(Color.blue);
 //				g.drawLine(previewNode.getX() + desktopX, previewNode.getY() + desktopY, previewNodeImage.getWidth()/2, previewNodeImage.getHeight()/2);
@@ -1118,6 +1135,21 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		/** call this with world space position to make a click inside the window */
 		public boolean doClick(int x, int y) {
+			for (MiniButton b : miniButtons) {
+				if (b.inside(x - posX, y -posY)) {
+					System.out.println(b.t);
+					
+					if ("X".equals(b.t)) {
+						removePreviewWindow(this);
+					} else if ("+".equals(b.t)) {
+						
+					} else if ("-".equals(b.t)) {
+						
+					}
+					
+					return true;
+				}
+			}
 			
 			
 			return false;
