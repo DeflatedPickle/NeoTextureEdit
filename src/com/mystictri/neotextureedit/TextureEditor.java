@@ -565,7 +565,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 		view.setMnemonic('V');
 		m_MainMenuBar.add(view);
 		createMenuItem(view, "Center", "view_center", 'C', null);
-		createMenuItem(view, "Clear Preview", "view_clearPreview", 'P', null);
 		createMenuItem(view, "Show/Hide OpenGL Preview", "view_OpenGLPreview", 'P', null).setEnabled(GL_ENABLED);
 
 		JMenu options = new JMenu("Options");
@@ -633,8 +632,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 			if (m_MainFrame != null) m_MainFrame.dispose();
 		} else if (c.equals("view_center")) {
 			m_GraphDrawPanel.centerDesktop();
-		} else if (c.equals("view_clearPreview")) {
-			m_GraphDrawPanel.setPreviewNode(null);
 		} else if (c.equals("view_OpenGLPreview")) {
 			if (!GL_ENABLED) {
 				Logger.logError(this, "Tried to show OpenGL preview, but it is not initialized.");

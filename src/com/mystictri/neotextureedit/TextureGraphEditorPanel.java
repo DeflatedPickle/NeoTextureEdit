@@ -101,6 +101,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	boolean nodeDragging = false;
 	boolean desktopDragging = false;
 	boolean connectionDragging = false;
+	PreviewWindow draggedWindow = null;
 	TextureGraphNode.ConnectionPoint connectionSource = null;
 	Point connectionOrigin;
 	Point connectionTarget;
@@ -129,10 +130,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
 	ChannelParameterEditorPanel paramEditorPanel;
 	
-	// This is a first experiment for a preview image inside the graph editor;
-	// TODO: replace this with the selectable preview image from the ChannelParameterEditor
-	TextureGraphNode previewNode;
-	BufferedImage previewImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
 	
 	TextureGraph graph;
 	
@@ -412,8 +409,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			}
 		} else if (e.getSource() == previewChannelMenuItem) {
 			if (graph.selectedNodes.size() > 0) {
-				setPreviewNode(null);
-				setPreviewNode(graph.selectedNodes.get(0));
+				addPreviewWindow(graph.selectedNodes.get(0));
 				repaint();
 			}
 		} else if (e.getSource() == cloneChannelMenuItem) { // --------------------------------------------------------
@@ -525,7 +521,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	
 	public void deleteFullGraph() {
 		paramEditorPanel.setTextureNode(null);
-		setPreviewNode(null);
+		removeAllPreviewWindows();
 		graph.deleteFullGraph();
 		CacheTileManager.clearCache();
 		repaint();
@@ -574,7 +570,9 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.notifyTextureNodeRemoved(node);
 		if (paramEditorPanel.getActiveTextureNode() == node)
 			paramEditorPanel.setTextureNode(null);
-		if (previewNode == node) setPreviewNode(null);
+		
+		removePreviewWindowByTextureNode(node);
+		
 		repaint();
 	}
 	
@@ -588,7 +586,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	}
 	
 	
-	
+	/*
 	public void setPreviewNode(TextureGraphNode n) {
 		if (n == previewNode) return;
 		if (previewNode != null) {
@@ -606,14 +604,15 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	void updatePreview() {
 		if (previewNode != null) {
 			if (previewNode.getChannel().chechkInputChannels()) {
-				ChannelUtils.computeImage(previewNode.getChannel(), previewImage, null, 0);
+				ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0);
 			} else {
-				Graphics g = previewImage.getGraphics();
-				g.fillRect(0, 0, previewImage.getWidth(), previewImage.getHeight());
+				Graphics g = previewNodeImage.getGraphics();
+				g.fillRect(0, 0, previewNodeImage.getWidth(), previewNodeImage.getHeight());
 			}
 		}
 		repaint();
 	}
+	*/
 	
 	
 	
@@ -739,11 +738,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		}
 		
 		
-		if (previewNode != null) {
-			g.setColor(Color.blue);
-			g.drawLine(previewNode.getX() + desktopX, previewNode.getY() + desktopY, previewImage.getWidth()/2, previewImage.getHeight()/2);
-			g.drawImage(previewImage, 0, 0, this);
+		for (PreviewWindow prevwindow : previewWindows) {
+			prevwindow.draw(g);
 		}
+		
 		
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
@@ -764,7 +762,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	public void moveDesktop(int dx, int dy) {
 		desktopX += dx;
 		desktopY += dy;
-		repaint();
 	}
 	
 	/**
@@ -807,24 +804,29 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (desktopDragging) {
-			int dx = (int)((e.getXOnScreen()*zoom) - dragStartX); dragStartX = (int)(e.getXOnScreen() * zoom);
-			int dy = (int)((e.getYOnScreen()*zoom) - dragStartY); dragStartY = (int)(e.getYOnScreen() * zoom);
+			int dx = (int)((e.getXOnScreen()*zoom) - dragStartX);
+			int dy = (int)((e.getYOnScreen()*zoom) - dragStartY);
 			moveDesktop(dx, dy);
+			repaint();
 		} else if (nodeDragging) {
 			for (TextureGraphNode node : graph.selectedNodes) {
 				node.movePosition((int)(e.getXOnScreen()*zoom) - dragStartX, (int)(e.getYOnScreen()*zoom) - dragStartY);
 			}
-			dragStartX = (int)(e.getXOnScreen()*zoom);
-			dragStartY = (int)(e.getYOnScreen()*zoom);
 			repaint();
 		} else if (connectionDragging) {
-			dragStartX = (int)(e.getXOnScreen()*zoom);
-			dragStartY = (int)(e.getYOnScreen()*zoom);
 			//connectionTarget = e.getPoint();
 			connectionTarget.x = (int)(e.getX()*zoom);
 			connectionTarget.y = (int)(e.getY()*zoom);
 			repaint();
+		} else if (draggedWindow != null) {
+			int dx = (int)((e.getXOnScreen()) - dragStartX/zoom);
+			int dy = (int)((e.getYOnScreen()) - dragStartY/zoom);
+			draggedWindow.move(dx, dy);
+			repaint();
 		}
+		
+		dragStartX = (int)(e.getXOnScreen()*zoom);
+		dragStartY = (int)(e.getYOnScreen()*zoom);
 	}
 	
 
@@ -880,6 +882,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		if (e.getButton() == 2 || (e.isControlDown())) { // Desktop Dragging
 			desktopDragging = true;
+		} else if ((draggedWindow = getPreviewWindowAtPosition(mousePosition.x, mousePosition.y)) != null) {
+			
 		} else {
 			TextureGraphNode node = graph.getNodeAtPosition(wsX, wsY);
 			if (node != null) {
@@ -963,6 +967,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		nodeDragging = false;
 		connectionDragging = false;
 		desktopDragging = false;
+		draggedWindow = null;
 		
 		repaint();
 	}
@@ -985,9 +990,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
 	@Override
 	public void channelChanged(Channel source) {
-		if ((previewNode != null) && (previewNode.getChannel() == source)){
-			updatePreview();
-		}
 		notifyEditChangeListener();
 	}
 
@@ -1011,7 +1013,143 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 //			}
 //		}
 	}
+	
+	Vector<PreviewWindow> previewWindows = new Vector<PreviewWindow>();
+	
+	/** Checks if a PreviewWindow exists for the given TextureGraphNode and
+	 * removes it.
+	 * @param node
+	 */
+	void removePreviewWindowByTextureNode(TextureGraphNode node) {
+		for (int i = 0; i < previewWindows.size(); i++) {
+			PreviewWindow w = previewWindows.get(i);
+			if (w.previewNode == node) {
+				removePreviewWindow(w);
+				i--;
+			}
+		}
+	}
+	
+	void removeAllPreviewWindows() {
+		for (int i = previewWindows.size()-1; i >= 0; i--) {
+			removePreviewWindow(previewWindows.get(i));
+		}
+	}
+	
+	void removePreviewWindow(PreviewWindow w) {
+		w.previewNode.getChannel().removeChannelChangeListener(w);
+		previewWindows.remove(w);
+	}
+	
+	
+	void addPreviewWindow(TextureGraphNode node) {
+		PreviewWindow w = new PreviewWindow(node);
+		
+		previewWindows.add(w);
+	}
+	
+	PreviewWindow getPreviewWindowAtPosition(int x, int y) {
+		for (PreviewWindow w : previewWindows) {
+			if (w.isInside(x, y)) return w;
+		}
+		return null;
+	}
 
+	class PreviewWindow implements ChannelChangeListener {
+		int posX;
+		int posY;
+		final BufferedImage previewNodeImage;
+		final TextureGraphNode previewNode;
+		
 
+		//ad-hoc solution for button areas
+		class MiniButton {
+			int px, py;
+			int w, h;
+			String t;
+			
+			public MiniButton(int posX, int posY, int width, int height, String type) {
+				px = posX;
+				py = posY;
+				w = width;
+				h = height;
+				t = type;
+			}
+			
+			boolean inside(int x, int y) {
+				return (x >= px && y >= py && x <= (px+w) && y <= (py+h));
+			}
+		}
+		
+		Vector<MiniButton> miniButtons = new Vector<MiniButton>();
+		
+		
+		public PreviewWindow(TextureGraphNode node) {
+			previewNode = node;
+			node.getChannel().addChannelChangeListener(this);
+			previewNodeImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
+			updatePreviewImage();
+			
+			//miniButtons.add(new MiniButton(8,8,16,16, "CLOSE"));
+		}
+		
+		
+		public void move(int dx, int dy) {
+			posX += dx;
+			posY += dy;
+			
+			if (posX < -128) posX = -128;
+			if (posY < -128) posY = -128;
+			
+			if (posX > getWidth()-128) posX = getWidth()-128;
+			if (posY > getHeight()-128) posY = getHeight()-128;
+		}
+		
+		public void draw(Graphics2D g) {
+			g.drawImage(previewNodeImage, posX, posY, null);
+			
+//			if (previewNode != null) {
+//				g.setColor(Color.blue);
+//				g.drawLine(previewNode.getX() + desktopX, previewNode.getY() + desktopY, previewNodeImage.getWidth()/2, previewNodeImage.getHeight()/2);
+//				g.drawImage(previewNodeImage, 0, 0, this);
+//			}
+
+		}
+		
+		/** call this with world space position to make a click inside the window */
+		public boolean doClick(int x, int y) {
+			
+			
+			return false;
+		}
+		
+		public boolean isInside(int x, int y) {
+			int width = previewNodeImage.getWidth();
+			int height = previewNodeImage.getHeight();
+			return (x >= posX) && (x <= posX+width) && (y >= posY) && (y <= posY + height);
+		}
+
+		
+		
+		
+		void updatePreviewImage() {
+			if (previewNode != null) {
+				if (previewNode.getChannel().chechkInputChannels()) {
+					ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0);
+				} else {
+					Graphics g = previewNodeImage.getGraphics();
+					g.fillRect(0, 0, previewNodeImage.getWidth(), previewNodeImage.getHeight());
+				}
+			}
+		}
+
+		@Override
+		public void channelChanged(Channel source) {
+			// TODO Auto-generated method stub
+			updatePreviewImage();
+		}
+		
+		
+	}
 
 }
