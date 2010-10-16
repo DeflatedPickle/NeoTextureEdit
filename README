@@ -66,6 +66,14 @@ MacOS: The application can be started via double-click in the finder.
 Release Notes:
 ==============
 
+0.6.2:
+ - Improved Node Preview (with arbitrary Zoom)
+ - Transform now only in Patterns and extra Transform Filter
+ - Gamma and Desaturation in Color Correction Filter
+ - Combine Filter to select arbitrary RGBA channels
+ - small UI Improvements (Selection of multiple nodes and nicer rendering)
+ - Cache System Rewrite
+
 0.6.1.1:
  - pattern brick bug fix
  

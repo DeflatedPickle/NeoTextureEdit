@@ -1152,8 +1152,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 					if ("X".equals(b.t)) {
 						removePreviewWindow(this);
 					} else if ("+".equals(b.t)) {
-						zoom *= 2.0f;
-						updatePreviewImage();
+						if (zoom < 256.0f) {
+							zoom *= 2.0f;
+							updatePreviewImage();
+						}
 					} else if ("-".equals(b.t)) {
 						if (zoom > 0.125) {
 							zoom /= 2.0f;
@@ -1184,7 +1186,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 					if (zoom == 1.0f) {
 						ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0);
 					} else if (zoom > 1.0f) {
-						System.out.println("Zoom is " + zoom);
 						ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0, (int)(previewNodeImage.getWidth()*zoom), (int)(previewNodeImage.getHeight()*zoom), 0, 0);
 					} else if (zoom < 1.0f) {
 						int lx = (int)(previewNodeImage.getWidth()*zoom);

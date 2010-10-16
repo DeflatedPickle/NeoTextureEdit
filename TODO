@@ -11,14 +11,13 @@ Currently working on:
 
 Feature Requests:
 
+  - Enable/Disable GUI Antialiasing Option
   - Zoom,
   - Export All Menu Item
   - Blur Node
   - UnDo stack
   - Keyboard shortcuts
   
-  - Preview Node Zoom (showing a region of the texture (info should contain target resolution); 
-     create a simple (self-managed) internal frame that can be moved, closed and with zoom controls
   
 TODO:  
 
@@ -103,6 +102,7 @@ Known Bugs:
 
 
 Planned Features:
+ - GLSL Export 
  - FFT-Node
  - HDR OutputNode + Curve Editor
  - Auto Graph Layout
@@ -116,7 +116,11 @@ Planned Features:
 -----------------------------------------------------------------------------------------------------------------------
 Releases (Notes):
 -----------------------------------------------------------------------------------------------------------------------
-0.6.2+ (Current):
+
+0.6.3+ (Current):
+
+
+0.6.2:
  - Matrix a parameter and now only available in Patterns
  - Transform Node as replacement
  - Gamma Correction available in the ColorCorrect filter (renamed from the Brightness/Contrast filter)
@@ -167,5 +171,7 @@ Done:
  - Scaling of u/v coords for preview
  - Interpolation Modes for Bitmap Node (at least bi-linear)
  - Lighting Filter (with Normal Map input)
+ - Preview Node Zoom (showing a region of the texture (info should contain target resolution); 
+   create a simple (self-managed) internal frame that can be moved, closed and with zoom controls
 
 
