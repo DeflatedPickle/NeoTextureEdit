@@ -8,7 +8,7 @@ import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
 
 public class FilterBlur extends Channel {
-	FloatParam radius = CreateLocalFloatParam("Radius", 2, 0, 50);
+	FloatParam radius = CreateLocalFloatParam("Radius", 1, 0, 50).setDefaultIncrement(0.25f);
 	IntParam numSamples = CreateLocalIntParam("# Samples", 64, 8, 1024);
 	EnumParam weightFunction = CreateLocalEnumParam("Weight", "Gaussian,Box");
 
@@ -44,7 +44,7 @@ public class FilterBlur extends Channel {
 		float r = radius.get()/100.0f;
 		float weightSum = 0.0f;
 		
-		if (weightFunction.getEnumPos() == 0) { // Gaussian
+		if (weightFunction.getEnumPos() == 0 && r > 0.0f) { // Gaussian
 			for (int i = 0; i < numSamples.get(); i++) {
 				float du = (FMath.radicalInverse_vdC(2, i)*2.0f - 1.0f)*r;
 				float dv = (FMath.radicalInverse_vdC(3, i)*2.0f - 1.0f)*r;
@@ -73,7 +73,7 @@ public class FilterBlur extends Channel {
 		float r = radius.get()/100.0f;
 		float weightSum = 0.0f;
 		
-		if (weightFunction.getEnumPos() == 0) { // Gaussian
+		if (weightFunction.getEnumPos() == 0 && r > 0.0f) { // Gaussian
 			for (int i = 0; i < numSamples.get(); i++) {
 				float du = (FMath.radicalInverse_vdC(2, i)*2.0f - 1.0f)*r;
 				float dv = (FMath.radicalInverse_vdC(3, i)*2.0f - 1.0f)*r;

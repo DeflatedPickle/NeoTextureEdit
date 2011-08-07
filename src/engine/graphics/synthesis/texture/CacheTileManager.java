@@ -119,8 +119,8 @@ public final class CacheTileManager {
 
 	
 		public Vector4 sample_Normalized(float u, float v) {
-			int x = ((int) (u * xres)) ;
-			int y = ((int) (v * yres));
+			int x = ((int) (u * xres + 0.5f)) ;
+			int y = ((int) (v * yres + 0.5f));
 			while (x < 0)
 				x += xres;
 			while (y < 0)

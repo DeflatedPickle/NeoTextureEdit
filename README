@@ -66,6 +66,9 @@ MacOS: The application can be started via double-click in the finder.
 Release Notes:
 ==============
 
+0.6.3:
+ - Blur filter added
+
 0.6.2:
  - Improved Node Preview (with arbitrary Zoom)
  - Transform now only in Patterns and extra Transform Filter
@@ -85,7 +88,6 @@ Release Notes:
  - Command Line option for export to image (now batch export possible; also with wildcards)
  - SCM changed from svn to git on sourceforge
  
-
 0.5.3:
  - New Pattern: Bitmap: allows to load images as generator patterns
  - New Pattern: Function: basic sin/saw/square function as generator pattern
