@@ -115,7 +115,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 	JFileChooser m_TextureFileChooser_SaveLoadImage;
 	ProgressDialog m_ProgressDialog;
 
-	// String title = "NeoTextureEdit - Revision " + svnRevisionNumber;
 	String title = "NeoTextureEdit - Version " + programVersionNumber;
 
 	String help_message = "NeoTextureEdit " + programVersionNumber + " Help Overview\n\n"
@@ -126,7 +125,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			+ "         Double Click inserts or edits a color node\n" + "         Shift Click and drag on color node edits alpha value\n";
 
 	String about_message = "NeoTextureEdit\n\n" + "Version: " + programVersionNumber + "\n"
-			+ "(c) Copyright Holger Dammertz 2010. All rights reserved.\n" + "Visit http://sourceforge.net/projects/neotextureedit/\n\n"
+			+ "(c) Copyright Holger Dammertz 2010, 2011. All rights reserved.\n" + "Visit http://sourceforge.net/projects/neotextureedit/\n\n"
 			+ "NeoTextureEdit and the runtime generation library NeoTexture are\n"
 			+ "licensed under the GNU LGPL v.3. See the files COPYING and\n" + "COPYING.LESSER for details.\n\n"
 			+ "This program is distributed in the hope that it will be useful,\n"
@@ -147,7 +146,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 					"FilterMask.class", "FilterNormalMap.class", "FilterWarp.class", "Pattern.class", "PatternBrick.class",
 					"PatternCellular.class", "PatternChecker.class", "PatternConstantColor.class", "PatternGradient.class",
 					"PatternPerlinNoise.class", "PatternTile.class", "PatternFunction.class", "PatternBitmap.class", "FilterIlluminate.class",
-					"FilterCombine.class", "FilterTransform.class"};
+					"FilterCombine.class", "FilterTransform.class", "FilterBlur.class"};
 			files = f;
 		}
 

@@ -24,7 +24,7 @@ import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
  * 
  */
 public final class TextureGenerator {
-	static private String version = "0.6.2";
+	static private String version = "0.6.3";
 	static private boolean useCache = false;
 	static private int cacheTileResolution = 256;
 

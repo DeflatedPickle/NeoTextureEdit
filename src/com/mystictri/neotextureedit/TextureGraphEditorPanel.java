@@ -68,6 +68,7 @@ import com.mystictri.neotexture.TextureGraphNode.ConnectionPoint;
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.CacheTileManager;
 import engine.graphics.synthesis.texture.Channel;
+import engine.graphics.synthesis.texture.Channel.ChannelVizType;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 import engine.graphics.synthesis.texture.Pattern;
 
@@ -84,6 +85,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
 	// node drawing settings
 	private static final Color col_NodeBG = new Color(128, 128, 128);
+	private static final Color col_NodeSlowBG = new Color(128+64, 64, 64);
 	private static final Color col_NodeBorder = new Color(255, 255, 255);
 	private static final Color col_NodeSelected = new Color(255, 255, 0);
 	private static final Color col_NodeOutPort = new Color(0, 230, 64);
@@ -635,8 +637,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		final int roundRad = 16;
 		if (node.userData == null) node.userData = new NodePreviewImage(node);
 
-		
-		g.setColor(col_NodeBG);
+		if (node.getChannel().vizType == ChannelVizType.SLOW) 
+			g.setColor(col_NodeSlowBG);
+		else 
+			g.setColor(col_NodeBG);
 		int x = node.getX() + desktopX;
 		int y = node.getY() + desktopY;
 		int w = TextureGraphNode.width;
