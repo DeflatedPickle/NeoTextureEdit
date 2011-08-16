@@ -343,7 +343,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			boolean useCache = ChannelUtils.useCache;
 			try {
 				ChannelUtils.useCache = false;
-				ImageIO.write(ChannelUtils.createAndComputeImage(graph.selectedNodes.lastElement().getChannel(), resX, resY, TextureEditor.INSTANCE.m_ProgressDialog, 0), "png", new File(name));
+				ImageIO.write(ChannelUtils.createAndComputeImage(graph.selectedNodes.lastElement().getChannel(), resX, resY, TextureEditor.INSTANCE.m_ProgressDialog, 3), "png", new File(name));
 				Logger.log(this, "Saved image to " + name + ".");
 			} catch (IOException exc) {
 				exc.printStackTrace();

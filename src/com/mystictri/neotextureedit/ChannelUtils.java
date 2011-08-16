@@ -37,7 +37,7 @@ public final class ChannelUtils {
 
 	/**
 	 * Computes a image from the given channel; mode 0: RGB, 1: blended with
-	 * background; 2: alpha as grayscale
+	 * background; 2: alpha as grayscale; 3: ARGB (for export)
 	 */
 	private static void _computeImage(Channel c, BufferedImage img, ProgressBarInterface progress, int mode, int globalXres, int globalYres, int px, int py) {
 
@@ -72,20 +72,28 @@ public final class ChannelUtils {
 					else col = tce.sample(x, y);
 					
 					final Vector3 color = new Vector3();
+					int val;
 					// !!UGH TODO: optimize this!!
-					if (mode == 0)
+					if (mode == 0) {
 						color.set(col.getVector3());
-					else if (mode == 1) {
+						val = Utils.vector3ToINTColor(color);
+					} else if (mode == 1) {
 						float bg = ((((x + y) / 8) % 2) != 0) ? 1.0f : 0.75f;
 						col.x = col.x * col.w + bg * (1.0f - col.w);
 						col.y = col.y * col.w + bg * (1.0f - col.w);
 						col.z = col.z * col.w + bg * (1.0f - col.w);
 						color.set(col.getVector3());
+						val = Utils.vector3ToINTColor(color);
 					} else if (mode == 2) {
 						color.set(col.w);
-					} else
+						val = Utils.vector3ToINTColor(color);
+					} else if (mode == 3) {
+						color.set(col.getVector3());
+						val = Utils.vector4ToINTColor_ARGB(col);
+					} else {
 						Logger.logError(null, "Wrong in computeImage");
-					int val = Utils.vector3ToINTColor(color);
+						val = Utils.vector3ToINTColor(color);
+					}
 					img.setRGB(x, y, val);
 				}
 			}
@@ -105,7 +113,7 @@ public final class ChannelUtils {
 	 * @return
 	 */
 	public static BufferedImage createAndComputeImage(Channel c, int xres, int yres, ProgressBarInterface progress, int mode) {
-		BufferedImage ret = new BufferedImage(xres, yres, BufferedImage.TYPE_INT_RGB);
+		BufferedImage ret = new BufferedImage(xres, yres, BufferedImage.TYPE_INT_ARGB);
 
 		computeImage(c, ret, progress, mode);
 
