@@ -148,7 +148,11 @@ public class DrawableTextureGraphNode  extends JPanel implements ChannelChangeLi
 		return 1;
 	}
 	
-	
+	/**
+	 * 
+	 * Implements (overrides) the interface method ChannelChangeListener.channelChanged
+	 */
+	@Override
 	public void channelChanged(Channel source) {
 		updatePreviewImage();
 	}

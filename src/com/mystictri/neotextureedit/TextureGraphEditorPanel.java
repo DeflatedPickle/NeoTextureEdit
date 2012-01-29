@@ -45,8 +45,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Stack;
 import java.util.TooManyListenersException;
 import java.util.Vector;
 
@@ -192,8 +194,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			repaint();
 		}
 	}
-	
-	
 	
 	
 	
@@ -354,6 +354,44 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	}
 	
 	
+	final Stack<String> undoStack = new Stack<String>();
+	final Stack<String> redoStack = new Stack<String>();
+	String lastStateForUndo = null;
+	
+	
+	
+	public void pushUndo() {
+		//System.out.println("Pushing Undo: undoStack.size() == " + undoStack.size());
+		try {
+			if (lastStateForUndo != null) {
+				// the peek().equals(lastState) is more or less an ugly hack to avoid
+				// re-pushing of states that are not currenlty caputred by saving
+				if (undoStack.empty() || !(undoStack.peek().equals(lastStateForUndo))) {
+					undoStack.push(lastStateForUndo);
+					redoStack.clear();
+				}
+			}
+			// now we remember the current state for the next undo
+			StringWriter writer = new StringWriter();
+			graph.save(writer);
+			lastStateForUndo = writer.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void popUndo() {
+		if (undoStack.empty()) return;
+		//System.out.println("Doing a Undo...");
+		deleteFullGraph();
+		String undo = undoStack.pop();
+		redoStack.push(undo);
+		graph.load(new Scanner(undo));
+		lastStateForUndo = undo;
+		repaint();
+	}
+	
+	
 	private void action_DeleteSelectedNodes() {
 		graph.deleteSelection();
 		repaint();
@@ -374,12 +412,14 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 				if (!mi.isAReplaceCall) { // insert a new Node
 					Channel chan = (Channel) mi.classType.newInstance();
 					addTextureNode(new TextureGraphNode(chan), mousePosition.x - desktopX, mousePosition.y - desktopY);
+					notifyEditChangeListener();
 					repaint();
 				} else { // try to replace an existing node as good as possible
 					TextureGraphNode node = graph.selectedNodes.get(0);
 					if (node != null) {
 						TextureGraphNode newNode = new TextureGraphNode((Channel) mi.classType.newInstance());
 						replaceTextureNode(node, newNode);
+						notifyEditChangeListener();
 						repaint();
 					} else {
 						Logger.logWarning(this, "No node selected for replace.");
@@ -530,7 +570,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		graph.deleteFullGraph();
 		CacheTileManager.clearCache();
 		repaint();
-		
 	}
 	
 	
@@ -555,6 +594,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			
 			graph.load(s);
 			if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.load(s);
+			notifyEditChangeListener();
 			repaint();
 			
 			return true;
@@ -994,11 +1034,13 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
 	//!!TODO: this is not yet correctly called when the parameter of a channel changes
 	protected void notifyEditChangeListener() {
-		//!!TODO: make the undo-stack here also
-		
+		pushUndo();
 		for (EditChangeListener l : editChangeListener) l.graphWasEdited();
 	}
 
+	/**
+	 * Implements (overrides) the interface method ChannelChangeListener.channelChanged
+	 */
 	@Override
 	public void channelChanged(Channel source) {
 		notifyEditChangeListener();
@@ -1214,7 +1256,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
 		@Override
 		public void channelChanged(Channel source) {
-			// TODO Auto-generated method stub
 			updatePreviewImage();
 		}
 		

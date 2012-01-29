@@ -95,7 +95,10 @@ public abstract class Channel extends LocalParameterManager {
 	 * parameter silently changed. Subclasses of channel who override this
 	 * method needs to account for source==null and recreate all internal data
 	 * structures accordingly.
+	 * 
+	 * This method overrides LocalParameterManager.parameterChanged
 	 */
+	@Override
 	public void parameterChanged(AbstractParam source) {
 		CacheTileManager.setEntrysDirty(this);
 		

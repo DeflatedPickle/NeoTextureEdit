@@ -253,6 +253,10 @@ public final class ChannelParameterEditorPanel extends JPanel implements Channel
 		}
 	}
 
+	/**
+	 * 
+	 * Implements (overrides) the interface method ChannelChangeListener.channelChanged
+	 */
 	@Override
 	public void channelChanged(Channel source) {
 		//System.out.println("ChannelParameterEditor: Channel Change " + node);

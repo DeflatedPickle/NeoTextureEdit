@@ -1,4 +1,9 @@
 Currently working on:
+ - Undo: 
+      - parameter changes are currently missing
+      - need to disable undo in GUI menu
+      - add redo to GUI menu
+
  - Zoom
     - fix: zoom to mouse cursor
     - fix: make zoomed rendering faster
@@ -30,8 +35,6 @@ TODO:
 - Not all nodes are using the caching system (for example the transform node or parts of the warp node); we
   need to evaluate how interpolated access could help improving the performance of these nodes
 - Fix the border in the caching system
-  
-  
 
 - Export All button
 
@@ -39,9 +42,6 @@ TODO:
 
 
 
-JMonkeyPlatform Integration:
- - List of possible
- 
  
 Current Keyboard Shortcuts:
  - Ctrl-click drags the desktop
@@ -118,8 +118,8 @@ Releases (Notes):
 -----------------------------------------------------------------------------------------------------------------------
 
 0.6.3+ (Current):
-
-
+ - Blur Filter Node
+ 
 0.6.2:
  - Matrix a parameter and now only available in Patterns
  - Transform Node as replacement
