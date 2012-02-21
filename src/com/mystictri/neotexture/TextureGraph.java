@@ -15,7 +15,7 @@ import engine.graphics.synthesis.texture.ChannelChangeListener;
  * @author Holger Dammertz
  *
  */
-public final class TextureGraph {
+public final class TextureGraph implements ChannelChangeListener {
 	public TextureGraphListener graphListener = null;
 
 	// currently all operations on nodes with the mouse expect that the clicked node is the selected node
@@ -25,6 +25,7 @@ public final class TextureGraph {
 
 	public void addNode(TextureGraphNode node) {
 		allNodes.add(node);
+		node.getChannel().addChannelChangeListener(this);
 	}
 
 
@@ -289,6 +290,12 @@ public final class TextureGraph {
 			}
 			target.parent.getChannel().parameterChanged(null);
 		}
+	}
+
+
+	@Override
+	public void channelChanged(Channel source) {
+		graphListener.channelInNodeChanged(source);
 	}
 	
 }

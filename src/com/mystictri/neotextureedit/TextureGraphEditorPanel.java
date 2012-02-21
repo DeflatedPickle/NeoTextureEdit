@@ -80,7 +80,7 @@ import engine.graphics.synthesis.texture.Pattern;
  * @author Holger Dammertz
  *
  */
-public final class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ChannelChangeListener, TextureGraphListener {
+public final class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, TextureGraphListener {
 	private static final long serialVersionUID = 4535161419971720668L;
 	int dragStartX = 0;
 	int dragStartY = 0;
@@ -358,10 +358,11 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	final Stack<String> redoStack = new Stack<String>();
 	String lastStateForUndo = null;
 	
-	
+	boolean hack_InUndo = false; // needed to block the events when applying the actual undo (!!TODO: find a better solution)
 	
 	public void pushUndo() {
-		//System.out.println("Pushing Undo: undoStack.size() == " + undoStack.size());
+		if (hack_InUndo) return;
+		System.out.println("Pushing Undo: undoStack.size() == " + undoStack.size());
 		try {
 			if (lastStateForUndo != null) {
 				// the peek().equals(lastState) is more or less an ugly hack to avoid
@@ -382,13 +383,15 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	
 	public void popUndo() {
 		if (undoStack.empty()) return;
-		//System.out.println("Doing a Undo...");
+		hack_InUndo = true;
+		System.out.println("Doing a Undo...");
 		deleteFullGraph();
 		String undo = undoStack.pop();
 		redoStack.push(undo);
 		graph.load(new Scanner(undo));
 		lastStateForUndo = undo;
 		repaint();
+		hack_InUndo = false;
 	}
 	
 	
@@ -610,6 +613,9 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	}
 
 	
+	/**
+	 * Overrides the interface method from TextureGraphListener
+	 */
 	@Override
 	public void nodeDeleted(TextureGraphNode node) {
 		if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.notifyTextureNodeRemoved(node);
@@ -620,6 +626,18 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		repaint();
 	}
+	
+	/**
+	 * Overrides the interface method from TextureGraphListener
+	 */
+	@Override
+	public void channelInNodeChanged(Channel source) {
+		if (source != null) {
+			notifyEditChangeListener();
+			System.out.println("BLAH");
+		}
+	}
+
 	
 	// utility method to draw a conneciton line.
 	public static void drawConnectionLine(Graphics2D g, int x0, int y0, int x1, int y1) {
@@ -1038,15 +1056,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		for (EditChangeListener l : editChangeListener) l.graphWasEdited();
 	}
 
-	/**
-	 * Implements (overrides) the interface method ChannelChangeListener.channelChanged
-	 */
-	@Override
-	public void channelChanged(Channel source) {
-		notifyEditChangeListener();
-	}
-
-
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
@@ -1261,5 +1270,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		
 	}
+
+
+
 
 }

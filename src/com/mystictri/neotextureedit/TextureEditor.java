@@ -567,7 +567,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		JMenu edit = new JMenu("Edit");
 		edit.setMnemonic('E');
 		m_MainMenuBar.add(edit);
-		createMenuItem(edit, "Undo", "undo_edit", 'U', KeyStroke.getKeyStroke(KeyEvent.VK_U, Event.CTRL_MASK));
+		createMenuItem(edit, "Undo", "undo_edit", 'U', KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK));
 
 		JMenu options = new JMenu("Options");
 		options.setMnemonic('O');
