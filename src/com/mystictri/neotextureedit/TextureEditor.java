@@ -568,6 +568,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		edit.setMnemonic('E');
 		m_MainMenuBar.add(edit);
 		createMenuItem(edit, "Undo", "undo_edit", 'U', KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK));
+		createMenuItem(edit, "Redo", "redo_edit", 'R', KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK));
 
 		JMenu options = new JMenu("Options");
 		options.setMnemonic('O');
@@ -636,6 +637,8 @@ public class TextureEditor implements ActionListener, KeyListener {
 			m_GraphDrawPanel.centerDesktop();
 		} else if (c.equals("undo_edit")) {
 			m_GraphDrawPanel.popUndo();
+		} else if (c.equals("redo_edit")) {
+			m_GraphDrawPanel.popRedo();
 		} else if (c.equals("view_OpenGLPreview")) {
 			if (!GL_ENABLED) {
 				Logger.logError(this, "Tried to show OpenGL preview, but it is not initialized.");

@@ -189,6 +189,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	public class TextureGraphDropTarget extends DropTargetAdapter {
 
 		public void drop(DropTargetDropEvent e) {
+			pushUndo();
 			TextureGraphNode n = new TextureGraphNode(Channel.cloneChannel(TextureEditor.INSTANCE.dragndropChannel));
 			addTextureNode(n, e.getLocation().x - desktopX, e.getLocation().y - desktopY);
 			repaint();
@@ -361,37 +362,85 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	boolean hack_InUndo = false; // needed to block the events when applying the actual undo (!!TODO: find a better solution)
 	
 	public void pushUndo() {
-		if (hack_InUndo) return;
+		if (hack_InUndo) {
+			System.out.println("Blocked Undo.");
+			return;
+		}
 		System.out.println("Pushing Undo: undoStack.size() == " + undoStack.size());
 		try {
 			if (lastStateForUndo != null) {
 				// the peek().equals(lastState) is more or less an ugly hack to avoid
 				// re-pushing of states that are not currenlty caputred by saving
+				System.out.print("    haveALastState: ");
 				if (undoStack.empty() || !(undoStack.peek().equals(lastStateForUndo))) {
 					undoStack.push(lastStateForUndo);
 					redoStack.clear();
+					System.out.println(" pushed it");
+				} else {
+					System.out.println(" ignored push");
 				}
 			}
 			// now we remember the current state for the next undo
 			StringWriter writer = new StringWriter();
 			graph.save(writer);
-			lastStateForUndo = writer.toString();
+			String newState = writer.toString();
+			if (lastStateForUndo == null) {
+				undoStack.push(newState);
+				System.out.println("  pushed newState (lastState was null)");
+			}
+			lastStateForUndo = newState;
+			System.out.println("    new: undoStack.size() == " + undoStack.size());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public void blockUndoStack() {
+		hack_InUndo = true;
+	}
+
+	public void removeUndoStackBlock() {
+		hack_InUndo = false;
+	}
+	
 	public void popUndo() {
 		if (undoStack.empty()) return;
-		hack_InUndo = true;
+		blockUndoStack();
 		System.out.println("Doing a Undo...");
-		deleteFullGraph();
+		/*{
+			try {
+				StringWriter writer = new StringWriter();
+				graph.save(writer);
+				redoStack.push(writer.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}*/
 		String undo = undoStack.pop();
-		redoStack.push(undo);
+		deleteFullGraph();
 		graph.load(new Scanner(undo));
 		lastStateForUndo = undo;
 		repaint();
-		hack_InUndo = false;
+		removeUndoStackBlock();
+	}
+	
+	public void popRedo() {
+		/*
+		if (redoStack.empty()) return;
+		pushUndo();
+		System.out.println("Doing a Redo...");
+		String redo = redoStack.pop();
+		blockUndoStack();
+		deleteFullGraph();
+		graph.load(new Scanner(redo));
+		repaint();
+		removeUndoStackBlock();
+		*/
+	}
+	
+	public void clearUndo() {
+		undoStack.clear();
+		redoStack.clear();
 	}
 	
 	
@@ -545,11 +594,13 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	
 	
 	void addTextureNode(TextureGraphNode n, int x, int y) {
+		pushUndo();
 		graph.addNode(n, x, y);
 		setSelectedNode(n);
 	}
 	
 	void replaceTextureNode(TextureGraphNode oldNode, TextureGraphNode newNode) {
+		pushUndo();
 		graph.replaceNode(oldNode, newNode);
 		setSelectedNode(newNode);
 	}
@@ -593,13 +644,20 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	public boolean load(String filename, boolean eraseOld) {
 		try {
 			Scanner s = new Scanner(new BufferedReader(new FileReader(filename)));
-			if (eraseOld) deleteFullGraph();
+			if (eraseOld) {
+				deleteFullGraph();
+				clearUndo();
+			} else {
+				pushUndo();
+			}
 			
+			blockUndoStack();
 			graph.load(s);
 			if (TextureEditor.GL_ENABLED) TextureEditor.INSTANCE.m_OpenGLPreviewPanel.load(s);
 			notifyEditChangeListener();
 			repaint();
-			
+			removeUndoStackBlock();
+
 			return true;
 		} catch (FileNotFoundException e) {
 			Logger.logError(this, "Could not load " + filename);
