@@ -21,11 +21,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -72,6 +72,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
 
+import apple.dts.samplecode.osxadapter.OSXAdapter;
+
 import com.mystictri.neotexture.TextureGenerator;
 import com.mystictri.neotexture.TextureGraphNode;
 
@@ -94,6 +96,10 @@ public class TextureEditor implements ActionListener, KeyListener {
 												// we can successfully
 												// initialize GL
 	public static TextureEditor INSTANCE = null;
+
+	// Check that we are on Mac OS X.  This is crucial to loading and using the OSXAdapter class.
+	public static boolean MAC_OS_X =
+	    (System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
 
 	private final Properties globalSettings = new Properties();
 	static final String programVersionNumber = TextureGenerator.getVersion();
@@ -146,7 +152,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 					"FilterMask.class", "FilterNormalMap.class", "FilterWarp.class", "Pattern.class", "PatternBrick.class",
 					"PatternCellular.class", "PatternChecker.class", "PatternConstantColor.class", "PatternGradient.class",
 					"PatternPerlinNoise.class", "PatternTile.class", "PatternFunction.class", "PatternBitmap.class", "FilterIlluminate.class",
-					"FilterCombine.class", "FilterTransform.class", "FilterBlur.class"};
+					"FilterCombine.class", "FilterTransform.class", "FilterBlur.class", "FilterModulus.class"};
 			files = f;
 		}
 
@@ -545,19 +551,23 @@ public class TextureEditor implements ActionListener, KeyListener {
 	}
 
 	void createMainMenu() {
+		int modifierMask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
 		m_MainMenuBar = new JMenuBar();
 		JMenu file = new JMenu("File");
 		file.setMnemonic('F');
 		m_MainMenuBar.add(file);
 		createMenuItem(file, "New", "file_new", 'N', null);
-		createMenuItem(file, "Open", "file_open", 'O', KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
-		createMenuItem(file, "Import", "file_import", 'I', KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK));
+		createMenuItem(file, "Open", "file_open", 'O', KeyStroke.getKeyStroke(KeyEvent.VK_O, modifierMask));
+		createMenuItem(file, "Import", "file_import", 'I', KeyStroke.getKeyStroke(KeyEvent.VK_I, modifierMask));
 		m_File_Save_Item = createMenuItem(file, "Save", "file_save", 's', null);
 		m_File_Save_Item.setEnabled(false);
-		m_File_Save_Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
+		m_File_Save_Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, modifierMask));
 		createMenuItem(file, "Save as", "file_saveas", 'a', null);
-		file.addSeparator();
-		createMenuItem(file, "Exit", "file_exit", 'x', null);
+		if (!MAC_OS_X) {
+			file.addSeparator();
+			createMenuItem(file, "Exit", "file_exit", 'x', null);
+		}
 		JMenu view = new JMenu("View");
 		view.setMnemonic('V');
 		m_MainMenuBar.add(view);
@@ -970,6 +980,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		TextureEditor te = new TextureEditor(args); // new String[]{"--disableGL"}
 		te.createMainFrame();
 		te.initialize();
+		te.registerForMacOSXEvents();
 		te.m_MainFrame.setVisible(true);
 	}
 
@@ -1124,4 +1135,26 @@ public class TextureEditor implements ActionListener, KeyListener {
 	public void keyTyped(KeyEvent arg0) {
 	}
 
+	public void onQuit() {
+		if (m_MainFrame != null) m_MainFrame.dispose();
+	}
+
+	// Generic registration with the Mac OS X application menu
+	// Checks the platform, then attempts to register with the Apple EAWT
+	// See OSXAdapter.java to see how this is done without directly referencing any Apple APIs
+	public void registerForMacOSXEvents() {
+		if (MAC_OS_X) {
+			try {
+				// Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
+				// use as delegates for various com.apple.eawt.ApplicationListener methods
+				OSXAdapter.setQuitHandler(this, getClass().getDeclaredMethod("onQuit", (Class[]) null));
+				// OSXAdapter.setAboutHandler(this, getClass().getDeclaredMethod("about", (Class[])null));
+				// OSXAdapter.setPreferencesHandler(this, getClass().getDeclaredMethod("preferences", (Class[])null));
+				System.setProperty("apple.laf.useScreenMenuBar", "true");
+			} catch (Exception e) {
+				System.err.println("Error while loading the OSXAdapter:");
+				e.printStackTrace();
+			}
+		}
+	}
 }
