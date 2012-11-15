@@ -485,7 +485,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			panel.setBounds(0, 0, getWidth(), getHeight());
 			panel.setBorder(BorderFactory.createEtchedBorder());
 			add(panel);
-
+			
 			progbar = new JProgressBar(0, width);
 			progbar.setBounds(8, 8, width, 16);
 			panel.add(progbar);
@@ -812,6 +812,8 @@ public class TextureEditor implements ActionListener, KeyListener {
 		createMainMenu();
 		
 		m_MainFrame.setJMenuBar(m_MainMenuBar);
+		
+		m_ProgressDialog = new ProgressDialog(m_MainFrame);
 	}
 
 	// GradientEditorPanel m_GradientEditorPanel;
@@ -853,7 +855,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 		}
 
 		m_ColorChooser = new ColorChooserDialog(null);
-		m_ProgressDialog = new ProgressDialog(null);
 		m_PatternSelector = new PatternSelectorPanel();
 		m_GraphDrawPanel = new TextureGraphEditorPanel();
 
