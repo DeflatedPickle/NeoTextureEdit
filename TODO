@@ -14,7 +14,7 @@ Feature Requests:
   - Enable/Disable GUI Antialiasing Option
   - Zoom,
   - Export All Menu Item
-  - Blur Node
+  - Anisotropic Blur Node
   - UnDo stack
   - Keyboard shortcuts
   
@@ -117,8 +117,11 @@ Planned Features:
 Releases (Notes):
 -----------------------------------------------------------------------------------------------------------------------
 
-0.6.3+ (Current):
+0.6.4+ (Current):
  - Modulus Filter
+ 
+0.6.3
+ - Blur Filter added
 
 
 0.6.2:

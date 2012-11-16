@@ -152,7 +152,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 					"FilterMask.class", "FilterNormalMap.class", "FilterWarp.class", "Pattern.class", "PatternBrick.class",
 					"PatternCellular.class", "PatternChecker.class", "PatternConstantColor.class", "PatternGradient.class",
 					"PatternPerlinNoise.class", "PatternTile.class", "PatternFunction.class", "PatternBitmap.class", "FilterIlluminate.class",
-					"FilterCombine.class", "FilterTransform.class", "FilterBlur.class", "FilterModulus.class"};
+					"FilterCombine.class", "FilterTransform.class", "FilterBlur.class", "FilterModulus.class", "FilterMath1.class"};
 			files = f;
 		}
 
