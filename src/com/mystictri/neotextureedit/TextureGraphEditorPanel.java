@@ -626,10 +626,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	public void drawConnectionPoint(Graphics2D g, int ox, int oy, ConnectionPoint p) {
 		if (p.channelIndex == -1) { // input
 			g.setColor(col_NodeInPort);
-			g.fillRect(ox+p.x, oy+p.y, p.width, p.height);
+			g.fillRect(ox+p.getX(), oy+p.getY(), p.width, p.height);
 		} else { // output
 			g.setColor(col_NodeOutPort);
-			g.fillRect(ox+p.x, oy+p.y, p.width, p.height);
+			g.fillRect(ox+p.getX(), oy+p.getY(), p.width, p.height);
 		}
 	}
 	
@@ -643,13 +643,16 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			g.setColor(col_NodeBG);
 		int x = node.getX() + desktopX;
 		int y = node.getY() + desktopY;
-		int w = TextureGraphNode.width;
-		int h = TextureGraphNode.height;
+		int w = node.getWidth();
+		int h = node.getHeight();
+		
 		g.fillRoundRect(x, y, w, h, roundRad, roundRad);
 		
 		//if (threadIsRecomputing) return;
 		
-		g.drawImage(((NodePreviewImage)node.userData).previewImage, x + 4, y+12+12, this);
+		if (!node.isFolded()) {
+			g.drawImage(((NodePreviewImage)node.userData).previewImage, x + 4, y+12+12, this);
+		}
 		
 		g.setFont(font);
 		
@@ -667,6 +670,9 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		g.setColor(Color.yellow);
 		g.drawString("?", x+helpX+6, y+helpY+12);
+
+		g.setColor(Color.yellow);
+		g.drawString("-", x+helpX-8, y+helpY+12);
 		
 		if (node.getChannel().isMarkedForExport()) {
 			g.drawString("E", x+4, y+helpY+10);
@@ -724,7 +730,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		g.setColor(col_NodeSelected);
 		for (TextureGraphNode n : graph.selectedNodes) {
 			//Rectangle r = new n.getBounds();
-			g.fillRoundRect(desktopX + n.getX() - 3, desktopY + n.getY() - 3, TextureGraphNode.width + 6, TextureGraphNode.height + 6, 20, 20);
+			g.fillRoundRect(desktopX + n.getX() - 3, desktopY + n.getY() - 3, n.getWidth() + 6, n.getHeight() + 6, 20, 20);
 		}
 		
 		g.setColor(Color.blue);
@@ -782,8 +788,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		for (TextureGraphNode n : graph.allNodes) {
 			minX = Math.min(minX, n.getX());
 			minY = Math.min(minY, n.getY());
-			maxX = Math.max(maxX, n.getX() + TextureGraphNode.width);
-			maxY = Math.max(maxY, n.getY() + TextureGraphNode.height);
+			maxX = Math.max(maxX, n.getX() + n.getWidth());
+			maxY = Math.max(maxY, n.getY() + n.getHeight());
 		}
 		int dx = getWidth()/2 - (minX+maxX)/2;
 		int dy = getHeight()/2 - (minY+maxY)/2;
@@ -872,6 +878,11 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		if ((x >= helpX+n.getX()) && (x <= (helpX+n.getX() + helpW)) && (y >= helpY+n.getY()) && (y <= (helpY+n.getY() + helpH))) {
 			JOptionPane.showMessageDialog(this, n.getChannel().getHelpText(), n.getChannel().getName() + " Help", JOptionPane.PLAIN_MESSAGE);
 			return 3;
+		}
+
+		if ((x >= helpX+n.getX() - 12) && (x <= (helpX+n.getX() + helpW - 12)) && (y >= helpY+n.getY()) && (y <= (helpY+n.getY() + helpH))) {
+			n.setFolded(!n.isFolded());
+			return 4;
 		}
 
 		return 1;

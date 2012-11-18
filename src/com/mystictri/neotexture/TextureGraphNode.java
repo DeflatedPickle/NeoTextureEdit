@@ -37,7 +37,7 @@ import engine.graphics.synthesis.texture.Channel;
  */
 public final class TextureGraphNode {
 	public static final int width = 64 + 8; 
-	public static final int height = 64 + 16 +12;
+	public static final int height = 64 + 16 + 12;
 	
 	// this is currently a 'workaround' for the TextureGraphEditorPanel to efficiently store preview images
 	public Object userData = null;
@@ -45,10 +45,20 @@ public final class TextureGraphNode {
 	Channel texChannel;
 	
 	int posX, posY;
+	boolean folded = false;
 	
 	public void setLocation(int x, int y) {
 		posX = x;
 		posY = y;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		if (folded) return height - 64;
+		return height;
 	}
 	
 	
@@ -58,6 +68,14 @@ public final class TextureGraphNode {
 	
 	public int getY() {
 		return posY;
+	}
+	
+	public boolean isFolded() {
+		return folded;
+	}
+	
+	public void setFolded(boolean f) {
+		folded = f;
 	}
 	
 	
@@ -114,7 +132,7 @@ public final class TextureGraphNode {
 	 *
 	 */
 	public static class ConnectionPoint {
-		public int x, y;
+		int x, y;
 		//public int direction; // 0 input; 1 output
 		public Channel.OutputType type;
 		public int channelIndex; // -1: input node; else the output connections
@@ -135,20 +153,29 @@ public final class TextureGraphNode {
 			this.channelIndex = index;
 		}
 		
+		public int getX() {
+			return x;
+		}
+		
+		public int getY() {
+			if (y > 16 && parent.isFolded()) return y - 64; //!!HACK
+			return y;
+		}
+		
 
 		public int getWorldSpaceX() {
-			return parent.getX() + x + 4;
+			return parent.getX() + getX() + 4;
 		}
 
 		public int getWorldSpaceY() {
-			return parent.getY() + y + 4;
+			return parent.getY() + getY() + 4;
 		}
 
 	
 		// Utility method to check if the mouse position is inside the
 		// connection point
 		public boolean inside(int px, int py) {
-			return ((px >= x+parent.getX()) && (px <= (x+parent.getX() + width)) && (py >= y+parent.getY()) && (py <= (y+parent.getY() + height)));
+			return ((px >= getX()+parent.getX()) && (px <= (getX()+parent.getX() + width)) && (py >= getY()+parent.getY()) && (py <= (getY()+parent.getY() + height)));
 		}
 	}
 
@@ -213,11 +240,6 @@ public final class TextureGraphNode {
 		//channel.addChannelChangeListener(this);
 		//updatePreviewImage();
 	}
-	
-
-
-	
-
 	
 }
 
