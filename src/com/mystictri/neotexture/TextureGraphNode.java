@@ -90,15 +90,20 @@ public final class TextureGraphNode {
 
 	// saves only the node; not the Connection!!
 	public void save(Writer w, TextureGraphNode n) throws IOException {
-		w.write(String.format("%d %d\n", n.getX(), n.getY()));
+		w.write(String.format("%d %d %d\n", n.getX(), n.getY(), folded?1:0));
 		Channel.saveChannel(w, texChannel);
 	}
 
 	public static TextureGraphNode load(Scanner s) {
 		int x = s.nextInt();
 		int y = s.nextInt();
+		boolean isFolded = false;
+		if (s.hasNextInt()) { // this check is needed to be compatible to files savec in version 0.6.3 and earlier (where no folding existed)
+			isFolded = (s.nextInt() == 1); 
+		}
 		TextureGraphNode ret = new TextureGraphNode(Channel.loadChannel(s));
 		ret.setLocation(x, y);
+		ret.setFolded(isFolded);
 		return ret;
 	}
 	
