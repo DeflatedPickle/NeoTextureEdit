@@ -24,6 +24,7 @@ import engine.parameters.BoolParam;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
+import engine.parameters.SpectralControlParam;
 
 public final class PatternPerlinNoise extends Pattern {
 
@@ -43,27 +44,18 @@ public final class PatternPerlinNoise extends Pattern {
 	
 	final Noise3D_ImprovedPerlin noise = new Noise3D_ImprovedPerlin(1, -1);
 	
-	FloatParam scaleX;
-	FloatParam scaleY;
-	FloatParam persistence;
-	FloatParam valueScale;
-	IntParam startBand;
-	IntParam endBand;
-	IntParam seed;
-	BoolParam periodic;
+	FloatParam scaleX = CreateLocalFloatParam("ScaleX", 1.0f, 1.0f, Float.MAX_VALUE);
+	FloatParam scaleY = CreateLocalFloatParam("ScaleY", 1.0f, 1.0f, Float.MAX_VALUE);
+	FloatParam valueScale = CreateLocalFloatParam("ValueScale", 1.0f, 0.0f, Float.MAX_VALUE).setDefaultIncrement(0.125f);
+	FloatParam persistence =  CreateLocalFloatParam("Persistence", 0.5f, 0.0f, Float.MAX_VALUE).setDefaultIncrement(0.125f/2.0f);
+	IntParam startBand = CreateLocalIntParam("StartBand", 0, 1, 16);
+	IntParam endBand = CreateLocalIntParam("EndBand", 8, 1, 16);
+	IntParam seed = CreateLocalIntParam("Seed", -1, -1, Integer.MAX_VALUE);
+	BoolParam periodic = CreateLocalBoolParam("Periodic", true);
+	SpectralControlParam spectralControl = CreateLocalSpectralControlParam("Spectral Control");
 	
 	
 	public PatternPerlinNoise() {
-		scaleX = CreateLocalFloatParam("ScaleX", 1.0f, 1.0f, Float.MAX_VALUE);
-		scaleY = CreateLocalFloatParam("ScaleY", 1.0f, 1.0f, Float.MAX_VALUE);
-		valueScale = CreateLocalFloatParam("ValueScale", 1.0f, 0.0f, Float.MAX_VALUE);
-		valueScale.setDefaultIncrement(0.125f);
-		persistence = CreateLocalFloatParam("Persistence", 0.5f, 0.0f, Float.MAX_VALUE);
-		persistence.setDefaultIncrement(0.125f/2.0f);
-		startBand = CreateLocalIntParam("StartBand", 0, 1, 16);
-		endBand = CreateLocalIntParam("EndBand", 8, 1, 16);
-		seed = CreateLocalIntParam("Seed", -1, -1, Integer.MAX_VALUE);
-		periodic = CreateLocalBoolParam("Periodic", true);
 	}
 
 	public PatternPerlinNoise(float sx, float sy) {
@@ -76,6 +68,18 @@ public final class PatternPerlinNoise extends Pattern {
 		if (source == null || source == seed) {
 			noise.setSeed(seed.get());
 		}
+		
+		if (source == null || source == persistence) {
+			// when loading and old noise from a file this is not initialized so we do it here
+			if (spectralControl.getEndBand() != endBand.get() || source == persistence) {
+				float mult = 1.0f;
+				for (int i = startBand.get(); i <= endBand.get(); i++) {
+					spectralControl.set(i, mult);
+					mult *= persistence.get();
+				}
+			}
+		}
+		
 		super.parameterChanged(source);
 	}
 

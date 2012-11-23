@@ -107,6 +107,13 @@ public class LocalParameterManager  implements ParamChangeListener {
 		return p;
 	}
 	
+	protected SpectralControlParam CreateLocalSpectralControlParam(String name) {
+		SpectralControlParam p = SpectralControlParam.create(name);
+		m_LocalParameters.add(p);
+		p.addParamChangeListener(this);
+		return p;
+	}
+	
 	
 	public Vector<AbstractParam> getParameters() {
 		return m_LocalParameters;

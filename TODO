@@ -1,4 +1,6 @@
 Currently working on:
+ - SpectralControl for Noise Pattern
+
  - Zoom
     - fix: zoom to mouse cursor
     - fix: make zoomed rendering faster
