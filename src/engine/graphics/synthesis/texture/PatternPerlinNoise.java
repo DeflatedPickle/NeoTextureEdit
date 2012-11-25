@@ -48,11 +48,11 @@ public final class PatternPerlinNoise extends Pattern {
 	FloatParam scaleY = CreateLocalFloatParam("ScaleY", 1.0f, 1.0f, Float.MAX_VALUE);
 	FloatParam valueScale = CreateLocalFloatParam("ValueScale", 1.0f, 0.0f, Float.MAX_VALUE).setDefaultIncrement(0.125f);
 	FloatParam persistence =  CreateLocalFloatParam("Persistence", 0.5f, 0.0f, Float.MAX_VALUE).setDefaultIncrement(0.125f/2.0f);
+	SpectralControlParam spectralControl = CreateLocalSpectralControlParam("Spectral Control");
 	IntParam startBand = CreateLocalIntParam("StartBand", 0, 1, 16);
 	IntParam endBand = CreateLocalIntParam("EndBand", 8, 1, 16);
 	IntParam seed = CreateLocalIntParam("Seed", -1, -1, Integer.MAX_VALUE);
 	BoolParam periodic = CreateLocalBoolParam("Periodic", true);
-	SpectralControlParam spectralControl = CreateLocalSpectralControlParam("Spectral Control");
 	
 	
 	public PatternPerlinNoise() {
@@ -71,13 +71,23 @@ public final class PatternPerlinNoise extends Pattern {
 		
 		if (source == null || source == persistence) {
 			// when loading and old noise from a file this is not initialized so we do it here
+			spectralControl.setSilent(true); // needed to avoid multiple recomputations of the noise
 			if (spectralControl.getEndBand() != endBand.get() || source == persistence) {
 				float mult = 1.0f;
 				for (int i = startBand.get(); i <= endBand.get(); i++) {
+					//System.out.println(i + " " + mult + "\n");
 					spectralControl.set(i, mult);
 					mult *= persistence.get();
 				}
+				spectralControl.setStartEndBand(startBand.get(), endBand.get());
 			}
+			spectralControl.setSilent(false);
+		}
+		
+		if (source == startBand || source == endBand) {
+			spectralControl.setSilent(true); // needed to avoid multiple recomputations of the noise
+			spectralControl.setStartEndBand(startBand.get(), endBand.get());
+			spectralControl.setSilent(false);
 		}
 		
 		super.parameterChanged(source);
@@ -93,7 +103,11 @@ public final class PatternPerlinNoise extends Pattern {
 		}
 		
 		
-		for (int i = startBand.get(); i < endBand.get(); i++) {
+		boolean isPeriodic = periodic.get();
+		
+		for (int i = startBand.get(); i <= endBand.get(); i++) {
+			
+			mult = spectralControl.get(i, 0.5f);
 			//Torus sampling of noise for periodicity
 			/*float x = (4 + 1*FMath.cos(v * 2.0f * FMath.PI)) * FMath.cos(u * 2.0f * FMath.PI);
 			float y = (4 + 1*FMath.cos(v * 2.0f * FMath.PI)) * FMath.sin(u * 2.0f * FMath.PI);
@@ -107,14 +121,14 @@ public final class PatternPerlinNoise extends Pattern {
 			
 			// seems to be a better periodic force
 			float valueAdd = 0.0f;
-			if (periodic.get()) valueAdd = noise.sample3dPeriodic(new Vector3(u*freq*scaleX.get(), v*freq*scaleY.get(),0.0f), (int)(freq*scaleX.get()), (int)(freq*scaleY.get()), 256)*mult;
+			if (isPeriodic) valueAdd = noise.sample3dPeriodic(new Vector3(u*freq*scaleX.get(), v*freq*scaleY.get(),0.0f), (int)(freq*scaleX.get()), (int)(freq*scaleY.get()), 256)*mult;
 			else valueAdd = noise.sample(new Vector3(u*freq*scaleX.get(), v*freq*scaleY.get(), 0.0f))*mult;
 			
 			val += valueAdd;
 			
 			
 			freq *= 2.0f;
-			mult *= persistence.get();
+			//mult *= persistence.get();
 		}
 		val = val*0.5f + 0.5f;
 		val *= valueScale.get();

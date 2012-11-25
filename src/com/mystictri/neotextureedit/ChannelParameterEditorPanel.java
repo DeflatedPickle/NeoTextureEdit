@@ -47,6 +47,7 @@ import engine.parameters.InfoParam;
 import engine.parameters.IntParam;
 import engine.parameters.Matrix3x3Param;
 import engine.parameters.ParamChangeListener;
+import engine.parameters.SpectralControlParam;
 import engine.parameters.TextParam;
 
 /**
@@ -188,6 +189,8 @@ public final class ChannelParameterEditorPanel extends JPanel implements Channel
 			return new InfoLabel((InfoParam) param);
 		else if (param.getClass() == Matrix3x3Param.class)
 			return new Matrix3x3ParameterEditor((Matrix3x3Param) param);
+		else if (param.getClass() == SpectralControlParam.class)
+			return new SpectralControlParameterEditor((SpectralControlParam) param);
 		else
 			return null;
 	}

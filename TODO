@@ -32,8 +32,6 @@ TODO:
 - Not all nodes are using the caching system (for example the transform node or parts of the warp node); we
   need to evaluate how interpolated access could help improving the performance of these nodes
 - Fix the border in the caching system
-  
-  
 
 - Export All button
 
@@ -46,9 +44,11 @@ JMonkeyPlatform Integration:
  
  
 Current Keyboard Shortcuts:
+ - Ctrl-click on gradient editor nodes moves all
  - Ctrl-click drags the desktop
  - Dragging nodes: Ctrl-drag on target node connector connects to all nodes
- - Alpha: Ctrl-drag on color gradient editor moves all nodes 
+ - Alpha: Ctrl-drag on color gradient editor moves all nodes
+ - Spectral Control: Ctrl-Click leads to continous update of noise 
   
   
 Caching System and Derivative based nodes:
@@ -104,6 +104,7 @@ Known Bugs:
 
 
 Planned Features:
+ - Tiled Export (for very large exported images)
  - GLSL Export 
  - FFT-Node
  - HDR OutputNode + Curve Editor
@@ -121,6 +122,9 @@ Releases (Notes):
 
 0.6.4+ (Current):
  - Modulus Filter
+ - merged OSX improvements by Talin
+ - Math1 filter (single channel math operations)
+ - Folding of Texture Nodes
  
 0.6.3
  - Blur Filter added
