@@ -61,7 +61,7 @@ public class TextParameterEditor extends AbstractParameterEditor implements Acti
 		if (inputField != null) {
 		try {
 				String txt = inputField.getText().trim();
-				System.out.println("checkAndApplyChange: " + inputField.getValue());
+				//System.out.println("checkAndApplyChange: " + inputField.getValue());
 				param.set(txt);
 			} catch (NumberFormatException nfe) {
 			}

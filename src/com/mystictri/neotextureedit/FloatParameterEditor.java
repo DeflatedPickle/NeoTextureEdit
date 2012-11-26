@@ -94,7 +94,7 @@ class FloatParameterEditor extends AbstractParameterEditor implements ActionList
 	void checkAndApplyChange() {
 		try {
 			String txt = inputField.getText();
-			System.out.println("checkAndApplyChange: " + inputField.getValue());
+			//System.out.println("checkAndApplyChange: " + inputField.getValue());
 			float val = (Float.parseFloat(txt));
 			param.set(val);
 		} catch (NumberFormatException nfe) {
