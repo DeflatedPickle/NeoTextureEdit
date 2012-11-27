@@ -16,12 +16,12 @@ public class FilterModulus extends Channel {
 	}
 
 	public String getHelpText() {
-		return "Computes the modulus of the input.";
+		return "Computes\n(I + u*m*xBias) % m\nand clamps the result to [0,1] per channel.\nOptionally normalizes.";
 	}
 
 	public FilterModulus() {
 		super(1);
-		modulus = CreateLocalFloatParam("Modulus", 0.5f, 0.0f, 1.0f);
+		modulus = CreateLocalFloatParam("Modulus", 0.5f, 0.0f, 1.0f).setDefaultIncrement(0.125f);
 	}
 
 	public OutputType getOutputType() {

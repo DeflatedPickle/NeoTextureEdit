@@ -120,13 +120,17 @@ Planned Features:
 Releases (Notes):
 -----------------------------------------------------------------------------------------------------------------------
 
-0.6.4+ (Current):
+0.6.5+ (Current):
+
+0.6.4:
  - Modulus Filter
  - merged OSX improvements by Talin
  - Math1 filter (single channel math operations)
  - Folding of Texture Nodes
+ - Directional Blur Filter
+ - Spectral Control for Noise Bands
  
-0.6.3
+0.6.3:
  - Blur Filter added
 
 

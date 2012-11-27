@@ -66,6 +66,13 @@ MacOS: The application can be started via double-click in the finder.
 Release Notes:
 ==============
 
+0.6.4:
+ - Spectral Control Widget for Noise Bands
+ - Two new filter added: Math1 and Modulus
+ - OSX Improvements
+ - Texture Node Folding
+ - Directional Blur option in Blur filter
+
 0.6.3:
  - Blur filter added
 

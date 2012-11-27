@@ -131,7 +131,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			+ "         Double Click inserts or edits a color node\n" + "         Shift Click and drag on color node edits alpha value\n";
 
 	String about_message = "NeoTextureEdit\n\n" + "Version: " + programVersionNumber + "\n"
-			+ "(c) Copyright Holger Dammertz 2010, 2011. All rights reserved.\n" + "Visit http://sourceforge.net/projects/neotextureedit/\n\n"
+			+ "(c) Copyright Holger Dammertz 2010, 2011, 2012. All rights reserved.\n" + "Visit http://sourceforge.net/projects/neotextureedit/\n\n"
 			+ "NeoTextureEdit and the runtime generation library NeoTexture are\n"
 			+ "licensed under the GNU LGPL v.3. See the files COPYING and\n" + "COPYING.LESSER for details.\n\n"
 			+ "This program is distributed in the hope that it will be useful,\n"
