@@ -45,6 +45,7 @@ import java.io.StringWriter;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -101,7 +102,8 @@ public class TextureEditor implements ActionListener, KeyListener {
 	public static boolean MAC_OS_X =
 	    (System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
 
-	private final Properties globalSettings = new Properties();
+	Preferences preferences = Preferences.userRoot().node("com.mystictri.NeoTextureEdit");
+
 	static final String programVersionNumber = TextureGenerator.getVersion();
 
 	//String m_CurrentFileName = null;
@@ -832,13 +834,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 		tempTest_FindAllPatternsAndChannelClasses();
 
-		try {
-			globalSettings.load(new FileReader("TextureEditorSettings"));
-		} catch (IOException ioe) {
-			Logger.logWarning(this, "No TextureEditorSettings file found. Starting with default settings.");
-		}
-
-
 		if (commandLineOptions.useOpenGL) {
 			try {
 				m_OpenGLPreviewPanel = new OpenGLPreviewPanel();
@@ -884,51 +879,51 @@ public class TextureEditor implements ActionListener, KeyListener {
 		m_PatternSelector.savePresets(); // stores them in a string in
 											// NTEPresetString
 
-		saveStringP("NTEPresets", NTEPresetString);
+		preferences.put("NTEPresets", NTEPresetString);
 
 		if (m_MainFrame != null) {
-			saveIntP("mainWindowPosX", m_MainFrame.getX());
-			saveIntP("mainWindowPosY", m_MainFrame.getY());
-			saveIntP("mainWindowSizeX", m_MainFrame.getWidth());
-			saveIntP("mainWindowSizeY", m_MainFrame.getHeight());
+			preferences.putInt("mainWindowPosX", m_MainFrame.getX());
+			preferences.putInt("mainWindowPosY", m_MainFrame.getY());
+			preferences.putInt("mainWindowSizeX", m_MainFrame.getWidth());
+			preferences.putInt("mainWindowSizeY", m_MainFrame.getHeight());
 		}
 
-		saveIntP("m_ColorChooser.PosX", m_ColorChooser.getX());
-		saveIntP("m_ColorChooser.PosY", m_ColorChooser.getY());
-		saveIntP("m_TextureFileChooser_SaveLoadImage.PosX", m_TextureFileChooser_SaveLoadImage.getX());
-		saveIntP("m_TextureFileChooser_SaveLoadImage.PosY", m_TextureFileChooser_SaveLoadImage.getY());
-		saveStringP("m_TextureFileChooser_SaveLoadImage.directory", m_TextureFileChooser_SaveLoadImage.getCurrentDirectory()
-				.getAbsolutePath());
-		saveIntP("m_TextureFileChooser_SaveLoadGraph.PosX", m_TextureFileChooser_SaveLoadGraph.getX());
-		saveIntP("m_TextureFileChooser_SaveLoadGraph.PosY", m_TextureFileChooser_SaveLoadGraph.getY());
-		saveStringP("m_TextureFileChooser_SaveLoadGraph.directory", m_TextureFileChooser_SaveLoadGraph.getCurrentDirectory()
-				.getAbsolutePath());
+		preferences.putInt("m_ColorChooser.PosX", m_ColorChooser.getX());
+		preferences.putInt("m_ColorChooser.PosY", m_ColorChooser.getY());
+		preferences.putInt("m_TextureFileChooser_SaveLoadImage.PosX", m_TextureFileChooser_SaveLoadImage.getX());
+		preferences.putInt("m_TextureFileChooser_SaveLoadImage.PosY", m_TextureFileChooser_SaveLoadImage.getY());
+		preferences.put("m_TextureFileChooser_SaveLoadImage.directory",
+				m_TextureFileChooser_SaveLoadImage.getCurrentDirectory().getAbsolutePath());
+		preferences.putInt("m_TextureFileChooser_SaveLoadGraph.PosX", m_TextureFileChooser_SaveLoadGraph.getX());
+		preferences.putInt("m_TextureFileChooser_SaveLoadGraph.PosY", m_TextureFileChooser_SaveLoadGraph.getY());
+		preferences.put("m_TextureFileChooser_SaveLoadGraph.directory",
+				m_TextureFileChooser_SaveLoadGraph.getCurrentDirectory().getAbsolutePath());
 
-		saveStringP("m_CurrentFileName", m_CurrentFile.getAbsolutePath());
-
-		try {
-			globalSettings.store(new FileWriter("TextureEditorSettings"), "Exit Settings of NeoSpark TextureEditor");
-		} catch (IOException ioe) {
-			System.err.println(ioe);
-		}
+		preferences.put("m_CurrentFileName", m_CurrentFile.getAbsolutePath());
 	}
 
 	private void loadAndSetExitParameters(String cmdLine_fileNameToLoad) {
-		NTEPresetString = getStringP("NTEPresets", defaultNTEPresets);
+		NTEPresetString = preferences.get("NTEPresets", defaultNTEPresets);
 
 		if (m_MainFrame != null) {
-			m_MainFrame.setSize(getIntP("mainWindowSizeX", 1024), getIntP("mainWindowSizeY", 768));
-			m_MainFrame.setLocation(getIntP("mainWindowPosX", 0), getIntP("mainWindowPosY", 0));
+			m_MainFrame.setSize(preferences.getInt("mainWindowSizeX", 1024), preferences.getInt("mainWindowSizeY", 768));
+			m_MainFrame.setLocation(preferences.getInt("mainWindowPosX", 0), preferences.getInt("mainWindowPosY", 0));
 		}
 
-		m_ColorChooser.setLocation(getIntP("m_ColorChooser.PosX", 0), getIntP("m_ColorChooser.PosY", 0));
-		m_TextureFileChooser_SaveLoadImage.setLocation(getIntP("m_TextureFileChooser_SaveLoadImage.PosX", 0), getIntP(
-				"m_TextureFileChooser_SaveLoadImage.PosY", 0));
-		m_TextureFileChooser_SaveLoadImage.setCurrentDirectory(new File(getStringP("m_TextureFileChooser_SaveLoadImage.directory", ".")));
+		m_ColorChooser.setLocation(
+			preferences.getInt("m_ColorChooser.PosX", 0),
+			preferences.getInt("m_ColorChooser.PosY", 0));
+		m_TextureFileChooser_SaveLoadImage.setLocation(
+			preferences.getInt("m_TextureFileChooser_SaveLoadImage.PosX", 0),
+			preferences.getInt("m_TextureFileChooser_SaveLoadImage.PosY", 0));
+		m_TextureFileChooser_SaveLoadImage.setCurrentDirectory(
+			new File(preferences.get("m_TextureFileChooser_SaveLoadImage.directory", ".")));
 
-		m_TextureFileChooser_SaveLoadGraph.setLocation(getIntP("m_TextureFileChooser_SaveLoadGraph.PosX", 0), getIntP(
-				"m_TextureFileChooser_SaveLoadGraph.PosY", 0));
-		m_TextureFileChooser_SaveLoadGraph.setCurrentDirectory(new File(getStringP("m_TextureFileChooser_SaveLoadGraph.directory", ".")));
+		m_TextureFileChooser_SaveLoadGraph.setLocation(
+			preferences.getInt("m_TextureFileChooser_SaveLoadGraph.PosX", 0),
+			preferences.getInt("m_TextureFileChooser_SaveLoadGraph.PosY", 0));
+		m_TextureFileChooser_SaveLoadGraph.setCurrentDirectory(
+			new File(preferences.get("m_TextureFileChooser_SaveLoadGraph.directory", ".")));
 
 		if (cmdLine_fileNameToLoad != null) {
 			setCurrentFileName(cmdLine_fileNameToLoad);
@@ -936,7 +931,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 				setCurrentFileName(null);
 			}
 		} else {
-			setCurrentFileName(getStringP("m_CurrentFileName", "examples/example_Bricks.tgr"));
+			setCurrentFileName(preferences.get("m_CurrentFileName", "examples/example_Bricks.tgr"));
 			if (m_CurrentFile.equals("null"))
 				setCurrentFileName(null);
 			else if (!m_GraphDrawPanel.load(m_CurrentFile.getAbsolutePath(), true)) {
@@ -983,49 +978,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 		te.initialize();
 		te.registerForMacOSXEvents();
 		te.m_MainFrame.setVisible(true);
-	}
-
-	public void saveIntP(String key, int v) {
-		globalSettings.setProperty(key, "" + v);
-	}
-
-	public void saveFloatP(String key, float v) {
-		globalSettings.setProperty(key, "" + v);
-	}
-
-	public void saveStringP(String key, String v) {
-		globalSettings.setProperty(key, v);
-	}
-
-	// the persitency methods
-	public int getIntP(String key, int std) {
-		String p = globalSettings.getProperty(key);
-		if (p != null)
-			return Integer.valueOf(p);
-		else {
-			globalSettings.setProperty(key, "" + std);
-			return std;
-		}
-	}
-
-	public float getFloatP(String key, float std) {
-		String p = globalSettings.getProperty(key);
-		if (p != null)
-			return Float.valueOf(p);
-		else {
-			globalSettings.setProperty(key, "" + std);
-			return std;
-		}
-	}
-
-	public String getStringP(String key, String std) {
-		String p = globalSettings.getProperty(key);
-		if (p != null)
-			return p;
-		else {
-			globalSettings.setProperty(key, std);
-			return std;
-		}
 	}
 
 	// -------------------------------------------------------------------------------------------------------------
