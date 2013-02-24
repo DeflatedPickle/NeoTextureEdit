@@ -566,7 +566,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		createMenuItem(file, "Save as", "file_saveas", 'a', null);
 		if (!MAC_OS_X) {
 			file.addSeparator();
-			createMenuItem(file, "Exit", "file_exit", 'x', null);
+			createMenuItem(file, "Exit", "file_exit", 'x', KeyStroke.getKeyStroke(KeyEvent.VK_Q, modifierMask));
 		}
 		JMenu view = new JMenu("View");
 		view.setMnemonic('V');
