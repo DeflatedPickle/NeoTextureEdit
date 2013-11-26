@@ -1084,6 +1084,9 @@ public class TextureEditor implements ActionListener, KeyListener {
 		// font for the basic help dialogs
 		UIManager.put("OptionPane.messageFont", new FontUIResource(new Font(
 				"Monospaced", Font.PLAIN, 12)));
+		
+		//
+		System.setProperty("org.lwjgl.librarypath", System.getProperty("user.dir") + "/lib/lwjgl-2.9.0/native/");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
