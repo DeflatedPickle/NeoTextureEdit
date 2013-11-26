@@ -30,9 +30,10 @@ public final class SpectralControlParam extends AbstractParam {
 	}
 
 	public void load(Scanner s) {
+		values.clear();
 		int num = s.nextInt();
 		for (int i = 0; i < num; i++) {
-			values.add(s.nextFloat());
+			values.add(Float.parseFloat(s.next()));
 		}
 		notifyParamChangeListener();
 	}

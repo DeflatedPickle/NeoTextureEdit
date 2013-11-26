@@ -56,12 +56,14 @@ public final class PatternPerlinNoise extends Pattern {
 	
 	
 	public PatternPerlinNoise() {
+		spectralControl.setStartEndBand(startBand.get(), endBand.get());
 	}
 
 	public PatternPerlinNoise(float sx, float sy) {
 		this();
 		scaleX.set(sx);
 		scaleY.set(sy);
+		spectralControl.setStartEndBand(startBand.get(), endBand.get());
 	}
 	
 	public void parameterChanged(AbstractParam source) {

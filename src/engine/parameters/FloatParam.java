@@ -45,7 +45,7 @@ public class FloatParam extends AbstractParam {
 	// loads only the value; uses the set method to set it (thus change listener are notified)
 	public void load(Scanner s) {
 		//set(s.nextFloat());
-		// !!TODO: this is a workaround for a weirded windows s.nextFloat bug;
+		// !!TODO: this is a workaround for a locale problem
 		set(Float.parseFloat(s.next()));
 	}
 	
