@@ -1085,12 +1085,12 @@ public class TextureEditor implements ActionListener, KeyListener {
 		UIManager.put("OptionPane.messageFont", new FontUIResource(new Font(
 				"Monospaced", Font.PLAIN, 12)));
 		
-		//
-		System.setProperty("org.lwjgl.librarypath", System.getProperty("user.dir") + "/lib/lwjgl-2.9.0/native/");
+		//!!TODO: move the libs into the native directory?
+		System.setProperty("org.lwjgl.librarypath", System.getProperty("user.dir") + "/lib/lwjgl-2.9.1/native");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			// UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			//UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
