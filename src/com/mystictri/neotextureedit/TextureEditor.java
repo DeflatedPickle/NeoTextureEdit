@@ -100,11 +100,9 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 	// Check that we are on Mac OS X. This is crucial to loading and using the
 	// OSXAdapter class.
-	public static boolean MAC_OS_X = (System.getProperty("os.name")
-			.toLowerCase().startsWith("mac os x"));
+	public static boolean MAC_OS_X = (System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
 
-	Preferences preferences = Preferences.userRoot().node(
-			"com.mystictri.NeoTextureEdit");
+	Preferences preferences = Preferences.userRoot().node("com.mystictri.NeoTextureEdit");
 
 	static final String programVersionNumber = TextureGenerator.getVersion();
 
@@ -165,32 +163,20 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 	String title = "NeoTextureEdit - Version " + programVersionNumber;
 
-	String help_message = "NeoTextureEdit "
-			+ programVersionNumber
-			+ " Help Overview\n\n"
-			+ "Right Click on empty space: create texture channels and patterns\n"
-			+ "Middle Click: Drag the Graph Canvas\n"
-			+ "Left Click on channel/pattern: select and drag\n"
-			+ "Richt Click on channel/pattern: additional options\n"
-			+ "\n"
+	String help_message = "NeoTextureEdit " + programVersionNumber + " Help Overview\n\n"
+			+ "Right Click on empty space: create texture channels and patterns\n" + "Middle Click: Drag the Graph Canvas\n"
+			+ "Left Click on channel/pattern: select and drag\n" + "Richt Click on channel/pattern: additional options\n" + "\n"
 			+ "Parameter editor (right side for selected channel/pattern)\n"
-			+ "         Shift-Click on increment/decrement buttons uses smaller value.\n"
-			+ "\n" + "Gradient Editor:\n"
-			+ "         Double Click inserts or edits a color node\n"
-			+ "         Shift Click and drag on color node edits alpha value\n";
+			+ "         Shift-Click on increment/decrement buttons uses smaller value.\n" + "\n" + "Gradient Editor:\n"
+			+ "         Double Click inserts or edits a color node\n" + "         Shift Click and drag on color node edits alpha value\n";
 
-	String about_message = "NeoTextureEdit\n\n"
-			+ "Version: "
-			+ programVersionNumber
-			+ "\n"
+	String about_message = "NeoTextureEdit\n\n" + "Version: " + programVersionNumber + "\n"
 			+ "(c) Copyright Holger Dammertz 2010, 2011, 2012. All rights reserved.\n"
 			+ "Visit http://sourceforge.net/projects/neotextureedit/\n\n"
 			+ "NeoTextureEdit and the runtime generation library NeoTexture are\n"
-			+ "licensed under the GNU LGPL v.3. See the files COPYING and\n"
-			+ "COPYING.LESSER for details.\n\n"
+			+ "licensed under the GNU LGPL v.3. See the files COPYING and\n" + "COPYING.LESSER for details.\n\n"
 			+ "This program is distributed in the hope that it will be useful,\n"
-			+ "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-			+ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
+			+ "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" + "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
 
 	// + "Send comments, suggestions, bugs to holger.dammertz@googlemail.com";
 
@@ -203,17 +189,11 @@ public class TextureEditor implements ActionListener, KeyListener {
 		 * File(url.toURI()); files = f.list(); } else
 		 */{
 			// System.err.println("WARNING: automatic loading of patterns/channels failed; adding hardcoded set");
-			String[] f = { "FilterBlend.class", "FilterColorCorrect.class",
-					"FilterColorize.class", "FilterEmboss.class",
-					"FilterMask.class", "FilterNormalMap.class",
-					"FilterWarp.class", "Pattern.class", "PatternBrick.class",
-					"PatternCellular.class", "PatternChecker.class",
-					"PatternConstantColor.class", "PatternGradient.class",
-					"PatternPerlinNoise.class", "PatternTile.class",
-					"PatternFunction.class", "PatternBitmap.class",
-					"FilterIlluminate.class", "FilterCombine.class",
-					"FilterTransform.class", "FilterBlur.class",
-					"FilterModulus.class", "FilterMath1.class" };
+			String[] f = { "FilterBlend.class", "FilterColorCorrect.class", "FilterColorize.class", "FilterEmboss.class", "FilterMask.class",
+					"FilterNormalMap.class", "FilterWarp.class", "Pattern.class", "PatternBrick.class", "PatternCellular.class",
+					"PatternChecker.class", "PatternConstantColor.class", "PatternGradient.class", "PatternPerlinNoise.class",
+					"PatternTile.class", "PatternFunction.class", "PatternBitmap.class", "FilterIlluminate.class", "FilterCombine.class",
+					"FilterTransform.class", "FilterBlur.class", "FilterModulus.class", "FilterMath1.class" };
 			files = f;
 		}
 
@@ -268,8 +248,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			Dimension size = new Dimension(64, 64);
 			setPreferredSize(size);
 			setSize(size);
-			previewImage = ChannelUtils.createAndComputeImage(pat, 64, 64,
-					null, 0);
+			previewImage = ChannelUtils.createAndComputeImage(pat, 64, 64, null, 0);
 			icon = new ImageIcon(previewImage);
 			this.setIcon(icon);
 		}
@@ -285,8 +264,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 	 * @author Holger Dammertz
 	 * 
 	 */
-	class PatternSelectorPanel extends JPanel implements ActionListener,
-			MouseListener {
+	class PatternSelectorPanel extends JPanel implements ActionListener, MouseListener {
 		private static final long serialVersionUID = 5732720988651708823L;
 
 		JScrollPane scroller;
@@ -347,8 +325,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 					if (c instanceof Pattern) {
 						addPatternPreset((Pattern) c);
 					} else {
-						Logger.logError(this,
-								"Preset file contained non-Patterns; ignoring them.");
+						Logger.logError(this, "Preset file contained non-Patterns; ignoring them.");
 					}
 				}
 			} catch (Exception e) {
@@ -392,8 +369,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			MouseListener ml = new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 					if (e.getButton() == MouseEvent.BUTTON1) {
-						PatternPresetLabel ppl = (PatternPresetLabel) e
-								.getSource();
+						PatternPresetLabel ppl = (PatternPresetLabel) e.getSource();
 						dragndropChannel = ppl.pat;
 						JComponent jc = (JComponent) e.getSource();
 						TransferHandler th = jc.getTransferHandler();
@@ -431,8 +407,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 					removePatternPreset(clickedPreset);
 					clickedPreset = null;
 				} else {
-					Logger.logWarning(this,
-							"Delete Preset called but no preset selected.");
+					Logger.logWarning(this, "Delete Preset called but no preset selected.");
 				}
 			}
 
@@ -453,8 +428,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			Object c = e.getSource();
-			if ((e.getButton() == MouseEvent.BUTTON3)
-					&& (c instanceof PatternPresetLabel)) {
+			if ((e.getButton() == MouseEvent.BUTTON3) && (c instanceof PatternPresetLabel)) {
 				clickedPreset = (PatternPresetLabel) c;
 				presetPopupMenu.show(e.getComponent(), e.getX(), e.getY());
 			} else {
@@ -571,19 +545,16 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 		public void startProgress() {
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			getParent().setCursor(
-					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			setLocation(getParent().getX() + getParent().getWidth() / 2
-					- getWidth() / 2, getParent().getY()
-					+ getParent().getHeight() / 2 - getHeight() / 2);
+			getParent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			setLocation(getParent().getX() + getParent().getWidth() / 2 - getWidth() / 2, getParent().getY() + getParent().getHeight() / 2
+					- getHeight() / 2);
 			setVisible(true);
 		}
 
 		public void endProgress() {
 			setVisible(false);
 			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-			getParent().setCursor(
-					Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			getParent().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		}
 
 	}
@@ -596,8 +567,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		System.exit(0);
 	}
 
-	JMenuItem createMenuItem(JMenu menu, String name, String action,
-			char mnemonic, KeyStroke ks) {
+	JMenuItem createMenuItem(JMenu menu, String name, String action, char mnemonic, KeyStroke ks) {
 		JMenuItem ret;
 		ret = new JMenuItem(name);
 		ret.addActionListener(this);
@@ -609,8 +579,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		return ret;
 	}
 
-	JCheckBoxMenuItem createCheckboxMenuItem(JMenu menu, String name,
-			String action, char mnemonic, KeyStroke ks) {
+	JCheckBoxMenuItem createCheckboxMenuItem(JMenu menu, String name, String action, char mnemonic, KeyStroke ks) {
 		JCheckBoxMenuItem ret;
 		ret = new JCheckBoxMenuItem(name);
 		ret.addActionListener(this);
@@ -631,38 +600,31 @@ public class TextureEditor implements ActionListener, KeyListener {
 		file.setMnemonic('F');
 		m_MainMenuBar.add(file);
 		createMenuItem(file, "New", "file_new", 'N', null);
-		createMenuItem(file, "Open", "file_open", 'O',
-				KeyStroke.getKeyStroke(KeyEvent.VK_O, modifierMask));
-		createMenuItem(file, "Import", "file_import", 'I',
-				KeyStroke.getKeyStroke(KeyEvent.VK_I, modifierMask));
+		createMenuItem(file, "Open", "file_open", 'O', KeyStroke.getKeyStroke(KeyEvent.VK_O, modifierMask));
+		createMenuItem(file, "Import", "file_import", 'I', KeyStroke.getKeyStroke(KeyEvent.VK_I, modifierMask));
 		m_File_Save_Item = createMenuItem(file, "Save", "file_save", 's', null);
 		m_File_Save_Item.setEnabled(false);
-		m_File_Save_Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				modifierMask));
+		m_File_Save_Item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, modifierMask));
 		createMenuItem(file, "Save as", "file_saveas", 'a', null);
 		if (!MAC_OS_X) {
 			file.addSeparator();
-			createMenuItem(file, "Exit", "file_exit", 'x',
-					KeyStroke.getKeyStroke(KeyEvent.VK_Q, modifierMask));
+			createMenuItem(file, "Exit", "file_exit", 'x', KeyStroke.getKeyStroke(KeyEvent.VK_Q, modifierMask));
 		}
 		JMenu view = new JMenu("View");
 		view.setMnemonic('V');
 		m_MainMenuBar.add(view);
 		createMenuItem(view, "Center", "view_center", 'C', null);
-		createMenuItem(view, "Show/Hide OpenGL Preview", "view_OpenGLPreview",
-				'P', null).setEnabled(GL_ENABLED);
+		createMenuItem(view, "Show/Hide OpenGL Preview", "view_OpenGLPreview", 'P', null).setEnabled(GL_ENABLED);
 
 		JMenu options = new JMenu("Options");
 		options.setMnemonic('O');
 		m_MainMenuBar.add(options);
-		createCheckboxMenuItem(options, "Use Cache", "options_toggle_usecache",
-				'C', null);
+		createCheckboxMenuItem(options, "Use Cache", "options_toggle_usecache", 'C', null);
 
 		JMenu help = new JMenu("Help");
 		help.setMnemonic('H');
 		m_MainMenuBar.add(help);
-		createMenuItem(help, "Help", "help_dialog", 'H',
-				KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+		createMenuItem(help, "Help", "help_dialog", 'H', KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		help.addSeparator();
 		createMenuItem(help, "About", "about_dialog", 'A', null);
 	}
@@ -694,31 +656,25 @@ public class TextureEditor implements ActionListener, KeyListener {
 				m_OpenGLPreviewPanel.resetPreview();
 			setCurrentFileName(null);
 		} else if (c.equals("file_open")) {
-			m_TextureFileChooser_SaveLoadGraph
-					.setDialogTitle("Loading texture graph from ...");
+			m_TextureFileChooser_SaveLoadGraph.setDialogTitle("Loading texture graph from ...");
 			if (m_TextureFileChooser_SaveLoadGraph.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-				String name = m_TextureFileChooser_SaveLoadGraph
-						.getSelectedFile().getAbsolutePath();
+				String name = m_TextureFileChooser_SaveLoadGraph.getSelectedFile().getAbsolutePath();
 				m_GraphDrawPanel.load(name, true);
 				setCurrentFileName(name);
 			}
 		} else if (c.equals("file_import")) {
-			m_TextureFileChooser_SaveLoadGraph
-					.setDialogTitle("Import (append) texture graph from ...");
+			m_TextureFileChooser_SaveLoadGraph.setDialogTitle("Import (append) texture graph from ...");
 			if (m_TextureFileChooser_SaveLoadGraph.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-				String name = m_TextureFileChooser_SaveLoadGraph
-						.getSelectedFile().getAbsolutePath();
+				String name = m_TextureFileChooser_SaveLoadGraph.getSelectedFile().getAbsolutePath();
 				m_GraphDrawPanel.load(name, false);
 			}
 		} else if (c.equals("file_save")) {
 			if (m_CurrentFile != null)
 				m_GraphDrawPanel.save(m_CurrentFile.getAbsolutePath());
 		} else if (c.equals("file_saveas")) {
-			m_TextureFileChooser_SaveLoadGraph
-					.setDialogTitle("Saving texture graph as ...");
+			m_TextureFileChooser_SaveLoadGraph.setDialogTitle("Saving texture graph as ...");
 			if (m_TextureFileChooser_SaveLoadGraph.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-				String name = m_TextureFileChooser_SaveLoadGraph
-						.getSelectedFile().getAbsolutePath();
+				String name = m_TextureFileChooser_SaveLoadGraph.getSelectedFile().getAbsolutePath();
 				if (!name.endsWith(".tgr"))
 					name += ".tgr";
 				m_GraphDrawPanel.save(name);
@@ -731,22 +687,18 @@ public class TextureEditor implements ActionListener, KeyListener {
 			m_GraphDrawPanel.centerDesktop();
 		} else if (c.equals("view_OpenGLPreview")) {
 			if (!GL_ENABLED) {
-				Logger.logError(this,
-						"Tried to show OpenGL preview, but it is not initialized.");
+				Logger.logError(this, "Tried to show OpenGL preview, but it is not initialized.");
 			} else {
-				m_OpenGLPreviewPanel.setVisible(!m_OpenGLPreviewPanel
-						.isVisible());
+				m_OpenGLPreviewPanel.setVisible(!m_OpenGLPreviewPanel.isVisible());
 				m_CenterPanel.validate();
 			}
 		} else if (c.equals("options_toggle_usecache")) {
 			ChannelUtils.useCache = !ChannelUtils.useCache;
 
 		} else if (c.equals("help_dialog")) {
-			JOptionPane.showMessageDialog(null, help_message,
-					"NeoTextureEdit - Help", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, help_message, "NeoTextureEdit - Help", JOptionPane.PLAIN_MESSAGE);
 		} else if (c.equals("about_dialog")) {
-			JOptionPane.showMessageDialog(null, about_message,
-					"About NeoTextureEdit", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, about_message, "About NeoTextureEdit", JOptionPane.PLAIN_MESSAGE);
 		}
 
 	}
@@ -779,41 +731,25 @@ public class TextureEditor implements ActionListener, KeyListener {
 				} else if (a.equalsIgnoreCase("-r")) {
 					String s = args[++i];
 					if (s.matches("\\d+x\\d+")) {
-						exportResX = Integer.parseInt(s.substring(0,
-								s.indexOf('x')));
-						exportResY = Integer.parseInt(s.substring(
-								s.indexOf('x') + 1, s.length()));
+						exportResX = Integer.parseInt(s.substring(0, s.indexOf('x')));
+						exportResY = Integer.parseInt(s.substring(s.indexOf('x') + 1, s.length()));
 					} else {
-						System.out
-								.println("Error in resolution string. Expected sth like 512x512; got "
-										+ s);
+						System.out.println("Error in resolution string. Expected sth like 512x512; got " + s);
 						System.exit(0);
 					}
 				} else if (a.equalsIgnoreCase("--disableGL")) {
 					useOpenGL = false;
-				} else if (a.equalsIgnoreCase("--help")
-						|| a.equalsIgnoreCase("-h")) {
-					System.out
-							.println("\nNeoTextureEdit "
-									+ "Version: "
-									+ programVersionNumber
-									+ " "
-									+ "(c) Copyright Holger Dammertz 2010. All rights reserved.\n");
-					System.out
-							.println("Usage: neotextureedit [filename] [options]");
+				} else if (a.equalsIgnoreCase("--help") || a.equalsIgnoreCase("-h")) {
+					System.out.println("\nNeoTextureEdit " + "Version: " + programVersionNumber + " "
+							+ "(c) Copyright Holger Dammertz 2010. All rights reserved.\n");
+					System.out.println("Usage: neotextureedit [filename] [options]");
 					System.out.println(" Options: ");
-					System.out
-							.println("    -h, --help                this help");
-					System.out
-							.println("    -e                        export the given file and exit");
-					System.out
-							.println("    -r  128x128               set the output resolution for the export");
-					System.out
-							.println("    -p path                   set the path for export");
-					System.out
-							.println("    --disableGL               disable the use of the OpenGL preview");
-					System.out
-							.println("\nContact and bug reports at http://sourceforge.net/projects/neotextureedit");
+					System.out.println("    -h, --help                this help");
+					System.out.println("    -e                        export the given file and exit");
+					System.out.println("    -r  128x128               set the output resolution for the export");
+					System.out.println("    -p path                   set the path for export");
+					System.out.println("    --disableGL               disable the use of the OpenGL preview");
+					System.out.println("\nContact and bug reports at http://sourceforge.net/projects/neotextureedit");
 					System.exit(0);
 				}
 			}
@@ -850,8 +786,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 	 */
 	void exportTexturesToImages() {
 		if (commandLineOptions.allFileNames.size() == 0) {
-			System.out
-					.println("Export error: need at least one filename of texture graph to load.");
+			System.out.println("Export error: need at least one filename of texture graph to load.");
 			System.exit(0);
 		}
 
@@ -866,23 +801,15 @@ public class TextureEditor implements ActionListener, KeyListener {
 					String exportname = n.getChannel().exportName.get();
 					String f = filename;
 					// ugly
-					String tmp_filename = f.substring(f.lastIndexOf("\\") + 1,
-							f.length() - 4);
-					tmp_filename = tmp_filename.substring(tmp_filename
-							.lastIndexOf("/") + 1);
+					String tmp_filename = f.substring(f.lastIndexOf("\\") + 1, f.length() - 4);
+					tmp_filename = tmp_filename.substring(tmp_filename.lastIndexOf("/") + 1);
 					exportname = exportname.replaceAll("\\%f", tmp_filename);
-					exportname = exportname.replaceAll("\\%r",
-							commandLineOptions.exportResX + "x"
-									+ commandLineOptions.exportResY);
-					exportname = commandLineOptions.exportPath + "/"
-							+ exportname + ".png";
+					exportname = exportname.replaceAll("\\%r", commandLineOptions.exportResX + "x" + commandLineOptions.exportResY);
+					exportname = commandLineOptions.exportPath + "/" + exportname + ".png";
 					System.out.println("Exporting " + exportname);
 					try {
-						ImageIO.write(ChannelUtils.createAndComputeImage(
-								n.getChannel(), commandLineOptions.exportResX,
-								commandLineOptions.exportResY,
-								new StdOutProgressBar(), 0), "png", new File(
-								exportname));
+						ImageIO.write(ChannelUtils.createAndComputeImage(n.getChannel(), commandLineOptions.exportResX,
+								commandLineOptions.exportResY, new StdOutProgressBar(), 0), "png", new File(exportname));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -902,8 +829,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		m_MainFrame.addKeyListener(this);
 
 		setTitle(title);
-		m_MainFrame.setIconImage(ChannelUtils.createAndComputeImage(
-				new PatternChecker(2, 2), 16, 16, null, 0));
+		m_MainFrame.setIconImage(ChannelUtils.createAndComputeImage(new PatternChecker(2, 2), 16, 16, null, 0));
 		m_MainFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				Window win = e.getWindow();
@@ -927,8 +853,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			m_CenterPanel.add(m_OpenGLPreviewPanel, BorderLayout.SOUTH);
 		}
 
-		m_MainFrame.getContentPane().add(
-				m_GraphDrawPanel.getParameterEditorPanel(), BorderLayout.EAST);
+		m_MainFrame.getContentPane().add(m_GraphDrawPanel.getParameterEditorPanel(), BorderLayout.EAST);
 		m_MainFrame.getContentPane().add(m_CenterPanel, BorderLayout.CENTER);
 
 		createMainMenu();
@@ -942,8 +867,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 	public TextureEditor(String[] args) {
 		if (INSTANCE != null)
-			Logger.logFatal(this,
-					"Multiple instances of TextureEditor are not allowed.");
+			Logger.logFatal(this, "Multiple instances of TextureEditor are not allowed.");
 		INSTANCE = this;
 		// now parse the command line
 		commandLineOptions.parse(args);
@@ -961,12 +885,10 @@ public class TextureEditor implements ActionListener, KeyListener {
 													// initializing openGL so we
 													// disable openGL preview
 					// m_OpenGLPreviewPanel = null;
-					Logger.logError(this,
-							"Could not initialize OpenGL for Preview Rendering!");
+					Logger.logError(this, "Could not initialize OpenGL for Preview Rendering!");
 				}
 			} catch (NoClassDefFoundError ncdfe) {
-				Logger.logError(this,
-						"Could not initialize OpenGL for Preview Rendering!");
+				Logger.logError(this, "Could not initialize OpenGL for Preview Rendering!");
 				ncdfe.printStackTrace();
 			}
 		}
@@ -978,14 +900,10 @@ public class TextureEditor implements ActionListener, KeyListener {
 		GradientEditorPanel.colorChooser = m_ColorChooser;
 
 		m_TextureFileChooser_SaveLoadGraph = new JFileChooser(".");
-		m_TextureFileChooser_SaveLoadGraph
-				.addChoosableFileFilter(new TextureEditorFilenameFilter("tgr",
-						"Texture Graph Files (.tgr)"));
+		m_TextureFileChooser_SaveLoadGraph.addChoosableFileFilter(new TextureEditorFilenameFilter("tgr", "Texture Graph Files (.tgr)"));
 
 		m_TextureFileChooser_SaveLoadImage = new JFileChooser(".");
-		m_TextureFileChooser_SaveLoadImage
-				.addChoosableFileFilter(new TextureEditorFilenameFilter("png",
-						"Image Files (.png)"));
+		m_TextureFileChooser_SaveLoadImage.addChoosableFileFilter(new TextureEditorFilenameFilter("png", "Image Files (.png)"));
 
 	}
 
@@ -1013,20 +931,14 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 		preferences.putInt("m_ColorChooser.PosX", m_ColorChooser.getX());
 		preferences.putInt("m_ColorChooser.PosY", m_ColorChooser.getY());
-		preferences.putInt("m_TextureFileChooser_SaveLoadImage.PosX",
-				m_TextureFileChooser_SaveLoadImage.getX());
-		preferences.putInt("m_TextureFileChooser_SaveLoadImage.PosY",
-				m_TextureFileChooser_SaveLoadImage.getY());
-		preferences.put("m_TextureFileChooser_SaveLoadImage.directory",
-				m_TextureFileChooser_SaveLoadImage.getCurrentDirectory()
-						.getAbsolutePath());
-		preferences.putInt("m_TextureFileChooser_SaveLoadGraph.PosX",
-				m_TextureFileChooser_SaveLoadGraph.getX());
-		preferences.putInt("m_TextureFileChooser_SaveLoadGraph.PosY",
-				m_TextureFileChooser_SaveLoadGraph.getY());
-		preferences.put("m_TextureFileChooser_SaveLoadGraph.directory",
-				m_TextureFileChooser_SaveLoadGraph.getCurrentDirectory()
-						.getAbsolutePath());
+		preferences.putInt("m_TextureFileChooser_SaveLoadImage.PosX", m_TextureFileChooser_SaveLoadImage.getX());
+		preferences.putInt("m_TextureFileChooser_SaveLoadImage.PosY", m_TextureFileChooser_SaveLoadImage.getY());
+		preferences.put("m_TextureFileChooser_SaveLoadImage.directory", m_TextureFileChooser_SaveLoadImage.getCurrentDirectory()
+				.getAbsolutePath());
+		preferences.putInt("m_TextureFileChooser_SaveLoadGraph.PosX", m_TextureFileChooser_SaveLoadGraph.getX());
+		preferences.putInt("m_TextureFileChooser_SaveLoadGraph.PosY", m_TextureFileChooser_SaveLoadGraph.getY());
+		preferences.put("m_TextureFileChooser_SaveLoadGraph.directory", m_TextureFileChooser_SaveLoadGraph.getCurrentDirectory()
+				.getAbsolutePath());
 
 		preferences.put("m_CurrentFileName", m_CurrentFile.getAbsolutePath());
 	}
@@ -1035,28 +947,18 @@ public class TextureEditor implements ActionListener, KeyListener {
 		NTEPresetString = preferences.get("NTEPresets", defaultNTEPresets);
 
 		if (m_MainFrame != null) {
-			m_MainFrame.setSize(preferences.getInt("mainWindowSizeX", 1024),
-					preferences.getInt("mainWindowSizeY", 768));
-			m_MainFrame.setLocation(preferences.getInt("mainWindowPosX", 0),
-					preferences.getInt("mainWindowPosY", 0));
+			m_MainFrame.setSize(preferences.getInt("mainWindowSizeX", 1024), preferences.getInt("mainWindowSizeY", 768));
+			m_MainFrame.setLocation(preferences.getInt("mainWindowPosX", 0), preferences.getInt("mainWindowPosY", 0));
 		}
 
-		m_ColorChooser.setLocation(
-				preferences.getInt("m_ColorChooser.PosX", 0),
-				preferences.getInt("m_ColorChooser.PosY", 0));
-		m_TextureFileChooser_SaveLoadImage.setLocation(preferences.getInt(
-				"m_TextureFileChooser_SaveLoadImage.PosX", 0), preferences
-				.getInt("m_TextureFileChooser_SaveLoadImage.PosY", 0));
-		m_TextureFileChooser_SaveLoadImage.setCurrentDirectory(new File(
-				preferences.get("m_TextureFileChooser_SaveLoadImage.directory",
-						".")));
+		m_ColorChooser.setLocation(preferences.getInt("m_ColorChooser.PosX", 0), preferences.getInt("m_ColorChooser.PosY", 0));
+		m_TextureFileChooser_SaveLoadImage.setLocation(preferences.getInt("m_TextureFileChooser_SaveLoadImage.PosX", 0),
+				preferences.getInt("m_TextureFileChooser_SaveLoadImage.PosY", 0));
+		m_TextureFileChooser_SaveLoadImage.setCurrentDirectory(new File(preferences.get("m_TextureFileChooser_SaveLoadImage.directory", ".")));
 
-		m_TextureFileChooser_SaveLoadGraph.setLocation(preferences.getInt(
-				"m_TextureFileChooser_SaveLoadGraph.PosX", 0), preferences
-				.getInt("m_TextureFileChooser_SaveLoadGraph.PosY", 0));
-		m_TextureFileChooser_SaveLoadGraph.setCurrentDirectory(new File(
-				preferences.get("m_TextureFileChooser_SaveLoadGraph.directory",
-						".")));
+		m_TextureFileChooser_SaveLoadGraph.setLocation(preferences.getInt("m_TextureFileChooser_SaveLoadGraph.PosX", 0),
+				preferences.getInt("m_TextureFileChooser_SaveLoadGraph.PosY", 0));
+		m_TextureFileChooser_SaveLoadGraph.setCurrentDirectory(new File(preferences.get("m_TextureFileChooser_SaveLoadGraph.directory", ".")));
 
 		if (cmdLine_fileNameToLoad != null) {
 			setCurrentFileName(cmdLine_fileNameToLoad);
@@ -1064,12 +966,10 @@ public class TextureEditor implements ActionListener, KeyListener {
 				setCurrentFileName(null);
 			}
 		} else {
-			setCurrentFileName(preferences.get("m_CurrentFileName",
-					"examples/example_Bricks.tgr"));
+			setCurrentFileName(preferences.get("m_CurrentFileName", "examples/example_Bricks.tgr"));
 			if (m_CurrentFile.equals("null"))
 				setCurrentFileName(null);
-			else if (!m_GraphDrawPanel.load(m_CurrentFile.getAbsolutePath(),
-					true)) {
+			else if (!m_GraphDrawPanel.load(m_CurrentFile.getAbsolutePath(), true)) {
 				setCurrentFileName(null);
 			}
 		}
@@ -1082,15 +982,14 @@ public class TextureEditor implements ActionListener, KeyListener {
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false); // needed for the
 																// gl canvas
 		// font for the basic help dialogs
-		UIManager.put("OptionPane.messageFont", new FontUIResource(new Font(
-				"Monospaced", Font.PLAIN, 12)));
-		
-		//!!TODO: move the libs into the native directory?
+		UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Monospaced", Font.PLAIN, 12)));
+
+		// !!TODO: move the libs into the native directory?
 		System.setProperty("org.lwjgl.librarypath", System.getProperty("user.dir") + "/lib/lwjgl-2.9.1/native");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			//UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			// UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -1135,17 +1034,14 @@ public class TextureEditor implements ActionListener, KeyListener {
 	 */
 	public ImageIcon Get_IconRGB() {
 		if (s_ButtonIconRGB_Selector == null) {
-			BufferedImage img = new BufferedImage(BUTTONICON_SIZE,
-					BUTTONICON_SIZE, BufferedImage.TYPE_INT_RGB);
+			BufferedImage img = new BufferedImage(BUTTONICON_SIZE, BUTTONICON_SIZE, BufferedImage.TYPE_INT_RGB);
 			Graphics g = img.getGraphics();
 			g.setColor(Color.red);
 			g.fillRect(0, 0, img.getWidth() / 3, img.getHeight());
 			g.setColor(Color.green);
-			g.fillRect(img.getWidth() / 3, 0, (img.getWidth() / 3),
-					img.getHeight());
+			g.fillRect(img.getWidth() / 3, 0, (img.getWidth() / 3), img.getHeight());
 			g.setColor(Color.blue);
-			g.fillRect(2 * (img.getWidth() / 3), 0, img.getWidth() / 3,
-					img.getHeight());
+			g.fillRect(2 * (img.getWidth() / 3), 0, img.getWidth() / 3, img.getHeight());
 			s_ButtonIconRGB_Selector = new ImageIcon(img);
 		}
 		return s_ButtonIconRGB_Selector;
@@ -1159,8 +1055,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 	 */
 	public ImageIcon Get_IconRGBA() {
 		if (s_ButtonIconRGBA_Selector == null) {
-			BufferedImage img = new BufferedImage(BUTTONICON_SIZE,
-					BUTTONICON_SIZE, BufferedImage.TYPE_INT_RGB);
+			BufferedImage img = new BufferedImage(BUTTONICON_SIZE, BUTTONICON_SIZE, BufferedImage.TYPE_INT_RGB);
 
 			for (int y = 0; y < img.getWidth(); y++) {
 				for (int x = 0; x < img.getHeight(); x++) {
@@ -1195,8 +1090,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 	 */
 	public ImageIcon Get_IconA() {
 		if (s_ButtonIconA_Selector == null) {
-			BufferedImage img = new BufferedImage(BUTTONICON_SIZE,
-					BUTTONICON_SIZE, BufferedImage.TYPE_INT_RGB);
+			BufferedImage img = new BufferedImage(BUTTONICON_SIZE, BUTTONICON_SIZE, BufferedImage.TYPE_INT_RGB);
 			Graphics g = img.getGraphics();
 			// g.getFontMetrics()
 			g.setColor(Color.DARK_GRAY);
@@ -1249,8 +1143,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 				// all the methods we wish to
 				// use as delegates for various
 				// com.apple.eawt.ApplicationListener methods
-				OSXAdapter.setQuitHandler(this,
-						getClass().getDeclaredMethod("onQuit", (Class[]) null));
+				OSXAdapter.setQuitHandler(this, getClass().getDeclaredMethod("onQuit", (Class[]) null));
 				// OSXAdapter.setAboutHandler(this,
 				// getClass().getDeclaredMethod("about", (Class[])null));
 				// OSXAdapter.setPreferencesHandler(this,
