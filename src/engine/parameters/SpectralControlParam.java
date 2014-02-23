@@ -47,11 +47,16 @@ public final class SpectralControlParam extends AbstractParam {
 	}
 	
 	
-	public void setStartEndBand(int start, int end) {
+	public void setStartEndBand(int start, int end, float persistence) {
 		if (start != startBand || end != endBand) {
 			startBand = start;
 			endBand = end;
-			get(endBand, 0.5f);
+			
+			float mult = 1.0f;
+			for (int i = startBand; i <= endBand; i++) {
+				get(i, mult);
+				mult *= persistence;
+			}
 			notifyParamChangeListener();
 		}
 	}

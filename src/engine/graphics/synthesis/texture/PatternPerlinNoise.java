@@ -56,14 +56,14 @@ public final class PatternPerlinNoise extends Pattern {
 	
 	
 	public PatternPerlinNoise() {
-		spectralControl.setStartEndBand(startBand.get(), endBand.get());
+		spectralControl.setStartEndBand(startBand.get(), endBand.get(), persistence.get());
 	}
 
 	public PatternPerlinNoise(float sx, float sy) {
 		this();
 		scaleX.set(sx);
 		scaleY.set(sy);
-		spectralControl.setStartEndBand(startBand.get(), endBand.get());
+		spectralControl.setStartEndBand(startBand.get(), endBand.get(), persistence.get());
 	}
 	
 	public void parameterChanged(AbstractParam source) {
@@ -81,14 +81,14 @@ public final class PatternPerlinNoise extends Pattern {
 					spectralControl.set(i, mult);
 					mult *= persistence.get();
 				}
-				spectralControl.setStartEndBand(startBand.get(), endBand.get());
+				spectralControl.setStartEndBand(startBand.get(), endBand.get(), persistence.get());
 			}
 			spectralControl.setSilent(false);
 		}
 		
 		if (source == startBand || source == endBand) {
 			spectralControl.setSilent(true); // needed to avoid multiple recomputations of the noise
-			spectralControl.setStartEndBand(startBand.get(), endBand.get());
+			spectralControl.setStartEndBand(startBand.get(), endBand.get(), persistence.get());
 			spectralControl.setSilent(false);
 		}
 		
