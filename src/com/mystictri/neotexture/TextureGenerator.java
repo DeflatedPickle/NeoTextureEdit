@@ -24,7 +24,6 @@ import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
  * 
  */
 public final class TextureGenerator {
-	static private String version = "0.6.5-devel";
 	static private boolean useCache = false;
 	static private int cacheTileResolution = 256;
 
@@ -42,7 +41,7 @@ public final class TextureGenerator {
 	 * used.
 	 */
 	public static String getVersion() {
-		return version;
+		return TextureVersion.version;
 	}
 
 	/**
