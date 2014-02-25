@@ -1,6 +1,4 @@
 Currently working on:
- - SpectralControl for Noise Pattern
-
  - Zoom
     - fix: zoom to mouse cursor
     - fix: make zoomed rendering faster
@@ -39,10 +37,6 @@ TODO:
 
 
 
-JMonkeyPlatform Integration:
- - List of possible
- 
- 
 Current Keyboard Shortcuts:
  - Ctrl-click on gradient editor nodes moves all
  - Ctrl-click drags the desktop
