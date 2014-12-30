@@ -26,7 +26,7 @@ public final class TextureGraph {
 	public void addNode(TextureGraphNode node) {
 		allNodes.add(node);
 	}
-
+	
 
 	
 	public void addNode(TextureGraphNode node, int x, int y) {

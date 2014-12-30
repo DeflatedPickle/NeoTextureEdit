@@ -78,6 +78,7 @@ import com.mystictri.neotexture.TextureVersion;
 
 import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
+import engine.graphics.synthesis.texture.FilterNormalMap;
 import engine.graphics.synthesis.texture.Pattern;
 import engine.graphics.synthesis.texture.PatternChecker;
 import engine.graphics.synthesis.texture.ProgressBarInterface;
@@ -577,7 +578,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		return ret;
 	}
 
-	JCheckBoxMenuItem createCheckboxMenuItem(JMenu menu, String name, String action, char mnemonic, KeyStroke ks) {
+	JCheckBoxMenuItem createCheckboxMenuItem(JMenu menu, String name, String action, char mnemonic, KeyStroke ks, boolean isSelected) {
 		JCheckBoxMenuItem ret;
 		ret = new JCheckBoxMenuItem(name);
 		ret.addActionListener(this);
@@ -586,7 +587,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		menu.add(ret);
 		if (ks != null)
 			ret.setAccelerator(ks);
-		ret.setSelected(ChannelUtils.useCache);
+		ret.setSelected(isSelected);
 		return ret;
 	}
 
@@ -617,7 +618,8 @@ public class TextureEditor implements ActionListener, KeyListener {
 		JMenu options = new JMenu("Options");
 		options.setMnemonic('O');
 		m_MainMenuBar.add(options);
-		createCheckboxMenuItem(options, "Use Cache", "options_toggle_usecache", 'C', null);
+		createCheckboxMenuItem(options, "Use Cache", "options_toggle_usecache", 'C', null, ChannelUtils.useCache);
+		createCheckboxMenuItem(options, "Normal FlipX", "options_toggle_normalFlipX", 'X', null, FilterNormalMap.ms_FlipX);
 
 		JMenu help = new JMenu("Help");
 		help.setMnemonic('H');
@@ -692,7 +694,8 @@ public class TextureEditor implements ActionListener, KeyListener {
 			}
 		} else if (c.equals("options_toggle_usecache")) {
 			ChannelUtils.useCache = !ChannelUtils.useCache;
-
+		} else if (c.equals("options_toggle_normalFlipX")) {
+			FilterNormalMap.ms_FlipX = !FilterNormalMap.ms_FlipX;
 		} else if (c.equals("help_dialog")) {
 			JOptionPane.showMessageDialog(null, help_message, "NeoTextureEdit - Help", JOptionPane.PLAIN_MESSAGE);
 		} else if (c.equals("about_dialog")) {
@@ -915,9 +918,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 	}
 
 	private void saveExitParameters() {
-		m_PatternSelector.savePresets(); // stores them in a string in
-											// NTEPresetString
-
+		m_PatternSelector.savePresets(); // stores them in a string in NTEPresetString
 		preferences.put("NTEPresets", NTEPresetString);
 
 		if (m_MainFrame != null) {
@@ -943,6 +944,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 	private void loadAndSetExitParameters(String cmdLine_fileNameToLoad) {
 		NTEPresetString = preferences.get("NTEPresets", defaultNTEPresets);
+		//NTEPresetString = defaultNTEPresets;
 
 		if (m_MainFrame != null) {
 			m_MainFrame.setSize(preferences.getInt("mainWindowSizeX", 1024), preferences.getInt("mainWindowSizeY", 768));

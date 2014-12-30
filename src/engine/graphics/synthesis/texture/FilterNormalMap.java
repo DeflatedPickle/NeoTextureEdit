@@ -23,6 +23,9 @@ import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.FloatParam;
 
 public final class FilterNormalMap extends Channel {
+	public static boolean ms_FlipX = false;
+	public static boolean ms_FlipY = false;
+	
 	FloatParam strength = CreateLocalFloatParam("Strength", 1.0f, 0.0f, Float.MAX_VALUE).setDefaultIncrement(0.125f);
 	
 	public String getName() {
@@ -55,7 +58,7 @@ public final class FilterNormalMap extends Channel {
 	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		float du = caches[0].sample_du(localX, localY).XYZto1f(); //inputChannels[0].du1f(u, v).XYZto1f();
 		float dv = caches[0].sample_dv(localX, localY).XYZto1f(); //inputChannels[0].dv1f(u, v).XYZto1f();
-		out.set(_function(du, dv));
+		out.set(_function(ms_FlipX?-du:du, ms_FlipY?-dv:dv));
 	}
 	
 	
@@ -65,6 +68,8 @@ public final class FilterNormalMap extends Channel {
 	}
 	
 	protected Vector4 _valueRGBA(float u, float v) {
-		return _function(inputChannels[0].du1f(u, v).XYZto1f(), inputChannels[0].dv1f(u, v).XYZto1f());
+		float du = inputChannels[0].du1f(u, v).XYZto1f();
+		float dv = inputChannels[0].dv1f(u, v).XYZto1f();
+		return _function(ms_FlipX?-du:du, ms_FlipY?-dv:dv);
 	}
 }

@@ -225,7 +225,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 	}
 
-	
 
 	public ChannelParameterEditorPanel getParameterEditorPanel() {
 		return paramEditorPanel;
@@ -530,7 +529,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		graph.deleteFullGraph();
 		CacheTileManager.clearCache();
 		repaint();
-		
 	}
 	
 	
