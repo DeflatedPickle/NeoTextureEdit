@@ -67,7 +67,8 @@ Release Notes:
 ==============
 
 0.6.5-devel:
- - 
+ - added basic keyboard scrolling to canvas
+ - fixes for startup file loading
 
 0.6.4:
  - Spectral Control Widget for Noise Bands

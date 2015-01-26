@@ -32,6 +32,8 @@ import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -78,7 +80,7 @@ import engine.graphics.synthesis.texture.Pattern;
  * @author Holger Dammertz
  *
  */
-public final class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ChannelChangeListener, TextureGraphListener {
+public final class TextureGraphEditorPanel extends JPanel implements MouseListener, MouseMotionListener, MouseWheelListener, ActionListener, ChannelChangeListener, TextureGraphListener, KeyListener {
 	private static final long serialVersionUID = 4535161419971720668L;
 	int dragStartX = 0;
 	int dragStartY = 0;
@@ -201,6 +203,9 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		graph = new TextureGraph();
 		graph.graphListener = this;
 		
+		addKeyListener(this);
+		this.setFocusable(true);
+		
 		setBackground(Color.darkGray);
 		setLayout(null);
 
@@ -224,6 +229,44 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		
 		
 	}
+	
+	
+		/**
+	 * Here is currently hard coded the keyboard handling of all key events in
+	 * NeoTextureEdit.
+	 */
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		//System.out.println(arg0.getKeyCode());
+		final int SCROLL_DX = 48;
+		final int SCROLL_DY = 48;
+		
+		switch (arg0.getKeyCode()) {
+		case KeyEvent.VK_LEFT:
+			moveDesktop(-SCROLL_DX, 0);
+			break;
+		case KeyEvent.VK_RIGHT:
+			moveDesktop(SCROLL_DX, 0);
+			break;
+		case KeyEvent.VK_UP:
+			moveDesktop(0, -SCROLL_DY);
+			break;
+		case KeyEvent.VK_DOWN:
+			moveDesktop(0, SCROLL_DY);
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+	}
+
 
 
 	public ChannelParameterEditorPanel getParameterEditorPanel() {
@@ -773,6 +816,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	public void moveDesktop(int dx, int dy) {
 		desktopX += dx;
 		desktopY += dy;
+		
+		repaint();
 	}
 	
 	/**
@@ -818,7 +863,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			int dx = (int)((e.getXOnScreen()*zoom) - dragStartX);
 			int dy = (int)((e.getYOnScreen()*zoom) - dragStartY);
 			moveDesktop(dx, dy);
-			repaint();
 		} else if (nodeDragging) {
 			for (TextureGraphNode node : graph.selectedNodes) {
 				node.movePosition((int)(e.getXOnScreen()*zoom) - dragStartX, (int)(e.getYOnScreen()*zoom) - dragStartY);

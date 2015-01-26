@@ -90,7 +90,7 @@ import engine.graphics.synthesis.texture.ProgressBarInterface;
  * @author Holger Dammertz
  * 
  */
-public class TextureEditor implements ActionListener, KeyListener {
+public class TextureEditor implements ActionListener {
 	private static final long serialVersionUID = -5567955539436014517L;
 	public static boolean GL_ENABLED = false; // on init this is set to true if
 												// we can successfully
@@ -827,7 +827,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 	 */
 	public void createMainFrame() {
 		m_MainFrame = new JFrame();
-		m_MainFrame.addKeyListener(this);
 
 		setTitle(title);
 		m_MainFrame.setIconImage(ChannelUtils.createAndComputeImage(new PatternChecker(2, 2), 16, 16, null, 0));
@@ -1104,28 +1103,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 		return s_ButtonIconA_Selector;
 	}
 
-	/**
-	 * Here is currently hard coded the keyboard handling of all key events in
-	 * NeoTextureEdit.
-	 */
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		switch (arg0.getKeyCode()) {
-		case KeyEvent.VK_DELETE:
-			System.out.println("DELETE");
-			break;
-		default:
-			break;
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-	}
 
 	public void onQuit() {
 		if (m_MainFrame != null)
