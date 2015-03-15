@@ -566,6 +566,18 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 		return graph.selectedNodes.contains(node);
 	}
 	
+	public void updateAll() {
+		//!!TODO: very brute force way to update everything; this could be optimized!
+		for (TextureGraphNode n : graph.allNodes) {
+			CacheTileManager.setEntrysDirty(n.getChannel());
+		}
+		for (TextureGraphNode n : graph.allNodes) {
+			if (n.userData != null) ((NodePreviewImage)n.userData).updatePreviewImage();
+		}
+		paramEditorPanel.channelChanged(null);
+		repaint();
+	}
+	
 	public void deleteFullGraph() {
 		paramEditorPanel.setTextureNode(null);
 		removeAllPreviewWindows();

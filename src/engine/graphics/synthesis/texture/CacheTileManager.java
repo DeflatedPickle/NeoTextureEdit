@@ -200,7 +200,7 @@ public final class CacheTileManager {
 	}
 
 	public static void clearCache() {
-//		tiles.clear();
+		//tiles.clear();
 	}
 
 	public static void setEntrysDirty(Channel c) {

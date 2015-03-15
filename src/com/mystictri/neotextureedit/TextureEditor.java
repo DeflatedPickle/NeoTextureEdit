@@ -694,8 +694,14 @@ public class TextureEditor implements ActionListener {
 			}
 		} else if (c.equals("options_toggle_usecache")) {
 			ChannelUtils.useCache = !ChannelUtils.useCache;
+			m_GraphDrawPanel.updateAll();
+			if (GL_ENABLED)
+				m_OpenGLPreviewPanel.channelChanged(null);
 		} else if (c.equals("options_toggle_normalFlipX")) {
 			FilterNormalMap.ms_FlipX = !FilterNormalMap.ms_FlipX;
+			m_GraphDrawPanel.updateAll();
+			if (GL_ENABLED)
+				m_OpenGLPreviewPanel.channelChanged(null);
 		} else if (c.equals("help_dialog")) {
 			JOptionPane.showMessageDialog(null, help_message, "NeoTextureEdit - Help", JOptionPane.PLAIN_MESSAGE);
 		} else if (c.equals("about_dialog")) {
