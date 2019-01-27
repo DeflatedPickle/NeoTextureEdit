@@ -27,7 +27,6 @@ import javax.imageio.ImageIO;
 
 import com.mystictri.neotextureedit.TextureEditor;
 
-import engine.base.Logger;
 import engine.base.Utils;
 
 //!!TODO: does not work when the path contains spaces!!
@@ -81,7 +80,7 @@ public class ImageParam extends AbstractParam {
 				System.err.println("WARNING: could not load " + filename);
 				return false;
 			}
-			Logger.log(this, "Loaded " + filename);
+			TextureEditor.logger.info("Loaded " + filename);
 		} catch (IOException e) {
 			System.err.println(e);
 			return false;

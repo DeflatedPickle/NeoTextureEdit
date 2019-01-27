@@ -22,7 +22,7 @@ import java.io.Writer;
 import java.util.Scanner;
 import java.util.Vector;
 
-import engine.base.Logger;
+import com.mystictri.neotextureedit.TextureEditor;
 import engine.graphics.synthesis.texture.Channel;
 
 /**
@@ -216,7 +216,7 @@ public final class TextureGraphNode {
 			if (allConnectionPoints.get(i).channelIndex == index)
 				return allConnectionPoints.get(i);
 		}
-		Logger.logError(this, "no connection point found for index " + index + " in class " + this);
+		TextureEditor.logger.error("No connection point found for index " + index + " in class " + this);
 		return null;
 	}
 

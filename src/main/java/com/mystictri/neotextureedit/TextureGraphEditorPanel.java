@@ -65,7 +65,6 @@ import com.mystictri.neotexture.TextureGraphListener;
 import com.mystictri.neotexture.TextureGraphNode;
 import com.mystictri.neotexture.TextureGraphNode.ConnectionPoint;
 
-import engine.base.Logger;
 import engine.graphics.synthesis.texture.CacheTileManager;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.Channel.ChannelVizType;
@@ -344,10 +343,10 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			try {
 				ChannelUtils.useCache = false;
 				ImageIO.write(ChannelUtils.createAndComputeImage(graph.selectedNodes.lastElement().getChannel(), resX, resY, TextureEditor.INSTANCE.m_ProgressDialog, 3), "png", new File(name));
-				Logger.log(this, "Saved image to " + name + ".");
+				TextureEditor.logger.info("Saved image to " + name);
 			} catch (IOException exc) {
 				exc.printStackTrace();
-				Logger.logError(this, "IO Exception while exporting image: " + exc);
+				TextureEditor.logger.error("IO Exception while exporting image: " + exc);
 			}
 			ChannelUtils.useCache = useCache;
 		}
@@ -382,7 +381,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 						replaceTextureNode(node, newNode);
 						repaint();
 					} else {
-						Logger.logWarning(this, "No node selected for replace.");
+						TextureEditor.logger.warn("No node selected for replace");
 					}
 				}
 			} catch (InstantiationException e1) {
@@ -392,7 +391,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			}
 		} else if (e.getSource() == newChannelInsertMenuItem) {
 			if (toCopyTextureGraphNode == null) {
-				Logger.logError(this, "No node copied to insert.");
+				TextureEditor.logger.error("No node copied to insert");
 			} else {
 				addTextureNode(toCopyTextureGraphNode.cloneThisNode(), mousePosition.x - desktopX, mousePosition.y - desktopY);
 				repaint();
@@ -401,16 +400,16 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			if (graph.selectedNodes.size() > 0) {
 				toCopyTextureGraphNode = graph.selectedNodes.get(0).cloneThisNode();
 			} else {
-				Logger.logError(this, "no selection in copyChannel popup menu.");
+				TextureEditor.logger.error("No selection in copyChannel popup menu");
 			}
 		} else if (e.getSource() == replacepasteChannelMenuItem) {
 			if (toCopyTextureGraphNode == null) {
-				Logger.logError(this, "No node copied to replace paste.");
+				TextureEditor.logger.error("No node copied to replace paste");
 			} else if (graph.selectedNodes.size() > 0) {
 				replaceTextureNode(graph.selectedNodes.get(0), toCopyTextureGraphNode.cloneThisNode());
 				repaint();
 			} else {
-				Logger.logError(this, "no selection in insert-replaceChannel popup menu.");
+				TextureEditor.logger.error("No selection in insert-replaceChannel popup menu");
 			}
 		} else if (e.getSource() == previewChannelMenuItem) {
 			if (graph.selectedNodes.size() > 0) {
@@ -424,7 +423,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 				addTextureNode(n, orig.getX()+32, orig.getY()+32);
 				repaint();
 			} else {
-				Logger.logError(this, "no selection in cloneChannel popup menu.");
+				TextureEditor.logger.error("No selection in cloneChannel popup menu");
 			}
 		} else if (e.getSource() == swapInputsChannelMenuItem) { // --------------------------------------------------------
 			TextureGraphNode node = graph.selectedNodes.get(0);
@@ -457,8 +456,8 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			if (graph.selectedNodes.size() > 0) {
 				if (graph.selectedNodes.get(0).getChannel() instanceof Pattern)
 					TextureEditor.INSTANCE.m_PatternSelector.addPatternPreset((Pattern)Channel.cloneChannel((Pattern)graph.selectedNodes.get(0).getChannel()));
-				else Logger.logError(this, "Invalid action 'Add to Presets': selected node is not a pattern");
-			} else Logger.logError(this, "Invalid action 'Add To Presets': no selected nodes exists.");
+				else TextureEditor.logger.error("Invalid action 'Add to Presets': selected node is not a pattern");
+			} else TextureEditor.logger.error("Invalid action 'Add To Presets': no selected nodes exists");
 		} else if (e.getSource() == deleteChannelMenuItem) { // --------------------------------------------------------
 			action_DeleteSelectedNodes();
 		} else if (e.getActionCommand().equals("arbitraryResolutionExport")) {
@@ -492,7 +491,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 						TextureEditor.INSTANCE.m_OpenGLPreviewPanel.setHeightmapTextureNode(n);
 						repaint();
 					}
-				} else Logger.logWarning(this, "Incomplete channel for preview."); 
+				} else TextureEditor.logger.warn("Incomplete channel for preview");
 			// --------------------------------------------------------
 			} 
 		}
@@ -535,7 +534,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 	
 	
 	public void save(String filename) {
-		Logger.log(this, "Saving TextureGraph to " + filename);
+		TextureEditor.logger.info("Saving TextureGraph to " + filename);
 		try {
 			BufferedWriter w = new BufferedWriter(new FileWriter(filename));
 			graph.save(w);
@@ -559,11 +558,11 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 			
 			return true;
 		} catch (FileNotFoundException e) {
-			Logger.logError(this, "Could not load " + filename);
+			TextureEditor.logger.error("Could not load " + filename);
 			return false;
 		} catch (InputMismatchException ime) {
 			ime.printStackTrace();
-			Logger.logError(this, "Could not load " + filename);
+			TextureEditor.logger.error("Could not load " + filename);
 			return false;
 		}
 		

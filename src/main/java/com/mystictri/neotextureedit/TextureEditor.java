@@ -38,11 +38,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Properties;
 import java.util.Scanner;
 import java.util.Vector;
 import java.util.prefs.Preferences;
@@ -78,11 +75,12 @@ import apple.dts.samplecode.osxadapter.OSXAdapter;
 import com.mystictri.neotexture.TextureGenerator;
 import com.mystictri.neotexture.TextureGraphNode;
 
-import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.Pattern;
 import engine.graphics.synthesis.texture.PatternChecker;
 import engine.graphics.synthesis.texture.ProgressBarInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This is the main window of NeoTextureEdit. It is more or less a singelton
@@ -97,6 +95,8 @@ public class TextureEditor implements ActionListener, KeyListener {
 												// we can successfully
 												// initialize GL
 	public static TextureEditor INSTANCE = null;
+
+	public static Logger logger = LogManager.getLogger(TextureEditor.class.getName());
 
 	// Check that we are on Mac OS X. This is crucial to loading and using the
 	// OSXAdapter class.
@@ -325,11 +325,11 @@ public class TextureEditor implements ActionListener, KeyListener {
 					if (c instanceof Pattern) {
 						addPatternPreset((Pattern) c);
 					} else {
-						Logger.logError(this, "Preset file contained non-Patterns; ignoring them.");
+						logger.error("Preset file contained non-Patterns; ignoring them");
 					}
 				}
 			} catch (Exception e) {
-				Logger.logError(this, "Failed to load presets");
+				logger.error("Failed to load presets");
 			}
 		}
 
@@ -391,7 +391,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 		 */
 		public void removePatternPreset(PatternPresetLabel p) {
 			if (!presets.remove(clickedPreset.pat))
-				Logger.logWarning(this, "Delete of selected preset failed");
+				logger.warn("Delete of selected preset failed");
 			patternPanel.remove(clickedPreset);
 
 			patternPanel.revalidate();
@@ -407,7 +407,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 					removePatternPreset(clickedPreset);
 					clickedPreset = null;
 				} else {
-					Logger.logWarning(this, "Delete Preset called but no preset selected.");
+					logger.warn("Delete Preset called but no preset selected");
 				}
 			}
 
@@ -687,7 +687,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 			m_GraphDrawPanel.centerDesktop();
 		} else if (c.equals("view_OpenGLPreview")) {
 			if (!GL_ENABLED) {
-				Logger.logError(this, "Tried to show OpenGL preview, but it is not initialized.");
+				logger.warn("Tried to show OpenGL preview, but it is not initialized");
 			} else {
 				m_OpenGLPreviewPanel.setVisible(!m_OpenGLPreviewPanel.isVisible());
 				m_CenterPanel.validate();
@@ -867,7 +867,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 	public TextureEditor(String[] args) {
 		if (INSTANCE != null)
-			Logger.logFatal(this, "Multiple instances of TextureEditor are not allowed.");
+			logger.fatal("Multiple instances of TextureEditor are not allowed");
 		INSTANCE = this;
 		// now parse the command line
 		commandLineOptions.parse(args);
@@ -885,10 +885,10 @@ public class TextureEditor implements ActionListener, KeyListener {
 													// initializing openGL so we
 													// disable openGL preview
 					// m_OpenGLPreviewPanel = null;
-					Logger.logError(this, "Could not initialize OpenGL for Preview Rendering!");
+					logger.error("Could not initialize OpenGL for Preview Rendering!");
 				}
 			} catch (NoClassDefFoundError ncdfe) {
-				Logger.logError(this, "Could not initialize OpenGL for Preview Rendering!");
+				logger.error("Could not initialize OpenGL for Preview Rendering!");
 				ncdfe.printStackTrace();
 			}
 		}

@@ -26,7 +26,6 @@ import org.lwjgl.opengl.Util;
 import org.lwjgl.util.glu.GLU;
 
 import engine.base.FMath;
-import engine.base.Logger;
 import engine.base.Utils;
 import engine.base.Vector3;
 import engine.graphics.synthesis.texture.Channel;
@@ -202,7 +201,7 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 		b.flip();
 		int ret = ARBShaderObjects.glGetUniformLocationARB(programID, b);
 		if (ret == -1) {
-			Logger.logWarning(this, "    WARNING: Shader: "+programID+": could not get uniform location " + loc_name);
+			TextureEditor.logger.warn("Shader: " + programID + ": could not get uniform location " + loc_name);
 		}
 		Util.checkGLError();
 		return ret;
@@ -314,7 +313,7 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 	
 	public synchronized void updateDiffuseMap(Channel c) {
 		if (c != null && !c.chechkInputChannels()) {
-			Logger.logWarning(this, "Incomplete input channel in diffuse map.");
+			TextureEditor.logger.warn("Incomplete input channel in diffuse map");
 			_updateDiffuse = null;
 		} else {
 			_updateDiffuse = c;
@@ -325,7 +324,7 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 	
 	public synchronized void updateNormalMap(Channel c) {
 		if (c != null && !c.chechkInputChannels()) {
-			Logger.logWarning(this, "Incomplete input channel in normal map.");
+			TextureEditor.logger.warn("Incomplete input channel in normal map");
 			_updateNormal = null;
 		} else {
 			_updateNormal = c;
@@ -336,7 +335,7 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 	
 	public synchronized void updateSpecWeightMap(Channel c) {
 		if (c != null && !c.chechkInputChannels()) {
-			Logger.logWarning(this, "Incomplete input channel in specular map.");
+			TextureEditor.logger.warn("Incomplete input channel in specular map");
 			_updateSpecWeight = null;
 		} else {
 			_updateSpecWeight = c;
@@ -347,7 +346,7 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 	
 	public synchronized void updateHeightMap(Channel c) {
 		if (c != null && !c.chechkInputChannels()) {
-			Logger.logWarning(this, "Incomplete input channel in height map.");
+			TextureEditor.logger.warn("Incomplete input channel in height map");
 			_updateHeightmap = null;
 		} else {
 			_updateHeightmap = c;
@@ -615,7 +614,7 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 	// here are the same performance problems as in create2dTexture
 	public synchronized void update2dTexture(BufferedImage img, int id) {
 		if (img.getWidth() != TEXTURE_RESX || img.getHeight() != TEXTURE_RESY) {
-			Logger.logError(this, "TextureResolution does not match image resolution for update.");
+			TextureEditor.logger.error("TextureResolution does not match image resolution for update");
 			return;
 		}
 		convertImageData(bbuf.asIntBuffer(), img);

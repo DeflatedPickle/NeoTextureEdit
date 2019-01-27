@@ -21,7 +21,6 @@ import org.lwjgl.opengl.Display;
 import com.mystictri.neotexture.TextureGraphNode;
 import com.mystictri.neotextureedit.ChannelParameterEditorPanel.InfoLabel;
 
-import engine.base.Logger;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 import engine.parameters.AbstractParam;
@@ -161,7 +160,7 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 				c.setLocation(x, y); y += c.getHeight();
 				parameterPanel.add(c);
 			} else {
-				Logger.logWarning(this, "Could not create an editor for parameter " + param.getName());
+				TextureEditor.logger.warn("Could not create an editor for parameter " + param.getName());
 			}
 		}
 		add(parameterPanel);
@@ -231,7 +230,7 @@ public class OpenGLPreviewPanel extends JPanel implements ChannelChangeListener,
 				if ((param = glcanvas.params.getParamByName(t.replace('_', ' '))) != null) {
 					param.load(s);
 				} else {
-					Logger.logWarning(null, " loading of param " + t + " failed.");
+					TextureEditor.logger.warn("Loading of param " + t + " failed.");
 				}
 			}
 		}

@@ -17,8 +17,8 @@
 
 package engine.graphics.synthesis.texture;
 
+import com.mystictri.neotextureedit.TextureEditor;
 import engine.base.FMath;
-import engine.base.Logger;
 import engine.base.Vector4;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.EnumParam;
@@ -54,7 +54,7 @@ public final class PatternGradient extends Pattern {
 		} else if (gradientType.getEnumPos() == 2) { // Square
 			pos =  1.0f - 2.0f*Math.max(FMath.abs(0.5f - u), FMath.abs(0.5f - v));
 		} else {
-			Logger.logError(this, "Invalid gradientType");
+			TextureEditor.logger.error("Invalid gradientType");
 		}
 		
 		return colorGradientParam.get().getColor(pos);

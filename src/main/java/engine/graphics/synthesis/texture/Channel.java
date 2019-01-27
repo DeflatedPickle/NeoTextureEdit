@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
 
+import com.mystictri.neotextureedit.TextureEditor;
 import engine.base.FMath;
-import engine.base.Logger;
 import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.AbstractParam;
@@ -85,7 +85,7 @@ public abstract class Channel extends LocalParameterManager {
 
 	public void removeChannelChangeListener(ChannelChangeListener listener) {
 		if (!changeListener.remove(listener)) {
-			Logger.logWarning(this, "tried to remove nonexisting ChannelChangeListener " + listener + " from " + this);
+			TextureEditor.logger.warn("Tried to remove non-existing ChannelChangeListener " + listener + " from " + this);
 		}
 	}
 
@@ -241,7 +241,7 @@ public abstract class Channel extends LocalParameterManager {
 				if ((param = c.getParamByName(t.replace('_', ' '))) != null) {
 					param.load(s);
 				} else {
-					Logger.logWarning(null, " loading of param " + t + " failed.");
+					TextureEditor.logger.warn("Loading of param " + t + " failed");
 				}
 			}
 			AbstractParam.GLOBAL_SILENT = false;

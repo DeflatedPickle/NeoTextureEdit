@@ -37,7 +37,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import engine.base.FMath;
-import engine.base.Logger;
 import engine.base.Utils;
 import engine.base.Vector4;
 import engine.parameters.ColorGradient;
@@ -111,7 +110,7 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 	}
 
 	static {
-		Logger.log(null, "Creating Gradient Presets");
+		TextureEditor.logger.info("Creating Gradient Presets");
 		// the first entry gets overwritten with the old gradient in case
 		// someone wants to use it;
 		ms_Presets.add(new GradientPreset(new ColorGradient().addEntryRGB(0f, 0f, 0f, 0f).addEntryRGB(0f, 0f, 0f, 0f)));
@@ -472,7 +471,7 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 		String command = e.getActionCommand();
 		
 		if (m_ActiveGradient == null) {
-			Logger.logWarning(this, "Popup Action without an active gradient.");
+			TextureEditor.logger.warn("Popup Action without an active gradient");
 			return;
 		}
 		
@@ -515,7 +514,7 @@ public class GradientEditorPanel extends JPanel implements MouseMotionListener, 
 			m_ActiveGradient.setFrom(ms_CopiedColorGradient);
 			setColorGradient(m_ActiveGradient);
 		} else {
-			Logger.logWarning(this, "got Unknown Action: " + command);
+			TextureEditor.logger.warn("Got unknown action: " + command);
 			return;
 		}
 

@@ -2,7 +2,6 @@ package com.mystictri.neotextureedit;
 
 import java.awt.image.BufferedImage;
 
-import engine.base.Logger;
 import engine.base.Utils;
 import engine.base.Vector3;
 import engine.base.Vector4;
@@ -42,7 +41,7 @@ public final class ChannelUtils {
 	private static void _computeImage(Channel c, BufferedImage img, ProgressBarInterface progress, int mode, int globalXres, int globalYres, int px, int py) {
 
 		if (!c.chechkInputChannels()) {
-			Logger.logError(null, "Computing image from incomplete channel not possible!");
+			TextureEditor.logger.error("Computing image from incomplete channel not possible!");
 			return;
 		}
 		// HACK_cache.clear();
@@ -91,7 +90,7 @@ public final class ChannelUtils {
 						color.set(col.getVector3());
 						val = Utils.vector4ToINTColor_ARGB(col);
 					} else {
-						Logger.logError(null, "Wrong in computeImage");
+						TextureEditor.logger.error("Wrong in computeImage");
 						val = Utils.vector3ToINTColor(color);
 					}
 					img.setRGB(x, y, val);
