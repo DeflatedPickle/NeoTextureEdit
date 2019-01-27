@@ -1,7 +1,8 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'com.stehno.natives' version '0.3.1'
 }
-apply plugin: 'java'
 apply plugin: 'idea'
 
 group 'com.mystictri.neotextureedit'
@@ -9,11 +10,24 @@ version '0.6.5'
 
 sourceCompatibility = 1.8
 
+mainClassName = 'com.mystictri.neotextureedit.TextureEditor'
+
 repositories {
+    jcenter()
     mavenCentral()
 }
 
 dependencies {
     compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
     compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
+}
+
+natives {
+    configurations = ['compile', 'runtime']
+    outputDir = 'natives'
+}
+
+run {
+    dependsOn includeNatives
+    systemProperty 'java.library.path', file('build/natives')
 }
