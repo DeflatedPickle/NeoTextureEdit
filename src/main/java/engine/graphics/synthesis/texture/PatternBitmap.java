@@ -20,11 +20,11 @@ package engine.graphics.synthesis.texture;
 import java.awt.image.BufferedImage;
 
 import engine.base.Utils;
-import engine.base.Vector4;
 import engine.parameters.AbstractParam;
 import engine.parameters.EnumParam;
 import engine.parameters.ImageParam;
 import engine.parameters.InfoParam;
+import org.joml.Vector4f;
 
 public final class PatternBitmap extends Pattern {
 	ImageParam image = CreateLocalImageParam("Image", "");
@@ -45,13 +45,13 @@ public final class PatternBitmap extends Pattern {
 				"are missing. The loaded image is left untouched and is sampled.";
 	}
 	
-	Vector4 sampleColorNearest(BufferedImage img, float u, float v) {
+	Vector4f sampleColorNearest(BufferedImage img, float u, float v) {
 		int x = ((int)(u * img.getWidth() + 0.5f)) % img.getWidth();
 		int y = ((int)(v * img.getHeight() + 0.5f)) % img.getHeight();
 		return Utils.RGBAToVector4(img.getRGB(x, y));
 	}
 	
-	Vector4 sampleColorLinear(BufferedImage img, float u, float v) {
+	Vector4f sampleColorLinear(BufferedImage img, float u, float v) {
 		int rx = img.getWidth();
 		int ry = img.getHeight();
 		int x = (int)(u * rx);
@@ -61,24 +61,24 @@ public final class PatternBitmap extends Pattern {
 		x = x%rx;
 		y = y%ry;
 		
-		Vector4 c0 = Utils.RGBAToVector4(img.getRGB(x, y)); 
-		Vector4 c1 = Utils.RGBAToVector4(img.getRGB((x+1)%rx, y)); 
-		Vector4 c2 = Utils.RGBAToVector4(img.getRGB(x, (y+1)%ry)); 
-		Vector4 c3 = Utils.RGBAToVector4(img.getRGB((x+1)%rx, (y+1)%ry));
+		Vector4f c0 = Utils.RGBAToVector4(img.getRGB(x, y)); 
+		Vector4f c1 = Utils.RGBAToVector4(img.getRGB((x+1)%rx, y)); 
+		Vector4f c2 = Utils.RGBAToVector4(img.getRGB(x, (y+1)%ry)); 
+		Vector4f c3 = Utils.RGBAToVector4(img.getRGB((x+1)%rx, (y+1)%ry));
 		
-		c0.linearInterp_ip(mx, c1);
-		c2.linearInterp_ip(mx, c3);
-		c0.linearInterp_ip(my, c2);
+		c0.lerp(c1, mx);
+		c2.lerp(c3, mx);
+		c0.lerp(c2, my);
 		
 		return c0;
 	}
 	
 	
 	
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		BufferedImage img = image.getImage();
 		if (img == null) {
-			return new Vector4(0, 0, 0, 0);
+			return new Vector4f(0, 0, 0, 0);
 		} else {
 			if (interpolation.getEnumPos() == 0) return sampleColorNearest(img, u, v);
 			else return sampleColorLinear(img, u, v);

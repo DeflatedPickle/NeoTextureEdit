@@ -1,10 +1,10 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.FMath;
-import engine.base.Vector3;
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.Matrix3x3Param;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class FilterTransform extends Channel {
 	
@@ -27,22 +27,22 @@ public class FilterTransform extends Channel {
 	}
 	
 	
-	final protected Vector3 transform(float u, float v) {
-		Vector3 p = transformation.getMatrix().mult(new Vector3(u, v, 1.0f));
+	final protected Vector3f transform(float u, float v) {
+		Vector3f p = transformation.getMatrix().mult(new Vector3f(u, v, 1.0f));
 		p.x = p.x - FMath.ffloor(p.x);
 		p.y = p.y - FMath.ffloor(p.y);
 		return p;
 	}
 	
 	//!!TODO; find an acceptable way to use the cache here (tiled cache is the problem here)
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
-		Vector3 p = transform(u, v);
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+		Vector3f p = transform(u, v);
 		out.set(inputChannels[0].valueRGBA(p.x, p.y));
 	}
 
 	
-	protected Vector4 _valueRGBA(float u, float v) {
-		Vector3 p = transform(u, v);
+	protected Vector4f _valueRGBA(float u, float v) {
+		Vector3f p = transform(u, v);
 		return inputChannels[0].valueRGBA(p.x, p.y);
 	}
 

@@ -1,10 +1,10 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.FMath;
-import engine.base.Vector4;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.EnumParam;
 import engine.parameters.FloatParam;
+import org.joml.Vector4f;
 
 public final class PatternFunction extends Pattern {
 	public String getName() {
@@ -39,7 +39,7 @@ public final class PatternFunction extends Pattern {
 		else return 1.0f;
 	}
 	
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		float su = 0.0f; 
 		float sv = 0.0f;
 		

@@ -17,11 +17,11 @@
 
 package engine.parameters;
 
+import org.joml.Vector4f;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Scanner;
-
-import engine.base.Vector4;
 
 public final class ColorGradientParam extends AbstractParam {
 	private final ColorGradient m_Gradient;
@@ -30,15 +30,15 @@ public final class ColorGradientParam extends AbstractParam {
 		this.name = name;
 		m_Gradient = new ColorGradient();
 		// default grayscale gradient
-		m_Gradient.addEntry(new Vector4(0.0f, 0.0f, 0.0f, 1.0f), 0.0f);
-		m_Gradient.addEntry(new Vector4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f);
+		m_Gradient.addEntry(new Vector4f(0.0f, 0.0f, 0.0f, 1.0f), 0.0f);
+		m_Gradient.addEntry(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f), 1.0f);
 	}
 	
 	// saves only the value
 	public void save(Writer w) throws IOException  {
 		w.write(m_Gradient.getNumEntries() + " ");
 		for (int i = 0; i < m_Gradient.getNumEntries(); i++) {
-			Vector4 v = m_Gradient.getEntryColor(i);
+			Vector4f v = m_Gradient.getEntryColor(i);
 			w.write(v.x+" "+v.y+" "+v.z+" "+v.w+" ");
 			w.write(m_Gradient.getEntryPosition(i) + " ");
 		}
@@ -50,7 +50,7 @@ public final class ColorGradientParam extends AbstractParam {
 		for (int i = 0; i < num; i++) {
 			// !!TODO: this is a workaround for a weirded windows s.nextFloat bug;
 			//m_Gradient.addEntry(new Vector4(s.nextFloat(), s.nextFloat(), s.nextFloat(), s.nextFloat()), s.nextFloat());
-			m_Gradient.addEntry(new Vector4(Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next())),Float.parseFloat(s.next()));
+			m_Gradient.addEntry(new Vector4f(Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next()),Float.parseFloat(s.next())),Float.parseFloat(s.next()));
 		}
 		notifyParamChangeListener();
 	}

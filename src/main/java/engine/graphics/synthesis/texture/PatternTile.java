@@ -17,9 +17,9 @@
 
 package engine.graphics.synthesis.texture;
 
-import engine.base.Vector4;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.FloatParam;
+import org.joml.Vector4f;
 
 public final class PatternTile extends Pattern {
 	public String getName() {
@@ -45,7 +45,7 @@ public final class PatternTile extends Pattern {
 		smooth.setDefaultIncrement(0.025f);
 	}
 
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		if ((u < borderX.get()) || (u > (1.0f-borderX.get()))) return colorGradientParam.get().getColor(0.0f);
 		if ((v < borderY.get()) || (v > (1.0f-borderY.get()))) return colorGradientParam.get().getColor(0.0f);
 		

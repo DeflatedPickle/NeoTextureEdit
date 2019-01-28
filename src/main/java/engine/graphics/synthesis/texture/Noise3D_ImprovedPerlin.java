@@ -20,7 +20,7 @@ package engine.graphics.synthesis.texture;
 import java.util.Random;
 
 import engine.base.FMath;
-import engine.base.Vector3;
+import org.joml.Vector3f;
 
 /**
  * Implementation of the paper Improving Noise, 2002, Ken Perlin based on Ken Perlin's reference implementation.
@@ -76,11 +76,11 @@ public final class Noise3D_ImprovedPerlin {
 	/**
 	 * @return a value between [-1,1]
 	 */
-	public float sample(Vector3 pos) {
+	public float sample(Vector3f pos) {
 		return sample3d(pos, 1.0f);
 	}
 
-	public float sample3d(Vector3 pos, float scale) {
+	public float sample3d(Vector3f pos, float scale) {
 		float x = pos.x * size * scale, y = pos.y * size * scale, z = pos.z * size * scale;
 		int X = FMath.ffloor(x), // FIND UNIT CUBE THAT
 		Y = FMath.ffloor(y), // CONTAINS POINT.
@@ -118,7 +118,7 @@ public final class Noise3D_ImprovedPerlin {
 	 * @param periodZ
 	 * @return
 	 */
-	public float sample3dPeriodic(Vector3 pos, int periodX, int periodY, int periodZ) {
+	public float sample3dPeriodic(Vector3f pos, int periodX, int periodY, int periodZ) {
 		float x = pos.x * size, y = pos.y * size, z = pos.z * size;
 		int X = FMath.ffloor(x), // FIND UNIT CUBE THAT
 		Y = FMath.ffloor(y), // CONTAINS POINT.

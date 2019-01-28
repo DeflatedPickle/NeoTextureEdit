@@ -17,14 +17,14 @@
 
 package engine.parameters;
 
+import org.joml.Vector3f;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Scanner;
 
-import engine.base.Vector3;
-
 public final class ColorParam extends AbstractParam {
-	final Vector3 color = new Vector3();
+	final Vector3f color = new Vector3f();
 
 	private ColorParam(String name, float r, float g, float b) {
 		this.name = name;
@@ -47,8 +47,8 @@ public final class ColorParam extends AbstractParam {
 		notifyParamChangeListener();
 	}
 	
-	public Vector3 get() {
-		return new Vector3(color);
+	public Vector3f get() {
+		return new Vector3f(color);
 	}
 	
 	public static ColorParam create(String name, float r, float g, float b) {

@@ -17,11 +17,12 @@
 
 package engine.graphics.synthesis.texture;
 
+import engine.base.FMath;
 import engine.base.Utils;
-import engine.base.Vector3;
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.FloatParam;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public final class FilterColorCorrect extends Channel {
 	private final FloatParam brightness = CreateLocalFloatParam("Brightness", 0.0f, -1.0f, 1.0f).setDefaultIncrement(0.125f);
@@ -58,39 +59,44 @@ public final class FilterColorCorrect extends Channel {
 		return OutputType.SCALAR;
 	}
 	
-	private Vector4 _function(Vector4 c0) {
-		c0.sub_ip(0.5f);
-		c0.mult_ip(contrast.get());
-		c0.add_ip(brightness.get());
-		c0.add_ip(0.5f);
-		c0.clamp(0.0f, 1.0f);
+	private Vector4f _function(Vector4f c0) {
+		c0.sub(new Vector4f(0.5f));
+		c0.mul(contrast.get());
+		c0.add(new Vector4f(brightness.get()));
+		c0.add(new Vector4f(0.5f));
+		c0.min(new Vector4f(0.0f), new Vector4f(1.0f));
 		
 		float d = desaturate.get();
 		if (d != 0.0f) {
-			Vector3 temp = c0.getVector3();
+			Vector3f temp = new Vector3f(c0.x, c0.y, c0.z);
 			Utils.rgbToHSV_ip(temp);
 			temp.y *= (1.0f - d);
 			Utils.hsvToRGB_ip(temp);
-			c0.setXYZ(temp.x, temp.y, temp.z);
+			c0.set(temp, c0.w);
 		}
 		
 		float g = gamma.get();
-		if (g != 1.0f) c0.pow_ip(1.0f/g);
+		if (g != 1.0f) c0.set(new Vector4f(
+				FMath.pow(c0.x, 1.0f / g),
+				FMath.pow(c0.y, 1.0f / g),
+				FMath.pow(c0.z, 1.0f / g),
+				FMath.pow(c0.w, 1.0f / g))
+		);
 		
 		return c0;
 	}
 	
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		out.set(_function(caches[0].sample(localX, localY)));
 	}
 	
 	
 	protected float _value1f(float u, float v) {
-		Vector4 val = valueRGBA(u, v);
+		Vector4f val = valueRGBA(u, v);
 		return (val.x+val.y+val.z)*(1.0f/3.0f);
 	}
 	
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		return _function(inputChannels[0].valueRGBA(u, v));
 	}
 	

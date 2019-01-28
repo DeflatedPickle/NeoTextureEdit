@@ -1,8 +1,8 @@
 package engine.graphics.synthesis.texture;
 
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.EnumParam;
+import org.joml.Vector4f;
 
 /**
  * Allows to combine 4 input channels arbitrary into and output RGBA image
@@ -38,21 +38,21 @@ public class FilterCombine extends Channel {
 	}
 	
 	
-	private final void _function(Vector4 out, Vector4 in0, Vector4 in1, Vector4 in2, Vector4 in3) {
+	private final void _function(Vector4f out, Vector4f in0, Vector4f in1, Vector4f in2, Vector4f in3) {
 		out.set(in0.get(input0channel.getEnumPos()), in1.get(input1channel.getEnumPos()),
 				in2.get(input2channel.getEnumPos()), in3.get(input3channel.getEnumPos()));
 	}
 	
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		_function(out, caches[0].sample(localX, localY), caches[1].sample(localX, localY), caches[2].sample(localX, localY), caches[3].sample(localX, localY));
 	}
 		
-	protected Vector4 _valueRGBA(float u, float v) {
-		Vector4 c0 = inputChannels[0].valueRGBA(u, v);
-		Vector4 c1 = inputChannels[1].valueRGBA(u, v);
-		Vector4 c2 = inputChannels[2].valueRGBA(u, v);
-		Vector4 c3 = inputChannels[3].valueRGBA(u, v);
-		Vector4 ret = new Vector4();
+	protected Vector4f _valueRGBA(float u, float v) {
+		Vector4f c0 = inputChannels[0].valueRGBA(u, v);
+		Vector4f c1 = inputChannels[1].valueRGBA(u, v);
+		Vector4f c2 = inputChannels[2].valueRGBA(u, v);
+		Vector4f c3 = inputChannels[3].valueRGBA(u, v);
+		Vector4f ret = new Vector4f();
 
 		_function(ret, c0, c1, c2, c3);
 		

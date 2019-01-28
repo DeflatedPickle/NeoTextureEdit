@@ -3,12 +3,12 @@ package com.mystictri.neotextureedit;
 import java.awt.image.BufferedImage;
 
 import engine.base.Utils;
-import engine.base.Vector3;
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ProgressBarInterface;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 /**
  * A collection of helper methods that use channels
@@ -66,28 +66,28 @@ public final class ChannelUtils {
 					float u = (float) (x + px * img.getWidth()) / (float) globalXres;
 					float v = (float) (y + py * img.getHeight()) / (float) globalYres;
 
-					final Vector4 col;
+					final Vector4f col;
 					if (tce == null) col = c.valueRGBA(u, v);
 					else col = tce.sample(x, y);
 					
-					final Vector3 color = new Vector3();
+					final Vector3f color = new Vector3f();
 					int val;
 					// !!UGH TODO: optimize this!!
 					if (mode == 0) {
-						color.set(col.getVector3());
+						color.set(col.x, col.y, col.z);
 						val = Utils.vector3ToINTColor(color);
 					} else if (mode == 1) {
 						float bg = ((((x + y) / 8) % 2) != 0) ? 1.0f : 0.75f;
 						col.x = col.x * col.w + bg * (1.0f - col.w);
 						col.y = col.y * col.w + bg * (1.0f - col.w);
 						col.z = col.z * col.w + bg * (1.0f - col.w);
-						color.set(col.getVector3());
+						color.set(col.x, col.y, col.z);
 						val = Utils.vector3ToINTColor(color);
 					} else if (mode == 2) {
 						color.set(col.w);
 						val = Utils.vector3ToINTColor(color);
 					} else if (mode == 3) {
-						color.set(col.getVector3());
+						color.set(col.x, col.y, col.z);
 						val = Utils.vector4ToINTColor_ARGB(col);
 					} else {
 						TextureEditor.logger.error("Wrong in computeImage");

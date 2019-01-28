@@ -17,14 +17,14 @@
 
 package engine.graphics.synthesis.texture;
 
-import engine.base.Vector3;
-import engine.base.Vector4;
 import engine.parameters.AbstractParam;
 import engine.parameters.BoolParam;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
 import engine.parameters.SpectralControlParam;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public final class PatternPerlinNoise extends Pattern {
 
@@ -95,7 +95,7 @@ public final class PatternPerlinNoise extends Pattern {
 		super.parameterChanged(source);
 	}
 
-	public Vector4 _valueRGBA(float u, float v) {
+	public Vector4f _valueRGBA(float u, float v) {
 		float val = 0.0f;
 		float mult = 1.0f;
 		float freq = 1.0f;
@@ -123,8 +123,8 @@ public final class PatternPerlinNoise extends Pattern {
 			
 			// seems to be a better periodic force
 			float valueAdd = 0.0f;
-			if (isPeriodic) valueAdd = noise.sample3dPeriodic(new Vector3(u*freq*scaleX.get(), v*freq*scaleY.get(),0.0f), (int)(freq*scaleX.get()), (int)(freq*scaleY.get()), 256)*mult;
-			else valueAdd = noise.sample(new Vector3(u*freq*scaleX.get(), v*freq*scaleY.get(), 0.0f))*mult;
+			if (isPeriodic) valueAdd = noise.sample3dPeriodic(new Vector3f(u*freq*scaleX.get(), v*freq*scaleY.get(),0.0f), (int)(freq*scaleX.get()), (int)(freq*scaleY.get()), 256)*mult;
+			else valueAdd = noise.sample(new Vector3f(u*freq*scaleX.get(), v*freq*scaleY.get(), 0.0f))*mult;
 			
 			val += valueAdd;
 			

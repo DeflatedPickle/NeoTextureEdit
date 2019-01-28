@@ -17,8 +17,8 @@
 
 package engine.graphics.synthesis.texture;
 
-import engine.base.Vector4;
 import engine.parameters.ColorParam;
+import org.joml.Vector4f;
 
 public final class PatternConstantColor extends Pattern {
 	public String getName() {
@@ -40,8 +40,8 @@ public final class PatternConstantColor extends Pattern {
 		color = CreateLocalColorParam("Color", r, g, b);
 	}
 
-	protected Vector4 _valueRGBA(float u, float v) {
-		return new Vector4(color.get(), 1.0f);
+	protected Vector4f _valueRGBA(float u, float v) {
+		return new Vector4f(color.get(), 1.0f);
 	}
 	
 }

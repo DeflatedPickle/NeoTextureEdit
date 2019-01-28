@@ -15,6 +15,10 @@ mainClassName = 'com.mystictri.neotextureedit.TextureEditor'
 repositories {
     jcenter()
     mavenCentral()
+    
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
 }
 
 dependencies {
@@ -23,6 +27,8 @@ dependencies {
 
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+
+    compile "org.joml:joml:1.9.12"
 }
 
 natives {

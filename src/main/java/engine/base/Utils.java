@@ -17,6 +17,9 @@
 
 package engine.base;
 
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -105,14 +108,14 @@ public final class Utils {
 		return ((a << 24) | (r << 16) | (g << 8) | (b << 0));
 	}
 
-	public static final int vector3ToINTColor(Vector3 c) {
+	public static final int vector3ToINTColor(Vector3f c) {
 		int r = ((int) (c.x * 255.0f)) & 0xFF;
 		int g = ((int) (c.y * 255.0f)) & 0xFF;
 		int b = ((int) (c.z * 255.0f)) & 0xFF;
 		return (0xFF000000 | (r << 16) | (g << 8) | (b << 0));
 	}
 
-	public static final int vector4ToINTColor_ARGB(Vector4 c) {
+	public static final int vector4ToINTColor_ARGB(Vector4f c) {
 		int r = ((int) (c.x * 255.0f)) & 0xFF;
 		int g = ((int) (c.y * 255.0f)) & 0xFF;
 		int b = ((int) (c.z * 255.0f)) & 0xFF;
@@ -120,7 +123,7 @@ public final class Utils {
 		return ((a << 24) | (r << 16) | (g << 8) | (b << 0));
 	}
 
-	public static final int vector4ToINTColor_ABGR(Vector4 c) {
+	public static final int vector4ToINTColor_ABGR(Vector4f c) {
 		int r = ((int) (c.x * 255.0f)) & 0xFF;
 		int g = ((int) (c.y * 255.0f)) & 0xFF;
 		int b = ((int) (c.z * 255.0f)) & 0xFF;
@@ -128,12 +131,12 @@ public final class Utils {
 		return ((a << 24) | (b << 16) | (g << 8) | (r << 0));
 	}
 
-	public static Vector4 RGBAToVector4(int c) {
+	public static Vector4f RGBAToVector4(int c) {
 		float a = ((c >> 24) & 0xFF) / 255.0f;
 		float r = ((c >> 16) & 0xFF) / 255.0f;
 		float g = ((c >> 8) & 0xFF) / 255.0f;
 		float b = ((c >> 0) & 0xFF) / 255.0f;
-		return new Vector4(r, g, b, a);
+		return new Vector4f(r, g, b, a);
 	}
 
 	/*
@@ -163,10 +166,10 @@ public final class Utils {
 	//		colorSpace.
 	//	}
 
-	public static Vector3 rgbToHSV_ip(Vector3 rgb) {
-		Vector3 temp = new Vector3(rgb);
-		int maxi = temp.maxIdx();
-		int mini = temp.minIdx();
+	public static Vector3f rgbToHSV_ip(Vector3f rgb) {
+		Vector3f temp = new Vector3f(rgb);
+		int maxi = temp.maxComponent();
+		int mini = temp.minComponent();
 
 		rgb.z = temp.get(maxi);
 		if (temp.get(maxi) == 0) {
@@ -183,8 +186,8 @@ public final class Utils {
 		return rgb;
 	}
 
-	public static Vector3 hsvToRGB_ip(Vector3 hsv) {
-		int maxc = 0;
+	public static Vector3f hsvToRGB_ip(Vector3f hsv) {
+		int maxc;
 
 		if (hsv.x > 300)
 			hsv.x -= 360.0f;
@@ -195,19 +198,19 @@ public final class Utils {
 		else
 			maxc = 1;
 
-		Vector3 temp = new Vector3();
+		Vector3f temp = new Vector3f();
 
-		temp.set(maxc, hsv.z);
+		temp.setComponent(maxc, hsv.z);
 
 		float min = (hsv.z * (255.0f - hsv.y)) / 255.0f;
 		float temphue = (((hsv.x / 60.0f) - (2 * maxc)) * (hsv.z - min));
 
 		if (temphue > 0) {
-			temp.set((maxc + 2) % 3, min);
-			temp.set((maxc + 1) % 3, min + temphue);
+			temp.setComponent((maxc + 2) % 3, min);
+			temp.setComponent((maxc + 1) % 3, min + temphue);
 		} else {
-			temp.set((maxc + 1) % 3, min);
-			temp.set((maxc + 2) % 3, min - temphue);
+			temp.setComponent((maxc + 1) % 3, min);
+			temp.setComponent((maxc + 2) % 3, min - temphue);
 		}
 
 		return hsv.set(temp);
@@ -225,8 +228,8 @@ public final class Utils {
 
 	}
 
-	public static Vector3 createSphereSample_Uniform(float u, float v) {
-		Vector3 dir = new Vector3();
+	public static Vector3f createSphereSample_Uniform(float u, float v) {
+		Vector3f dir = new Vector3f();
 		u = 2.0f * FMath.PI * u;
 		dir.x = 2.0f * FMath.cos(u) * FMath.sqrt(v * (1.0f - v));
 		dir.y = 2.0f * FMath.sin(u) * FMath.sqrt(v * (1.0f - v));
@@ -234,8 +237,8 @@ public final class Utils {
 		return dir;
 	}
 
-	public static Vector3 createHemisphereSample_Uniform(float u, float v) {
-		Vector3 dir = new Vector3();
+	public static Vector3f createHemisphereSample_Uniform(float u, float v) {
+		Vector3f dir = new Vector3f();
 		float r1 = v * 2.0f * FMath.PI;
 		float r2 = 1.0f - u;
 		float sp = FMath.sqrt(1.0f - r2 * r2);
@@ -245,8 +248,8 @@ public final class Utils {
 		return dir;
 	}
 
-	public static Vector3 createHemisphereSample_Cosinus(float u, float v) {
-		Vector3 dir = new Vector3();
+	public static Vector3f createHemisphereSample_Cosinus(float u, float v) {
+		Vector3f dir = new Vector3f();
 		float r1 = v * 2.0f * FMath.PI;
 		float r2 = FMath.sqrt(1.0f - u);
 		float sp = FMath.sqrt(1.0f - r2 * r2);
@@ -452,8 +455,8 @@ public final class Utils {
 	}
 
 	public static void main(String[] args) {
-		Vector3 col = new Vector3(0.4392157f, 0.6745098f, 0.71372549f);
-		col = new Vector3(135 / 255.0f, 33 / 255.0f, 38 / 255.0f);
+		Vector3f col = new Vector3f(0.4392157f, 0.6745098f, 0.71372549f);
+		col = new Vector3f(135 / 255.0f, 33 / 255.0f, 38 / 255.0f);
 		System.out.println(col);
 		System.out.println(rgbToHSV_ip(col));
 		System.out.println(hsvToRGB_ip(col));

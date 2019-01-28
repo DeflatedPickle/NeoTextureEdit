@@ -1,11 +1,11 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.FMath;
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.BoolParam;
 import engine.parameters.EnumParam;
 import engine.parameters.FloatParam;
+import org.joml.Vector4f;
 
 public class FilterMath1 extends Channel {
 	FloatParam A = CreateLocalFloatParam("A", 0.0f, -Float.MAX_VALUE, Float.MAX_VALUE).setDefaultIncrement(0.25f);
@@ -52,8 +52,8 @@ public class FilterMath1 extends Channel {
 		}
 	}
 
-	private final Vector4 _function(Vector4 in0, float u, float v) {
-		Vector4 c = new Vector4(in0);
+	private final Vector4f _function(Vector4f in0, float u, float v) {
+		Vector4f c = new Vector4f(in0);
 		if (onR.get()) c.x = apply(c.x);
 		if (onG.get()) c.y = apply(c.y);
 		if (onB.get()) c.z = apply(c.z);
@@ -61,13 +61,13 @@ public class FilterMath1 extends Channel {
 		return c;
 	}
 
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		out.set(_function(caches[0].sample(localX, localY), u, v));
 	}
 
 
-	protected Vector4 _valueRGBA(float u, float v) {
-		Vector4 c0 = inputChannels[0].valueRGBA(u, v);
+	protected Vector4f _valueRGBA(float u, float v) {
+		Vector4f c0 = inputChannels[0].valueRGBA(u, v);
 		return _function(c0, u, v);
 	}	
 }

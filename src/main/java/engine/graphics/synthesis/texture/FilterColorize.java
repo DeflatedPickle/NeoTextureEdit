@@ -17,9 +17,9 @@
 
 package engine.graphics.synthesis.texture;
 
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.ColorGradientParam;
+import org.joml.Vector4f;
 
 public final class FilterColorize extends Channel {
 
@@ -52,22 +52,22 @@ public final class FilterColorize extends Channel {
 	}
 	
 	
-	private final void _function(Vector4 out, Vector4 in) {
-		out.set(colorGradientParam.get().getColor(in.XYZto1f()));
+	private final void _function(Vector4f out, Vector4f in) {
+		out.set(colorGradientParam.get().getColor((in.x + in.y + in.z) * (1f / 3f)));
 	}
 	
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		_function(out, caches[0].sample(localX, localY));
 	}
 	
 	
 	protected float _value1f(float u, float v) {
-		Vector4 val = valueRGBA(u, v);
+		Vector4f val = valueRGBA(u, v);
 		return (val.x+val.y+val.z)*(1.0f/3.0f);
 	}
 	
-	protected Vector4 _valueRGBA(float u, float v) {
-		Vector4 ret = new Vector4();
+	protected Vector4f _valueRGBA(float u, float v) {
+		Vector4f ret = new Vector4f();
 		_function(ret, inputChannels[0].valueRGBA(u, v));
 		return ret;
 	}

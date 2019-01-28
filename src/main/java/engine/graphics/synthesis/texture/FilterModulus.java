@@ -1,10 +1,10 @@
 package engine.graphics.synthesis.texture;
 
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.BoolParam;
 import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
+import org.joml.Vector4f;
 
 public class FilterModulus extends Channel {
 	FloatParam modulus;
@@ -34,8 +34,8 @@ public class FilterModulus extends Channel {
 		return OutputType.SCALAR;
 	}
 
-	private final Vector4 _function(Vector4 in0, float u, float v) {
-		Vector4 c = new Vector4(in0);
+	private final Vector4f _function(Vector4f in0, float u, float v) {
+		Vector4f c = new Vector4f(in0);
 		float m = modulus.get();
 		float s = normalize.get() ? 1f / m : 1f;
 		float bias = u * m * xBias.get();
@@ -45,13 +45,13 @@ public class FilterModulus extends Channel {
 		return c;
 	}
 
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		out.set(_function(caches[0].sample(localX, localY), u, v));
 	}
 
 
-	protected Vector4 _valueRGBA(float u, float v) {
-		Vector4 c0 = inputChannels[0].valueRGBA(u, v);
+	protected Vector4f _valueRGBA(float u, float v) {
+		Vector4f c0 = inputChannels[0].valueRGBA(u, v);
 		return _function(c0, u, v);
 	}
 }

@@ -18,10 +18,10 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.FMath;
-import engine.base.Vector3;
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.FloatParam;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public final class FilterEmboss extends Channel {
 	FloatParam strength;
@@ -55,12 +55,12 @@ public final class FilterEmboss extends Channel {
 		return OutputType.SCALAR;
 	}
 	
-	private final Vector4 _function(Vector4 in0, float du, float dv) {
-		Vector4 c = new Vector4(in0);
-		Vector3 n = new Vector3(du*strength.get(), dv*strength.get(), 0.0f);
+	private final Vector4f _function(Vector4f in0, float du, float dv) {
+		Vector4f c = new Vector4f(in0);
+		Vector3f n = new Vector3f(du*strength.get(), dv*strength.get(), 0.0f);
 		
 		float a = FMath.deg2rad(angle.get());
-		Vector3 dir = new Vector3(FMath.cos(a),FMath.sin(a),0);
+		Vector3f dir = new Vector3f(FMath.cos(a),FMath.sin(a),0);
 		float addValue = n.dot(dir);
 		
 		c.x = Math.max(0.0f, Math.min(1.0f, c.x + addValue));
@@ -70,28 +70,28 @@ public final class FilterEmboss extends Channel {
 		return c;
 	}
 	
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		//float du = ce[1].du(u, v).XYZto1f();
 		//float dv = ce[1].dv(u, v).XYZto1f();
-		float du = caches[1].sample_du(localX, localY).XYZto1f(); //inputChannels[1].du1f(u, v).XYZto1f();
-		float dv = caches[1].sample_dv(localX, localY).XYZto1f(); //inputChannels[1].dv1f(u, v).XYZto1f();
-		out.set(_function(caches[0].sample(localX, localY), du, dv));
+		Vector4f du = caches[1].sample_du(localX, localY); //inputChannels[1].du1f(u, v).XYZto1f();
+		Vector4f dv = caches[1].sample_dv(localX, localY); //inputChannels[1].dv1f(u, v).XYZto1f();
+		out.set(_function(caches[0].sample(localX, localY), (du.x + du.y + du.z) * (1f / 3f), (dv.x + dv.y + dv.z) * (1f / 3f)));
 	}
 	
 
-	protected Vector4 _valueRGBA(float u, float v) {
-		float du = inputChannels[1].du1f(u, v).XYZto1f();
-		float dv = inputChannels[1].dv1f(u, v).XYZto1f();
-		return _function(inputChannels[0].valueRGBA(u, v), du, dv);
+	protected Vector4f _valueRGBA(float u, float v) {
+		Vector4f du = inputChannels[1].du1f(u, v);
+		Vector4f dv = inputChannels[1].dv1f(u, v);
+		return _function(inputChannels[0].valueRGBA(u, v), (du.x + du.y + du.z) * (1f / 3f), (dv.x + dv.y + dv.z) * (1f / 3f));
 		
-		/*Vector3 n = new Vector3(inputChannels[1].du1f(u, v)*strength.get(), inputChannels[1].dv1f(u, v)*strength.get(), 0.0f);
+		/*Vector3f n = new Vector3f(inputChannels[1].du1f(u, v)*strength.get(), inputChannels[1].dv1f(u, v)*strength.get(), 0.0f);
 		
 		float a = FMath.deg2rad(angle.get());
-		Vector3 dir = new Vector3(FMath.cos(a),FMath.sin(a),0);
+		Vector3f dir = new Vector3f(FMath.cos(a),FMath.sin(a),0);
 		float addValue = n.dot(dir);
 		
 		
-		Vector4 c = inputChannels[0].valueRGBA(u, v);
+		Vector4f c = inputChannels[0].valueRGBA(u, v);
 
 		c.x = Math.max(0.0f, Math.min(1.0f, c.x + addValue));
 		c.y = Math.max(0.0f, Math.min(1.0f, c.y + addValue));

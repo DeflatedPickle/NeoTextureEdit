@@ -1,11 +1,11 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.FMath;
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.EnumParam;
 import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
+import org.joml.Vector4f;
 
 public class FilterBlur extends Channel {
 	FloatParam radius = CreateLocalFloatParam("Radius", 1, 0, 50).setDefaultIncrement(0.25f);
@@ -42,8 +42,8 @@ public class FilterBlur extends Channel {
 	}
 	
 	
-	private Vector4 performFilter(Vector4 out, TileCacheEntry[] caches, float u, float v) {
-		Vector4 val = new Vector4();
+	private Vector4f performFilter(Vector4f out, TileCacheEntry[] caches, float u, float v) {
+		Vector4f val = new Vector4f();
 		
 		float r = radius.get()/100.0f;
 		float weightSum = 0.0f;
@@ -66,8 +66,8 @@ public class FilterBlur extends Channel {
 				float w = FMath.exp(-(l/r));
 				
 				
-				if (caches != null) val.add_ip(caches[0].sample_Normalized(du+u, dv+v).mult_ip(w));
-				else val.add_ip(inputChannels[0].valueRGBA(du+u, dv+v).mult_ip(w));
+				if (caches != null) val.add(caches[0].sample_Normalized(du+u, dv+v).mul(w));
+				else val.add(inputChannels[0].valueRGBA(du+u, dv+v).mul(w));
 				weightSum += w;
 			}
 		} else { // Box
@@ -81,24 +81,24 @@ public class FilterBlur extends Channel {
 				du = nu;
 				dv = nv;
 
-				if (caches != null) val.add_ip(caches[0].sample_Normalized(du+u, dv+v));
-				else val.add_ip(inputChannels[0].valueRGBA(du+u, dv+v));
+				if (caches != null) val.add(caches[0].sample_Normalized(du+u, dv+v));
+				else val.add(inputChannels[0].valueRGBA(du+u, dv+v));
 				weightSum += 1.0f;
 			}
 		
 		}
 		
-		val.mult_ip(1.0f/weightSum);
+		val.mul(1.0f/weightSum);
 		if (out != null) out.set(val);
 		return val;
 	}
 	
 
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches,	int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches,	int localX, int localY, float u, float v) {
 		performFilter(out, caches, u, v);
 	}
 
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		return performFilter(null, null, u, v);
 	}
 

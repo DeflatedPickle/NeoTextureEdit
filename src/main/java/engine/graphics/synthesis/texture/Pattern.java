@@ -18,9 +18,9 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.FMath;
-import engine.base.Vector3;
-import engine.base.Vector4;
 import engine.parameters.Matrix3x3Param;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 /**
  * A Pattern is a function that lives on [0,1)x[0,1)=>[0,1]. It is a channel with 0 input parameters
@@ -42,17 +42,17 @@ public class Pattern extends Channel {
 	}
 	
 	
-	final protected Vector3 transform(float u, float v) {
-		Vector3 p = transformation.getMatrix().mult(new Vector3(u, v, 1.0f));
+	final protected Vector3f transform(float u, float v) {
+		Vector3f p = transformation.getMatrix().mult(new Vector3f(u, v, 1.0f));
 		p.x = p.x - FMath.ffloor(p.x);
 		p.y = p.y - FMath.ffloor(p.y);
 		return p;
 	}
 	
 	@Override
-	public Vector4 valueRGBA(float u, float v) {
-		Vector3 p = transform(u, v);
-		Vector4 val = _valueRGBA(p.x, p.y);
+	public Vector4f valueRGBA(float u, float v) {
+		Vector3f p = transform(u, v);
+		Vector4f val = _valueRGBA(p.x, p.y);
 		return val;
 	}
 	

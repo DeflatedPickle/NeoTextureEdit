@@ -14,6 +14,7 @@ import java.nio.IntBuffer;
 
 import javax.swing.JPopupMenu;
 
+import org.joml.Vector3f;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -27,7 +28,6 @@ import org.lwjgl.util.glu.GLU;
 
 import engine.base.FMath;
 import engine.base.Utils;
-import engine.base.Vector3;
 import engine.graphics.synthesis.texture.Channel;
 import engine.parameters.AbstractParam;
 import engine.parameters.EnumParam;
@@ -358,20 +358,20 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 	
 	public FloatBuffer m_CamONB = Utils.allocFloatBuffer(9);
 	
-	final Vector3 UP = new Vector3(0,0,1);
+	final Vector3f UP = new Vector3f(0,0,1);
 	void updateCamera() {
-		final Vector3 u = new Vector3();
-		final Vector3 v = new Vector3();
-		final Vector3 w = new Vector3();
-		final Vector3 eye = new Vector3();
+		final Vector3f u = new Vector3f();
+		final Vector3f v = new Vector3f();
+		final Vector3f w = new Vector3f();
+		final Vector3f eye = new Vector3f();
 		float t = (params.rotY.get()-90) * ((float) Math.PI / 180.0f);
 		float p = (90 - params.rotX.get()) * ((float) Math.PI / 180.0f);
 
 		w.set(FMath.cos(t) * FMath.sin(p), FMath.sin(t) * FMath.sin(p), FMath.cos(p));
 		w.normalize();
-		u.cross_ip(UP, w);
+		u.cross(UP, w);
 		u.normalize();
-		v.cross_ip(w, u);
+		v.cross(w, u);
 		
 		
 		m_CamONB.put(0, u.x);
@@ -383,8 +383,8 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 		m_CamONB.put(6, w.x);
 		m_CamONB.put(7, w.y);
 		m_CamONB.put(8, w.z);
-		
-		eye.mult_add_ip(params.camDist.get(), w);
+
+		eye.fma(params.camDist.get(), w);
 
 		ARBShaderObjects.glUniform3fARB(u_WS_EyePos_loc, eye.x, eye.y, eye.z);
 		ARBShaderObjects.glUniformMatrix3ARB(u_CameraONB_loc, false, m_CamONB);
@@ -428,7 +428,7 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 		ARBShaderObjects.glUseProgramObjectARB(previewProgram);
 		updateCamera();
 		
-		GL13.glActiveTexture(GL13.GL_TEXTURE0+0);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texidDiffuse);
 		ARBShaderObjects.glUniform1iARB(_2dDiffuseMap_loc, 0);			
@@ -704,7 +704,6 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 	
 	/**
 	 * Loads a vertex and fragment shader pair, compiles them and links them to a ProgramObjectARB
-	 * @param name
 	 * @return the program object ID
 	 */
 	public int getShaderProgram(ByteBuffer vcode, ByteBuffer fcode) {

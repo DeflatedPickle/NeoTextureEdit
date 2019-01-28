@@ -26,11 +26,11 @@ import java.util.Vector;
 
 import com.mystictri.neotextureedit.TextureEditor;
 import engine.base.FMath;
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.AbstractParam;
 import engine.parameters.LocalParameterManager;
 import engine.parameters.TextParam;
+import org.joml.Vector4f;
 
 /**
  * A channel is an Procedural Texture Generation interface that can get 0 or
@@ -142,8 +142,8 @@ public abstract class Channel extends LocalParameterManager {
 	}
 
 
-	public Vector4 valueRGBA(float u, float v) {
-		Vector4 val = _valueRGBA(u - FMath.ffloor(u), v - FMath.ffloor(v));
+	public Vector4f valueRGBA(float u, float v) {
+		Vector4f val = _valueRGBA(u - FMath.ffloor(u), v - FMath.ffloor(v));
 		return val;
 	}
 
@@ -151,12 +151,12 @@ public abstract class Channel extends LocalParameterManager {
 	public static float deltaU = 1.0f / (deltaFac*256.0f);
 	public static float deltaV = 1.0f / (deltaFac*256.0f);
 
-	public Vector4 du1f(float u, float v) {
-		return new Vector4(valueRGBA(u + deltaU, v)).sub_ip(valueRGBA(u, v)).mult_ip(deltaFac);
+	public Vector4f du1f(float u, float v) {
+		return new Vector4f(valueRGBA(u + deltaU, v)).sub(valueRGBA(u, v)).mul(deltaFac);
 	}
 
-	public Vector4 dv1f(float u, float v) {
-		return new Vector4(valueRGBA(u, v + deltaV)).sub_ip(valueRGBA(u, v)).mult_ip(deltaFac);
+	public Vector4f dv1f(float u, float v) {
+		return new Vector4f(valueRGBA(u, v + deltaV)).sub(valueRGBA(u, v)).mul(deltaFac);
 	}
 	
 	
@@ -166,12 +166,12 @@ public abstract class Channel extends LocalParameterManager {
 		return OutputType.SCALAR;
 	}
 
-	protected Vector4 _valueRGBA(float u, float v) {
-		return new Vector4(0.0f, 0.0f, 0.0f, 1.0f);
+	protected Vector4f _valueRGBA(float u, float v) {
+		return new Vector4f(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
 	
-	void cache_function(Vector4 out, TileCacheEntry[] in, int localX, int localY, float u, float v) {
+	void cache_function(Vector4f out, TileCacheEntry[] in, int localX, int localY, float u, float v) {
 		out.set(1, 0, 0, 1);
 	}
 

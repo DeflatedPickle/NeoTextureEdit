@@ -4,13 +4,13 @@ import java.awt.image.BufferedImage;
 
 import engine.base.FMath;
 import engine.base.Utils;
-import engine.base.Vector4;
 import engine.base.datastructure.NdVector;
 import engine.base.datastructure.PointKDTree;
 import engine.parameters.AbstractParam;
 import engine.parameters.ImageParam;
 import engine.parameters.InfoParam;
 import engine.parameters.IntParam;
+import org.joml.Vector4f;
 
 /**
  * This is a first experimental test to integrate texture synthesis into
@@ -89,7 +89,7 @@ public final class PatternSynthesis extends Pattern {
 				if ((sj == 0) && (si == 0))
 					break;
 				int tcolor = sampleTarget(x + si, y + sj);
-				Vector4 color = Utils.RGBAToVector4(tcolor);
+				Vector4f color = Utils.RGBAToVector4(tcolor);
 				p.set(num++, color.x);
 				p.set(num++, color.y);
 				p.set(num++, color.z);
@@ -225,7 +225,7 @@ public final class PatternSynthesis extends Pattern {
 							break;
 						int scolor = sampleSrc(sx + si, sy + sj);
 
-						Vector4 color = Utils.RGBAToVector4(scolor);
+						Vector4f color = Utils.RGBAToVector4(scolor);
 						p.set(num++, color.x);
 						p.set(num++, color.y);
 						p.set(num++, color.z);
@@ -240,9 +240,9 @@ public final class PatternSynthesis extends Pattern {
 
 	}
 
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		if (tgtBuffer == null) {
-			return new Vector4(0, 0, 0, 0);
+			return new Vector4f(0, 0, 0, 0);
 		} else {
 			int x = (int) (u * _targetRes);
 			int y = (int) (v * _targetRes);

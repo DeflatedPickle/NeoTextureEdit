@@ -17,9 +17,9 @@
 
 package engine.graphics.synthesis.texture;
 
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.BoolParam;
+import org.joml.Vector4f;
 
 /**
  * This filter computes the output image as
@@ -57,29 +57,29 @@ public final class FilterMask extends Channel {
 	}
 	
 	
-	private final void _function(Vector4 out, Vector4 in0, Vector4 in1, Vector4 in2) {
+	private final void _function(Vector4f out, Vector4f in0, Vector4f in1, Vector4f in2) {
 		out.set(in0);
-		float w = in2.XYZto1f();
+		float w = (in2.x + in2.y + in2.z) * (1f / 3f);
 		if (invert.get()) w = 1.0f - w;
-		out.mult_ip(1.0f - w);
-		out.mult_add_ip(w, in1);
+		out.mul(1.0f - w);
+		out.fma(w, in1);
 	}
 	
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		_function(out, caches[0].sample(localX, localY), caches[1].sample(localX, localY), caches[2].sample(localX, localY));
 	}
 		
 	
 	protected float _value1f(float u, float v) {
-		Vector4 val = valueRGBA(u, v);
+		Vector4f val = valueRGBA(u, v);
 		return (val.x+val.y+val.z)*(1.0f/3.0f);
 	}
 	
-	protected Vector4 _valueRGBA(float u, float v) {
-		Vector4 c0 = inputChannels[0].valueRGBA(u, v);
-		Vector4 c1 = inputChannels[1].valueRGBA(u, v);
-		Vector4 c2 = inputChannels[2].valueRGBA(u, v);
-		Vector4 ret = new Vector4();
+	protected Vector4f _valueRGBA(float u, float v) {
+		Vector4f c0 = inputChannels[0].valueRGBA(u, v);
+		Vector4f c1 = inputChannels[1].valueRGBA(u, v);
+		Vector4f c2 = inputChannels[2].valueRGBA(u, v);
+		Vector4f ret = new Vector4f();
 
 		_function(ret, c0, c1, c2);
 		

@@ -17,9 +17,9 @@
 
 package engine.graphics.synthesis.texture;
 
-import engine.base.Vector4;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.FloatParam;
+import org.joml.Vector4f;
 
 public final class PatternChecker extends Pattern {
 	public String getName() {
@@ -47,7 +47,7 @@ public final class PatternChecker extends Pattern {
 		scaleY.set(sy);
 	}
 
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		boolean white = (((int)((u*scaleX.get())*2.0) + ((int)((v*scaleY.get())*2.0)))&1)==0;
 		if (white) return colorGradientParam.get().getColor(1.0f);
 		else return colorGradientParam.get().getColor(0.0f);

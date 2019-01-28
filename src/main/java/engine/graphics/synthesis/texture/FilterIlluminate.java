@@ -1,10 +1,10 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.FMath;
-import engine.base.Vector3;
-import engine.base.Vector4;
 import engine.graphics.synthesis.texture.CacheTileManager.TileCacheEntry;
 import engine.parameters.FloatParam;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public final class FilterIlluminate extends Channel {
 	FloatParam theta = CreateLocalFloatParam("Theta", 45.0f, 0.0f, 90.0f).setDefaultIncrement(11.5f);
@@ -40,30 +40,31 @@ public final class FilterIlluminate extends Channel {
 		return OutputType.SCALAR;
 	}
 
-	private final Vector4 _function(Vector4 in0, Vector4 normalmap) {
-		normalmap.add_ip(new Vector4(-0.5f));
-		normalmap.mult_ip(2.0f);
-		Vector3 lightDir = new Vector3();
-		lightDir.setDir(theta.get() * (FMath.PI / 180.0f), phi.get() * (FMath.PI / 180.0f));
+	private final Vector4f _function(Vector4f in0, Vector4f normalmap) {
+		normalmap.add(new Vector4f(-0.5f));
+		normalmap.mul(2.0f);
+		Vector3f lightDir = new Vector3f();
+		// lightDir.setDir(theta.get() * (FMath.PI / 180.0f), phi.get() * (FMath.PI / 180.0f));
+		lightDir.set(FMath.cos(phi.get() * (FMath.PI / 180.0f))*FMath.sin(theta.get() * (FMath.PI / 180.0f)), FMath.sin(phi.get() * (FMath.PI / 180.0f))*FMath.sin(theta.get() * (FMath.PI / 180.0f)), FMath.cos(theta.get() * (FMath.PI / 180.0f)));
 
-		Vector3 reflect = (new Vector3(0, 0, -1)).reflect(normalmap.getVector3());
+		Vector3f reflect = (new Vector3f(0, 0, -1)).reflect(normalmap.x, normalmap.y, normalmap.z);
 
 		float ar = reflect.dot(lightDir);
 		if (ar < 0)
 			ar = 0;
 		ar = FMath.pow(ar, shininess.get());
 
-		in0.add_ip(ar);
-		in0.clamp(0.0f, 1.0f);
+		in0.add(new Vector4f(ar));
+		in0.min(new Vector4f(0.0f), new Vector4f(1.0f));
 
 		return in0;
 	}
 
-	protected void cache_function(Vector4 out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
+	protected void cache_function(Vector4f out, TileCacheEntry[] caches, int localX, int localY, float u, float v) {
 		out.set(_function(caches[0].sample(localX, localY), caches[1].sample(localX, localY)));
 	}
 
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		return _function(inputChannels[0].valueRGBA(u, v), inputChannels[1].valueRGBA(u, v));
 	}
 }

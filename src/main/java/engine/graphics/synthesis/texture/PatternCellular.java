@@ -18,8 +18,6 @@
 package engine.graphics.synthesis.texture;
 
 import engine.base.FMath;
-import engine.base.Vector2;
-import engine.base.Vector4;
 import engine.base.datastructure.NdPositionable;
 import engine.base.datastructure.PointKDTree;
 import engine.parameters.AbstractParam;
@@ -28,6 +26,8 @@ import engine.parameters.ColorGradientParam;
 import engine.parameters.EnumParam;
 import engine.parameters.FloatParam;
 import engine.parameters.IntParam;
+import org.joml.Vector4f;
+import org.lwjgl.util.vector.Vector2f;
 
 public final class PatternCellular extends Pattern {
 	public String getName() {
@@ -59,12 +59,17 @@ public final class PatternCellular extends Pattern {
 	//boolean useManhattanDist = false;
 	int distanceFunctionType = 0; // 0 euclid, 1 manhattan, 2 max
 
-	final class PatternPoint extends Vector2 implements NdPositionable {
+	final class PatternPoint extends Vector2f implements NdPositionable {
 		public int index;
 
 		public PatternPoint(float x, float y, int i) {
 			super(x, y);
 			index = i;
+		}
+
+		@Override
+		public float getPos(int dim) {
+			return 0;
 		}
 
 		public final float nd_distance2Func(NdPositionable p) {
@@ -86,6 +91,11 @@ public final class PatternCellular extends Pattern {
 				float dY = (y - p.getPos(1));
 				return (dX * dX + dY * dY);
 			}
+		}
+
+		@Override
+		public int getDIM() {
+			return 0;
 		}
 	}
 
@@ -122,9 +132,11 @@ public final class PatternCellular extends Pattern {
 	
 	public float distance(PatternPoint p0, PatternPoint p1) {
 		if (distanceFunction.getEnumPos() == 0)
-			return p0.distance(p1);
+			// return p0.distance(p1);
+			return FMath.sqrt((p0.x - p1.x) * (p0.x - p1.x) + (p0.y - p1.y) * (p0.y - p1.y));
 		else if (distanceFunction.getEnumPos() == 1)
-			return p0.manhattan(p1);
+			// return p0.manhattan(p1);
+			return FMath.abs(p0.x - p1.x) + FMath.abs(p0.y - p1.y);
 		else if (distanceFunction.getEnumPos() == 2) 
 			return Math.max(FMath.abs(p0.x - p1.x), FMath.abs(p0.y - p1.y));
 		else if (distanceFunction.getEnumPos() == 3) { 
@@ -138,7 +150,7 @@ public final class PatternCellular extends Pattern {
 	
 	
 	// !!TODO: still can be optimized a lot
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		final PatternPoint[] p2 = new PatternPoint[2];
 		final PatternPoint[] p3 = new PatternPoint[3];
 

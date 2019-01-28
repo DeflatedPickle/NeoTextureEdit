@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 
 import engine.base.FMath;
-import engine.base.Vector4;
+import org.joml.Vector4f;
 
 /**
  * 
@@ -88,7 +88,7 @@ public final class CacheTileManager {
 
 		final FloatBuffer data;
 
-		public void put(int i, final Vector4 val) {
+		public void put(int i, final Vector4f val) {
 			data.put(i * 4 + 0, val.x);
 			data.put(i * 4 + 1, val.y);
 			data.put(i * 4 + 2, val.z);
@@ -102,23 +102,23 @@ public final class CacheTileManager {
 			this.py = py;
 		}
 
-		public Vector4 sample(int x, int y) {
+		public Vector4f sample(int x, int y) {
 			int i = ((x + border) + (y + border) * (xres + 2*border)) * 4;
-			return new Vector4(data.get(i + 0), data.get(i + 1), data.get(i + 2), data.get(i + 3));
+			return new Vector4f(data.get(i + 0), data.get(i + 1), data.get(i + 2), data.get(i + 3));
 		}
 		
 		//!!TODO: wrong on tile borders
-		public Vector4 sample_du(int x, int y) {
-			return sample((x+1)%xres, y).sub_ip(sample(x, y)).mult_ip((float)globalXres/xres);
+		public Vector4f sample_du(int x, int y) {
+			return sample((x+1)%xres, y).sub(sample(x, y)).mul((float)globalXres/xres);
 		}
 
 		//!!TODO: wrong on tile borders
-		public Vector4 sample_dv(int x, int y) {
-			return sample(x, (y+1)%yres).sub_ip(sample(x, y)).mult_ip((float)globalYres/yres);
+		public Vector4f sample_dv(int x, int y) {
+			return sample(x, (y+1)%yres).sub(sample(x, y)).mul((float)globalYres/yres);
 		}
 
 	
-		public Vector4 sample_Normalized(float u, float v) {
+		public Vector4f sample_Normalized(float u, float v) {
 			int x = ((int) (u * xres + 0.5f)) ;
 			int y = ((int) (v * yres + 0.5f));
 			while (x < 0)
@@ -130,7 +130,7 @@ public final class CacheTileManager {
 			while (y >= yres)
 				y -= xres;
 			int i = (x + border + (y +border) * (xres+2*border)) * 4;
-			return new Vector4(data.get(i + 0), data.get(i + 1), data.get(i + 2), data.get(i + 3));
+			return new Vector4f(data.get(i + 0), data.get(i + 1), data.get(i + 2), data.get(i + 3));
 		}
 		
 		
@@ -188,7 +188,7 @@ public final class CacheTileManager {
 						float v = (float) y / (float) globalYres;
 						u = u - FMath.ffloor(u);
 						v = v - FMath.ffloor(v);
-						Vector4 temp = new Vector4();
+						Vector4f temp = new Vector4f();
 						c.cache_function(temp, tiles, localX, localY, u, v);
 						put(idx, temp);
 					}

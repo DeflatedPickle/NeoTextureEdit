@@ -19,9 +19,9 @@ package engine.graphics.synthesis.texture;
 
 import com.mystictri.neotextureedit.TextureEditor;
 import engine.base.FMath;
-import engine.base.Vector4;
 import engine.parameters.ColorGradientParam;
 import engine.parameters.EnumParam;
+import org.joml.Vector4f;
 
 
 public final class PatternGradient extends Pattern {
@@ -41,7 +41,7 @@ public final class PatternGradient extends Pattern {
 	public PatternGradient() {
 	}
 
-	protected Vector4 _valueRGBA(float u, float v) {
+	protected Vector4f _valueRGBA(float u, float v) {
 		float pos = 0.0f;
 		
 		if (gradientType.getEnumPos() == 0) { // Linear

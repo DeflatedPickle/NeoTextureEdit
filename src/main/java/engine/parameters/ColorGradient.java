@@ -17,18 +17,18 @@
 
 package engine.parameters;
 
-import java.util.Vector;
+import org.joml.Vector4f;
 
-import engine.base.Vector4;
+import java.util.Vector;
 
 //!!TODO: this can be optimized easily
 public final class ColorGradient {
 
 	private static final class Entry {
-		public Vector4 color;
+		public Vector4f color;
 		public float position;
 
-		public Entry(Vector4 col, float pos) {
+		public Entry(Vector4f col, float pos) {
 			color = col;
 			position = pos;
 		}
@@ -54,7 +54,7 @@ public final class ColorGradient {
 		entries.remove(idx);
 	}
 	
-	public Vector4 getEntryColor(int idx) {
+	public Vector4f getEntryColor(int idx) {
 		return entries.get(idx).color;
 	}
 
@@ -67,7 +67,7 @@ public final class ColorGradient {
 	}
 	
 	public void updateColorRGB(int idx, float r, float g, float b) {
-		entries.get(idx).color.setXYZ(r, g, b);
+		entries.get(idx).color.set(new Vector4f(r, g, b, entries.get(idx).color.w));
 	}
 	
 	public void updateAlpha(int idx, float a) {
@@ -88,10 +88,10 @@ public final class ColorGradient {
 	
 	
 	public ColorGradient addEntryRGB(float r, float g, float b, float pos) {
-		return addEntry(new Vector4(r, g, b, 1.0f), pos);
+		return addEntry(new Vector4f(r, g, b, 1.0f), pos);
 	}
 
-	public ColorGradient addEntry(Vector4 color, float pos) {
+	public ColorGradient addEntry(Vector4f color, float pos) {
 		if (entries.size() == 0)
 			entries.add(new Entry(color, pos));
 		else if (entries.firstElement().position > pos)
@@ -119,13 +119,13 @@ public final class ColorGradient {
 		if (g.getNumEntries() <= 1) return;
 		clear();
 		for (int i = 0; i < g.getNumEntries(); i++) {
-			addEntry(new Vector4(g.getEntryColor(i)), g.getEntryPosition(i));
+			addEntry(new Vector4f(g.getEntryColor(i)), g.getEntryPosition(i));
 		}
 	}
 	
 	
-	public Vector4 getColor(float pos) {
-		Vector4 ret = new Vector4();
+	public Vector4f getColor(float pos) {
+		Vector4f ret = new Vector4f();
 		
 		if (pos <= entries.firstElement().position) ret.set(entries.firstElement().color);
 		else if (pos >= entries.lastElement().position) ret.set(entries.lastElement().color);
@@ -138,8 +138,9 @@ public final class ColorGradient {
 					float interp = (pos-a.position)/(b.position-a.position);
 					//ret.set(interp);
 					ret.set(a.color);
-					ret.mult_ip(1.0f - interp);
-					ret.mult_add_ip(interp, b.color);
+					ret.mul(1.0f - interp);
+					ret.fma(interp, b.color);
+
 					break;
 				}
 			}

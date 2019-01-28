@@ -17,6 +17,8 @@
 
 package engine.base;
 
+import org.joml.Vector3f;
+
 /**
  * A Simple 3x3 matrix class
  * @author Holger Dammertz
@@ -74,8 +76,8 @@ public class Matrix3x3 {
 		d[6] = a31; d[7] = a32; d[8] = a33;
 	}
 	
-	public Vector3 mult(Vector3 v) {
-		return new Vector3(d[0]*v.x + d[1]*v.y + d[2]*v.z,
+	public Vector3f mult(Vector3f v) {
+		return new Vector3f(d[0]*v.x + d[1]*v.y + d[2]*v.z,
 				           d[3]*v.x + d[4]*v.y + d[5]*v.z,
 				           d[6]*v.x + d[7]*v.y + d[8]*v.z);
 	}
