@@ -1,7 +1,5 @@
-NeoTextureEdit.
-===============
-
-http://neotextureedit.sourceforge.net/
+# NeoTextureEdit
+A graph-based procedural texture editor to create 2d seamless textures for real-time rendering applications.
 
 NeoTextureEdit is an easy to use graph-based procedural seamless
 texture editor. Using continuous basis functions it can generate
@@ -11,91 +9,51 @@ applications that can be stored in a few kB and synthesized on
 application startup. But it can also be used to generate off-line
 images.
 
-The most current version as well as the sourcecode can be found
-at the sourceforge project page:
+## Original
+This is a fork. The original version can be found here:
 http://sourceforge.net/projects/neotextureedit/
 
-
-NeoTexture Library.
-===================
-
+# NeoTexture Library
 The NeoTexture Library can be used to load a texture graph generated
 by NeoTextureEdit and create the according textures at runtime.
 
-
-License.
-========
-
-NeoTextureEdit and the runtime generation library NeoTexture are
-licensed under the GNU LGPL v.3. See the files COPYING and 
-COPYING.LESSER for details. 
-
-
-Dependencies.
-=============
-
-NeoTextureEdit needs a Java 1.6 compliant runtime environment.  For
-OpenGL preview rendering a graphics card with shader support is
-needed.
-
-
-Notes.
-======
-
+# Usage Notes
 To learn the usage of the editor you can look at the provided example
-textures in the examples directory.
+textures in the examples directory (a Wiki will be made soon).
 
 NeoTextureEdit saves its settings on exit in a file called
 'TextureEdtiorSettings'.  This file will be saved in the directory
 from where you start the editor.  This file also contains your pattern
 presets. Deleting this file resets to the factory settings.
 
+# Release Notes
+## Current
+The release notes for the next version.
 
+#### Next:
+ - Changed the build tool from Ant to Gradle
+ - Removed the included dependencies and moved them to Gradle
+ - Removed the included logging library in favour of Log4J
 
-Running NeoTextureEdit:
-=======================
+## Old Release Notes
+These were either unreleased or were made when the repository used SVN.
 
-Linux: Use the provided shell script in the main directory to run
-       NeoTextureEdit.
-
-Windows: Use the provided executable to start.
-
-MacOS: The application can be started via double-click in the finder.
-
-
-Release Notes:
-==============
-
-0.6.4:
- - Spectral Control Widget for Noise Bands
- - Two new filter added: Math1 and Modulus
- - OSX Improvements
- - Texture Node Folding
- - Directional Blur option in Blur filter
-
-0.6.3:
+#### 0.6.3:
  - Blur filter added
 
-0.6.2:
- - Improved Node Preview (with arbitrary Zoom)
- - Transform now only in Patterns and extra Transform Filter
- - Gamma and Desaturation in Color Correction Filter
- - Combine Filter to select arbitrary RGBA channels
- - small UI Improvements (Selection of multiple nodes and nicer rendering)
- - Cache System Rewrite
-
-0.6.1.1:
+#### 0.6.1.1:
  - pattern brick bug fix
  
-0.6.1:
+#### 0.6.1:
  - license change to GNU LGPL v.3
  - external run time generation library now available
  - changed the texture graph file format slightly
  - Export String (with replace options %f %r) for marking channels for export
  - Command Line option for export to image (now batch export possible; also with wildcards)
  - SCM changed from svn to git on sourceforge
+ - Basic drag-all feature in gradient editor (not yet very robust)
  
-0.5.3:
+#### 0.5.3:
  - New Pattern: Bitmap: allows to load images as generator patterns
  - New Pattern: Function: basic sin/saw/square function as generator pattern
  - Command line options for loading texture graph files and disabling OpenGL
@@ -104,4 +62,22 @@ Release Notes:
    of example at first start; switched to system UI instead of nimbus for
    now
 
+#### 0.5.3a
+ - Command line options for loading texture file and disabling OpenGL
+ - Experimental: Synthesis Pattern
+ - Function Pattern: basic sin/saw/square function as generator pattern
+ - Possible fix for the 2.3 LWJGL
+ - Bitmap Pattern: allows to load images as generator patterns
    
+#### 0.5.2a 
+ - some new pattern presets
+ - export of (almost) arbitrary resolution now works
+ - switched for release back from LWJGL 2.3 to LWJGL 2.2.2 because of MacOS problems
+ - re-enabled autosave into exit.tgr when quitting program
+ - added ambient term to OpenGL preview
+ - fixed some OpenGL preview bugs
+ - open texture file from command line parameter
+ - added popup-menu to OpenGL preview with clear textures option
+   
+#### 0.5.1a:
+ - OpenGL Preview of Textures
