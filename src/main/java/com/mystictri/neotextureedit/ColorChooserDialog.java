@@ -27,7 +27,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-class ColorChooserDialog extends JDialog {
+public class ColorChooserDialog extends JDialog {
 	private static final long serialVersionUID = -6546658810976403236L;
 	JButton okButton;
 	JButton cancelButton;

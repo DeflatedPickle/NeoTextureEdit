@@ -34,6 +34,7 @@ import javax.swing.JToggleButton;
 
 import com.mystictri.neotexture.TextureGraphNode;
 
+import com.mystictri.neotextureedit.parameters.*;
 import engine.graphics.synthesis.texture.Channel;
 import engine.graphics.synthesis.texture.ChannelChangeListener;
 import engine.parameters.AbstractParam;

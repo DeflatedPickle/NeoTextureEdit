@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import com.mystictri.neotextureedit.parameters.AbstractParameterEditor;
 import engine.parameters.SpectralControlParam;
 
 public class SpectralControlParameterEditor extends AbstractParameterEditor implements MouseMotionListener, MouseListener {

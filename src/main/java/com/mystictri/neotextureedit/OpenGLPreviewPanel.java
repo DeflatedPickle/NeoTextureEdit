@@ -15,6 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import com.mystictri.neotextureedit.parameters.*;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 

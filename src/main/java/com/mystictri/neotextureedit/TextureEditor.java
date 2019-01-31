@@ -158,7 +158,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 	ColorChooserDialog m_ColorChooser;
 	JFileChooser m_TextureFileChooser_SaveLoadGraph;
-	JFileChooser m_TextureFileChooser_SaveLoadImage;
+	public JFileChooser m_TextureFileChooser_SaveLoadImage;
 	ProgressDialog m_ProgressDialog;
 
 	String title = "NeoTextureEdit - Version " + programVersionNumber;

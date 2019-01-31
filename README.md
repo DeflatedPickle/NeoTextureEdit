@@ -34,6 +34,8 @@ The release notes for the next version.
  - Changed the build tool from Ant to Gradle
  - Removed the included dependencies and moved them to Gradle
  - Removed the included logging library in favour of Log4J
+ - Moved the parameter editors to a new package
+ - Moved the minus buttons on the `FloatParameterEditor` and the `IntParameterEditor` to be next to the plus button
 
 ## Old Release Notes
 These were either unreleased or were made when the repository used SVN.

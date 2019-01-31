@@ -29,6 +29,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+import com.mystictri.neotextureedit.parameters.AbstractParameterEditor;
 import engine.base.FMath;
 import engine.base.Matrix3x3;
 import engine.parameters.Matrix3x3Param;
@@ -43,12 +44,7 @@ class Matrix3x3ParameterEditor extends AbstractParameterEditor implements Docume
 	static final int MAT_BUT_WIDTH = 32;
 	
 	boolean ignoreDocumentEvent = false; // some kind of hack to avoid notifying an event when updating all text fields at once after a matrix change through a button press
-	
-	/**
-	 * 
-	 * @param m
-	 * @param c TEMP: giving the channel here solves the problem of not having a Matrix3x3 parameter yet
-	 */
+
 	public Matrix3x3ParameterEditor(Matrix3x3Param matrixParam) {
 		setPreferredSize(new Dimension(256-16, h*3+8+32));
 		setSize(getPreferredSize());
