@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package com.mystictri.neotextureedit;
+package com.mystictri.neotextureedit.parameters;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -34,7 +34,7 @@ import engine.base.FMath;
 import engine.base.Matrix3x3;
 import engine.parameters.Matrix3x3Param;
 
-class Matrix3x3ParameterEditor extends AbstractParameterEditor implements DocumentListener, ActionListener {
+public class Matrix3x3ParameterEditor extends AbstractParameterEditor implements DocumentListener, ActionListener {
 	private static final long serialVersionUID = -4845723469494814010L;
 	Matrix3x3Param mat;
 	final JTextField[] fields = new JTextField[9];

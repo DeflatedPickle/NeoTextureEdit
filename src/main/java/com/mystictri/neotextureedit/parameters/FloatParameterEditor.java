@@ -21,11 +21,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.text.ParseException;
 
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
+import javax.swing.text.DefaultFormatter;
 
 import engine.parameters.FloatParam;
 
@@ -39,7 +41,7 @@ import engine.parameters.FloatParam;
 public class FloatParameterEditor extends AbstractParameterEditor implements ActionListener, FocusListener {
     private static final long serialVersionUID = -7712009260279412308L;
     FloatParam param;
-    JFormattedTextField inputField;
+    JSpinner inputField;
 
     public FloatParameterEditor(FloatParam p) {
         super();
@@ -52,36 +54,18 @@ public class FloatParameterEditor extends AbstractParameterEditor implements Act
         x += NAME_WIDTH;
         add(nameLabel);
 
-        inputField = new JFormattedTextField(p.getAsString());
-        inputField.setValue(param.get());
-        inputField.addActionListener(this);
-        inputField.addFocusListener(this);
-
+        // TODO: Add a JSlider too, maybe?
+        inputField = new JSpinner(new SpinnerNumberModel(param.get(), -100f, 100f, param.getDefaultIncrement() * 0.125f));
         inputField.setBounds(x, y, TEXTFIELD_WIDTH, h);
-        x += TEXTFIELD_WIDTH;
+        inputField.addFocusListener(this);
         add(inputField);
 
-        JButton decrement = new JButton("-");
-        decrement.setBounds(x, y, BUTTON_WIDTH, h);
-        x += BUTTON_WIDTH;
-        decrement.addActionListener(e -> {
-            if ((e.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK)
-                param.increment(-param.getDefaultIncrement() * 0.125f);
-            else param.decrement();
-            inputField.setValue(param.get());
-        });
-        add(decrement);
+        JSpinner.NumberEditor numberEditor = (JSpinner.NumberEditor) inputField.getEditor();
+        var formattedTextField = numberEditor.getTextField();
+        var formatter = (DefaultFormatter) formattedTextField.getFormatter();
+        formatter.setCommitsOnValidEdit(true);
 
-        JButton increment = new JButton("+");
-        increment.setBounds(x, y, BUTTON_WIDTH, h);
-        x += BUTTON_WIDTH;
-        increment.addActionListener(e -> {
-            if ((e.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK)
-                param.increment(param.getDefaultIncrement() * 0.125f);
-            else param.increment();
-            inputField.setValue(param.get());
-        });
-        add(increment);
+        inputField.addChangeListener(e -> param.set(((Double) inputField.getValue()).floatValue()));
     }
 
     public void changedUpdate(DocumentEvent e) {
@@ -90,16 +74,24 @@ public class FloatParameterEditor extends AbstractParameterEditor implements Act
 
     void checkAndApplyChange() {
         try {
-            String txt = inputField.getText();
+            // String txt = inputField.getText();
             //System.out.println("checkAndApplyChange: " + inputField.getValue());
-            float val = (Float.parseFloat(txt));
-            param.set(val);
+            // float val = (Float.parseFloat(txt));
+            // param.set(val);
+
+            try {
+                inputField.commitEdit();
+            }
+            catch (ParseException ignored) {
+            }
+
+            param.set(((Double) inputField.getValue()).floatValue());
         }
-        catch (NumberFormatException nfe) {
+        catch (NumberFormatException ignored) {
         }
-        int pos = inputField.getCaretPosition();
-        inputField.setValue(param.get());
-        inputField.setCaretPosition(pos);
+        // int pos = inputField.getCaretPosition();
+        // inputField.setValue(param.get());
+        // inputField.setCaretPosition(pos);
     }
 
     public void actionPerformed(ActionEvent e) {

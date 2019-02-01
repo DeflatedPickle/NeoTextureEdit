@@ -21,17 +21,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.text.ParseException;
 
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
+import javax.swing.*;
+import javax.swing.text.DefaultFormatter;
 
 import engine.parameters.IntParam;
 
 public class IntParameterEditor extends AbstractParameterEditor implements ActionListener, FocusListener {
     private static final long serialVersionUID = -4292786478673916788L;
     IntParam param;
-    JFormattedTextField inputField;
+    // JFormattedTextField inputField;
+    JSpinner inputField;
 
     public IntParameterEditor(IntParam p) {
         super();
@@ -44,48 +45,38 @@ public class IntParameterEditor extends AbstractParameterEditor implements Actio
         x += NAME_WIDTH;
         add(nameLabel);
 
-        inputField = new JFormattedTextField();
-        inputField.setValue(param.get());
-        inputField.addActionListener(this);
-        inputField.addFocusListener(this);
+        // TODO: Add a JSlider too, maybe?
+        inputField = new JSpinner(new SpinnerNumberModel(param.get(), -100, 100, 1));
         inputField.setBounds(x, y, TEXTFIELD_WIDTH, h);
-        x += TEXTFIELD_WIDTH;
+        inputField.addFocusListener(this);
         add(inputField);
 
-        JButton decrement = new JButton("-");
-        decrement.setBounds(x, y, BUTTON_WIDTH, h);
-        x += BUTTON_WIDTH;
-        decrement.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                param.decrement();
-                inputField.setValue(param.get());
-            }
-        });
-        add(decrement);
+        JSpinner.NumberEditor numberEditor = (JSpinner.NumberEditor) inputField.getEditor();
+        var formattedTextField = numberEditor.getTextField();
+        var formatter = (DefaultFormatter) formattedTextField.getFormatter();
+        formatter.setCommitsOnValidEdit(true);
 
-        JButton increment = new JButton("+");
-        increment.setBounds(x, y, BUTTON_WIDTH, h);
-        x += BUTTON_WIDTH;
-        increment.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                param.increment();
-                inputField.setValue(param.get());
-            }
-        });
-        add(increment);
+        inputField.addChangeListener(e -> param.set((Integer) inputField.getValue()));
     }
 
     void checkAndApplyChange() {
         try {
-            String txt = inputField.getText();
-            int val = (Integer.parseInt(txt));
-            param.set(val);
+            // String txt = inputField.getText();
+            // int val = (Integer.parseInt(txt));
+
+            try {
+                inputField.commitEdit();
+            }
+            catch (ParseException ignored) {
+            }
+
+            param.set((Integer) inputField.getValue());
         }
-        catch (NumberFormatException nfe) {
+        catch (NumberFormatException ignored) {
         }
-        int pos = inputField.getCaretPosition();
-        inputField.setValue(param.get());
-        inputField.setCaretPosition(pos);
+        // int pos = inputField.getCaretPosition();
+        // inputField.setValue(param.get());
+        // inputField.setCaretPosition(pos);
 
     }
 

@@ -36,6 +36,7 @@ The release notes for the next version.
  - Removed the included logging library in favour of Log4J
  - Moved the parameter editors to a new package
  - Moved the minus buttons on the `FloatParameterEditor` and the `IntParameterEditor` to be next to the plus button
+ - Removed the `JButton`'s and `JFormattedTextField`'s from `FloatParameterEditor` and the `IntParameterEditor` in favour of `JSpinner`'s.
 
 ## Old Release Notes
 These were either unreleased or were made when the repository used SVN.
