@@ -37,6 +37,7 @@ The release notes for the next version.
  - Moved the parameter editors to a new package
  - Moved the minus buttons on the `FloatParameterEditor` and the `IntParameterEditor` to be next to the plus button
  - Removed the `JButton`'s and `JFormattedTextField`'s from `FloatParameterEditor` and the `IntParameterEditor` in favour of `JSpinner`'s.
+ - Changed the look of nodes
 
 ## Old Release Notes
 These were either unreleased or were made when the repository used SVN.
