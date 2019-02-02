@@ -37,6 +37,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -511,7 +512,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
                 // --------------------------------------------------------
             }
         }
-
     }
 
     private void addTextureNode(TextureGraphNode n, int x, int y) {
@@ -543,7 +543,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
         graph.deleteFullGraph();
         CacheTileManager.clearCache();
         repaint();
-
     }
 
     public void save(String filename) {
@@ -581,7 +580,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
             TextureEditor.logger.error("Could not load " + filename);
             return false;
         }
-
     }
 
     @Override
@@ -597,11 +595,20 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
     // utility method to draw a conneciton line.
     private static void drawConnectionLine(Graphics2D g, int x0, int y0, int x1, int y1) {
-        final int ofs = 12;
+        int offset = 6;
 
-        g.drawLine(x0, y0, x0, y0 - ofs);
-        g.drawLine(x0, y0 - ofs, x1, y1 + ofs);
-        g.drawLine(x1, y1 + ofs, x1, y1);
+        g.drawLine(x0, y0, x0, y0 - offset);
+        // g.drawLine(x0, y0 - offset, x1, y1 + offset);
+         g.drawLine(x1, y1 + offset, x1, y1);
+
+        var path = new GeneralPath();
+        path.moveTo(x0, y0- offset);
+        path.curveTo(x0 - 5, y0 - offset - 40, x1 - 5, y1 + offset + 15, x1, y1 + offset);
+        g.draw(path);
+
+        // Draw the control points
+        // g.drawOval(x0 - 5, y0 - 40, 15, 15);
+        // g.drawOval(x1 - 5, y1 + 15, 15, 15);
     }
 	
 	/*
