@@ -51,6 +51,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.TooManyListenersException;
 import java.util.Vector;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -312,7 +313,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
         if (genIcon) {
             Channel chan = null;
             try {
-                chan = (Channel)c.getDeclaredConstructor().newInstance();
+                chan = (Channel) c.getDeclaredConstructor().newInstance();
             }
             catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
@@ -360,18 +361,18 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
         System.out.println(e);
 
         if (e.getSource().getClass() == CreateMenuItem.class) { // this was one menu item from the create new channel menu
-            CreateMenuItem mi = (CreateMenuItem)e.getSource();
+            CreateMenuItem mi = (CreateMenuItem) e.getSource();
 
             try {
                 if (!mi.isAReplaceCall) { // insert a new Node
-                    Channel chan = (Channel)mi.classType.getDeclaredConstructor().newInstance();
+                    Channel chan = (Channel) mi.classType.getDeclaredConstructor().newInstance();
                     addTextureNode(new TextureGraphNode(chan), mousePosition.x - desktopX, mousePosition.y - desktopY);
                     repaint();
                 }
                 else { // try to replace an existing node as good as possible
                     TextureGraphNode node = graph.selectedNodes.get(0);
                     if (node != null) {
-                        TextureGraphNode newNode = new TextureGraphNode((Channel)mi.classType.getDeclaredConstructor().newInstance());
+                        TextureGraphNode newNode = new TextureGraphNode((Channel) mi.classType.getDeclaredConstructor().newInstance());
                         replaceTextureNode(node, newNode);
                         repaint();
                     }
@@ -464,7 +465,7 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
         else if (e.getSource() == addToPresetsChannelMenuItem) { // --------------------------------------------------------
             if (graph.selectedNodes.size() > 0) {
                 if (graph.selectedNodes.get(0).getChannel() instanceof Pattern)
-                    TextureEditor.INSTANCE.m_PatternSelector.addPatternPreset((Pattern)Channel.cloneChannel(graph.selectedNodes.get(0).getChannel()));
+                    TextureEditor.INSTANCE.m_PatternSelector.addPatternPreset((Pattern) Channel.cloneChannel(graph.selectedNodes.get(0).getChannel()));
                 else TextureEditor.logger.error("Invalid action 'Add to Presets': selected node is not a pattern");
             }
             else TextureEditor.logger.error("Invalid action 'Add To Presets': no selected nodes exists");
@@ -597,13 +598,13 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
     private static void drawConnectionLine(Graphics2D g, int x0, int y0, int x1, int y1) {
         int offset = 6;
 
-        g.drawLine(x0, y0, x0, y0 - offset);
+        g.drawLine(x0, y0, x0 - offset, y0);
         // g.drawLine(x0, y0 - offset, x1, y1 + offset);
-         g.drawLine(x1, y1 + offset, x1, y1);
+        g.drawLine(x1 + offset, y1, x1, y1);
 
         var path = new GeneralPath();
-        path.moveTo(x0, y0- offset);
-        path.curveTo(x0 - 5, y0 - offset - 40, x1 - 5, y1 + offset + 15, x1, y1 + offset);
+        path.moveTo(x0 - offset, y0);
+        path.curveTo(x0 - offset - 5, y0 + 15, x1 + offset - 5, y1 - 40, x1 + offset, y1);
         g.draw(path);
 
         // Draw the control points
@@ -668,27 +669,32 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
         //if (threadIsRecomputing) return;
 
         if (!node.isFolded()) {
-            g.drawImage(((NodePreviewImage)node.userData).previewImage, x + 4, y + 12 + 12, this);
+            // TODO: Properly center the image
+            g.drawImage(((NodePreviewImage) node.userData).previewImage, x + 12, y + 12 + 12, this);
         }
 
         g.setFont(font);
 
         g.setColor(Color.white);
-        g.drawString(node.getChannel().getName(), x + 2, y + 12 + 8);
+        g.drawString(node.getChannel().getName(), x + 12, y + 12);
 
         // g.setColor(col_NodeBorder);
         // g.drawRect(x, y, w, h);
-
 
         for (ConnectionPoint p : node.getAllConnectionPointsVector()) {
             drawConnectionPoint(g, x, y, p);
         }
 
-        g.setColor(Color.white);
-        g.drawString("?", x + helpX + 6, y + helpY + 12);
+        // g.setColor(Color.white);
+        // g.drawString("?", x + helpX + 6, y + helpY + 12);
 
         g.setColor(Color.white);
-        g.drawString("-", x + helpX - 8, y + helpY + 12);
+        for (var button : node.miniButtons) {
+            button.draw(g, node.getX() + desktopX, node.getY() + desktopY);
+        }
+
+        // g.setColor(Color.white);
+        // g.drawString("-", x + 4, y + 12);
 
         if (node.getChannel().isMarkedForExport()) {
             g.drawString("E", x + 4, y + helpY + 10);
@@ -704,6 +710,30 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
         }
     }
 
+    // TODO: Move to a different file
+    //ad-hoc solution for button areas
+    public static class MiniButton {
+        int px, py;
+        int w, h;
+        String t;
+
+        public MiniButton(int posX, int posY, int width, int height, String type) {
+            px = posX;
+            py = posY;
+            w = width;
+            h = height;
+            t = type;
+        }
+
+        void draw(Graphics2D g, int ox, int oy) {
+            g.drawString(t, px + ox + 4, py + oy + h - 4);
+        }
+
+        boolean inside(int x, int y) {
+            return (x >= px && y >= py && x <= (px + w) && y <= (py + h));
+        }
+    }
+
     private Color gridColor = new Color(25, 25, 25);
 
     private BufferedImage canvas;
@@ -713,11 +743,11 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
     public void paint(Graphics gr) {
 //		super.paint(gr);
 
-        if (canvas == null || (int)(getWidth() * zoom) != canvas.getWidth() || (int)(getHeight() * zoom) != canvas.getHeight()) {
-            canvas = new BufferedImage((int)(getWidth() * zoom), (int)(getHeight() * zoom), BufferedImage.TYPE_INT_RGB);
+        if (canvas == null || (int) (getWidth() * zoom) != canvas.getWidth() || (int) (getHeight() * zoom) != canvas.getHeight()) {
+            canvas = new BufferedImage((int) (getWidth() * zoom), (int) (getHeight() * zoom), BufferedImage.TYPE_INT_RGB);
         }
 
-        Graphics2D g = (Graphics2D)canvas.getGraphics();
+        Graphics2D g = (Graphics2D) canvas.getGraphics();
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -779,7 +809,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
         }
     }
 
-
     private void moveDesktop(int dx, int dy) {
         desktopX += dx;
         desktopY += dy;
@@ -823,32 +852,32 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
     @Override
     public void mouseDragged(MouseEvent e) {
         if (desktopDragging) {
-            int dx = (int)((e.getXOnScreen() * zoom) - dragStartX);
-            int dy = (int)((e.getYOnScreen() * zoom) - dragStartY);
+            int dx = (int) ((e.getXOnScreen() * zoom) - dragStartX);
+            int dy = (int) ((e.getYOnScreen() * zoom) - dragStartY);
             moveDesktop(dx, dy);
             repaint();
         }
         else if (nodeDragging) {
             for (TextureGraphNode node : graph.selectedNodes) {
-                node.movePosition((int)(e.getXOnScreen() * zoom) - dragStartX, (int)(e.getYOnScreen() * zoom) - dragStartY);
+                node.movePosition((int) (e.getXOnScreen() * zoom) - dragStartX, (int) (e.getYOnScreen() * zoom) - dragStartY);
             }
             repaint();
         }
         else if (connectionDragging) {
             //connectionTarget = e.getPoint();
-            connectionTarget.x = (int)(e.getX() * zoom);
-            connectionTarget.y = (int)(e.getY() * zoom);
+            connectionTarget.x = (int) (e.getX() * zoom);
+            connectionTarget.y = (int) (e.getY() * zoom);
             repaint();
         }
         else if (draggedWindow != null) {
-            int dx = (int)((e.getXOnScreen()) - dragStartX / zoom);
-            int dy = (int)((e.getYOnScreen()) - dragStartY / zoom);
+            int dx = (int) ((e.getXOnScreen()) - dragStartX / zoom);
+            int dy = (int) ((e.getYOnScreen()) - dragStartY / zoom);
             draggedWindow.move(dx, dy);
             repaint();
         }
 
-        dragStartX = (int)(e.getXOnScreen() * zoom);
-        dragStartY = (int)(e.getYOnScreen() * zoom);
+        dragStartX = (int) (e.getXOnScreen() * zoom);
+        dragStartY = (int) (e.getYOnScreen() * zoom);
     }
 
     @Override
@@ -882,28 +911,28 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
                 return -cp.channelIndex - 1;
         }
 
-        if ((x >= helpX + n.getX()) && (x <= (helpX + n.getX() + helpW)) && (y >= helpY + n.getY()) && (y <= (helpY + n.getY() + helpH))) {
-            JOptionPane.showMessageDialog(this, n.getChannel().getHelpText(), n.getChannel().getName() + " Help", JOptionPane.PLAIN_MESSAGE);
-            return 3;
-        }
+        // if ((x >= helpX + n.getX()) && (x <= (helpX + n.getX() + helpW)) && (y >= helpY + n.getY()) && (y <= (helpY + n.getY() + helpH))) {
+        //     JOptionPane.showMessageDialog(this, n.getChannel().getHelpText(), n.getChannel().getName() + " Help", JOptionPane.PLAIN_MESSAGE);
+        //     return 3;
+        // }
 
-        if ((x >= helpX + n.getX() - 12) && (x <= (helpX + n.getX() + helpW - 12)) && (y >= helpY + n.getY()) && (y <= (helpY + n.getY() + helpH))) {
-            n.setFolded(!n.isFolded());
-            return 4;
-        }
+        // if ((x >= helpX + n.getX() - 12) && (x <= (helpX + n.getX() + helpW - 12)) && (y >= helpY + n.getY()) && (y <= (helpY + n.getY() + helpH))) {
+        //     n.setFolded(!n.isFolded());
+        //     return 4;
+        // }
 
         return 1;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        mousePosition.x = (int)(e.getX() * zoom);
-        mousePosition.y = (int)(e.getY() * zoom);
+        mousePosition.x = (int) (e.getX() * zoom);
+        mousePosition.y = (int) (e.getY() * zoom);
 
-        dragStartX = (int)(e.getXOnScreen() * zoom);
-        dragStartY = (int)(e.getYOnScreen() * zoom);
-        int wsX = (int)((e.getX()) * zoom) - desktopX;
-        int wsY = (int)((e.getY()) * zoom) - desktopY;
+        dragStartX = (int) (e.getXOnScreen() * zoom);
+        dragStartY = (int) (e.getYOnScreen() * zoom);
+        int wsX = (int) ((e.getX()) * zoom) - desktopX;
+        int wsY = (int) ((e.getY()) * zoom) - desktopY;
 
         if (e.getButton() == 2 || (e.isControlDown())) { // Desktop Dragging
             desktopDragging = true;
@@ -923,6 +952,22 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
                     showSelectedChannelPopupMenu(node, e.getX(), e.getY());
                 }
                 else { // if it was not a popup we look if we clicked on a connection point or on the rest of the node
+                    for (var button : node.miniButtons) {
+                        if (button.inside(mousePosition.x - node.getX(), mousePosition.y - node.getY())) {
+                            switch (button.t) {
+                                case "-": {
+                                    node.setFolded(!node.isFolded());
+                                    break;
+                                }
+
+                                case "?": {
+                                    JOptionPane.showMessageDialog(this, node.getChannel().getHelpText(), node.getChannel().getName() + " Help", JOptionPane.PLAIN_MESSAGE);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     int actionType = getActionTypeForMouseClick(wsX, wsY, node);
                     if (e.isShiftDown()) { // add to selection of nodes
                         addSelectedNode(node);
@@ -967,11 +1012,11 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        mousePosition.x = (int)(e.getX() * zoom);
-        mousePosition.y = (int)(e.getY() * zoom);
+        mousePosition.x = (int) (e.getX() * zoom);
+        mousePosition.y = (int) (e.getY() * zoom);
 
-        int wsX = (int)((mousePosition.x) * zoom) - desktopX;
-        int wsY = (int)((mousePosition.y) * zoom) - desktopY;
+        int wsX = (int) ((mousePosition.x) * zoom) - desktopX;
+        int wsY = (int) ((mousePosition.y) * zoom) - desktopY;
 
         //!!TODO: this notifies already on selecting a node; it should fire only when the node was actually moved
         if (nodeDragging || connectionDragging) notifyEditChangeListener();
@@ -1096,30 +1141,6 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
 
         float zoom = 1.0f;
 
-        // TODO: Move to a different file
-        //ad-hoc solution for button areas
-        class MiniButton {
-            int px, py;
-            int w, h;
-            String t;
-
-            MiniButton(int posX, int posY, int width, int height, String type) {
-                px = posX;
-                py = posY;
-                w = width;
-                h = height;
-                t = type;
-            }
-
-            void draw(Graphics2D g, int ox, int oy) {
-                g.drawString(t, px + ox + 4, py + oy + h - 4);
-            }
-
-            boolean inside(int x, int y) {
-                return (x >= px && y >= py && x <= (px + w) && y <= (py + h));
-            }
-        }
-
         Vector<MiniButton> miniButtons = new Vector<>();
 
         PreviewWindow(TextureGraphNode node) {
@@ -1209,11 +1230,11 @@ public final class TextureGraphEditorPanel extends JPanel implements MouseListen
                         ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0);
                     }
                     else if (zoom > 1.0f) {
-                        ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0, (int)(previewNodeImage.getWidth() * zoom), (int)(previewNodeImage.getHeight() * zoom), 0, 0);
+                        ChannelUtils.computeImage(previewNode.getChannel(), previewNodeImage, null, 0, (int) (previewNodeImage.getWidth() * zoom), (int) (previewNodeImage.getHeight() * zoom), 0, 0);
                     }
                     else if (zoom < 1.0f) {
-                        int lx = (int)(previewNodeImage.getWidth() * zoom);
-                        int ly = (int)(previewNodeImage.getHeight() * zoom);
+                        int lx = (int) (previewNodeImage.getWidth() * zoom);
+                        int ly = (int) (previewNodeImage.getHeight() * zoom);
                         if (tempImage == null || tempImage.getWidth() != lx || tempImage.getHeight() != ly) {
                             tempImage = new BufferedImage(lx, ly, BufferedImage.TYPE_INT_RGB);
                         }
