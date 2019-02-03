@@ -15,6 +15,8 @@ mainClassName = 'com.mystictri.neotextureedit.TextureEditor'
 repositories {
     jcenter()
     mavenCentral()
+    
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -23,6 +25,16 @@ dependencies {
 
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+
+    // compile 'com.weblookandfeel:weblaf-core:1.2.8'
+    // compile 'com.weblookandfeel:weblaf-ui:1.2.8'
+
+    // compile 'com.jtattoo:JTattoo:1.6.11'
+
+    // compile 'org.codehaus.griffon.plugins:griffon-lookandfeel-napkin:2.0.0'
+    // compile 'org.codehaus.griffon.plugins:griffon-lookandfeel-office:2.0.0'
+
+    compile 'com.github.lkishalmi:Darcula:gradle-SNAPSHOT'
 }
 
 natives {

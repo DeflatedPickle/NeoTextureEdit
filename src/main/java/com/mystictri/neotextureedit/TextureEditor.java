@@ -72,6 +72,7 @@ import javax.swing.plaf.FontUIResource;
 
 import apple.dts.samplecode.osxadapter.OSXAdapter;
 
+import com.bulenkov.darcula.DarculaLaf;
 import com.mystictri.neotexture.TextureGenerator;
 import com.mystictri.neotexture.TextureGraphNode;
 
@@ -986,28 +987,40 @@ public class TextureEditor implements ActionListener, KeyListener {
 
 		System.setProperty("org.lwjgl.librarypath", System.getProperty("user.dir") + "/build/natives");
 
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			// UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+		// TODO: Add a theme chooser
+		// try {
+		// 	// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-			LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-			for (int i = 0; i < infos.length; i++) {
-				// System.out.println(infos[i]);
-			}
-		} catch (UnsupportedLookAndFeelException e) {
-			System.err.println("LookAndFeel Exception: " + e);
-		} catch (ClassNotFoundException e) {
-			System.err.println("LookAndFeel Exception: " + e);
-		} catch (InstantiationException e) {
-			System.err.println("LookAndFeel Exception: " + e);
-		} catch (IllegalAccessException e) {
-			System.err.println("LookAndFeel Exception: " + e);
+		// 	// UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+		// 	// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+
+		// 	// UIManager.setLookAndFeel("com.alee.laf.WebLookAndFeel");
+
+
+		// 	LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+		// 	for (int i = 0; i < infos.length; i++) {
+		// 		// System.out.println(infos[i]);
+		// 	}
+		// } catch (UnsupportedLookAndFeelException e) {
+		// 	System.err.println("LookAndFeel Exception: " + e);
+		// } catch (ClassNotFoundException e) {
+		// 	System.err.println("LookAndFeel Exception: " + e);
+		// } catch (InstantiationException e) {
+		// 	System.err.println("LookAndFeel Exception: " + e);
+		// } catch (IllegalAccessException e) {
+		// 	System.err.println("LookAndFeel Exception: " + e);
+		// }
+
+		try {
+			UIManager.setLookAndFeel(new DarculaLaf());
+		}
+		catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
 		}
 
 		TextureEditor te = new TextureEditor(args); // new

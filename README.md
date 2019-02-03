@@ -39,6 +39,7 @@ The release notes for the next version.
  - Removed the `JButton`'s and `JFormattedTextField`'s from `FloatParameterEditor` and the `IntParameterEditor` in favour of `JSpinner`'s.
  - Changed the look of nodes
  - Changed node connection lines to Bezier curves
+ - Added a dark theme
 
 ## Old Release Notes
 These were either unreleased or were made when the repository used SVN.
