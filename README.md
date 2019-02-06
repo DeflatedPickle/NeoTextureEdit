@@ -40,6 +40,7 @@ The release notes for the next version.
  - Changed the look of nodes
  - Changed node connection lines to Bezier curves
  - Added a dark theme
+ - Changed the `Matrix3x3ParameterEditor` to use `JSpinner`'s instead of `JTextField`'s and `JButton`'s
 
 ## Old Release Notes
 These were either unreleased or were made when the repository used SVN.
