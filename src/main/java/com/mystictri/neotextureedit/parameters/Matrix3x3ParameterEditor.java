@@ -124,7 +124,7 @@ public class Matrix3x3ParameterEditor extends AbstractParameterEditor {
 
         // This is needed to check if it was increased or decreased, and it's an AtomicReference as we update it in a lambda
         AtomicReference<Float> zoomValue = new AtomicReference<>(0f);
-        var zoomSpinner = new JSpinner(new SpinnerNumberModel(0, -100f, 100f, 0.125f));
+        var zoomSpinner = new JSpinner(new SpinnerNumberModel(zoomValue.get().floatValue(), -100f, 100f, 0.125f));
         zoomSpinner.setBounds(x, y, TEXTFIELD_WIDTH, h);
         zoomSpinner.addChangeListener(e -> {
             var spinner = (JSpinner) e.getSource();

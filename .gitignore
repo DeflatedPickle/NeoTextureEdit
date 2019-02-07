@@ -34,3 +34,5 @@ gen
 
 # Other files
 exit.tgr
+*.blend1
+*.mtl
