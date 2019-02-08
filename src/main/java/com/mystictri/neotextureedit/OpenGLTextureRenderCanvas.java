@@ -255,9 +255,11 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
                 TextureEditor.logger.info("Found an OBJ model: " + file.getName());
 
                 try {
-                    objHashMap.put(FilenameUtils.getBaseName(file.getName()), ObjUtils.convertToRenderable(ObjReader.read(FileUtils.openInputStream(file))));
+                    var model = ObjUtils.convertToRenderable(ObjReader.read(FileUtils.openInputStream(file)));
+                    // var model = ObjReader.read(FileUtils.openInputStream(file));
+                    objHashMap.put(FilenameUtils.getBaseName(file.getName()), model);
 
-                    TextureEditor.logger.info("Loaded an OBJ model: " + file.getName());
+                    TextureEditor.logger.info(String.format("Loaded an OBJ model: %s with; %d vertices, %d texels, %d normals and %d faces", file.getName(), model.getNumVertices(), model.getNumTexCoords(), model.getNumNormals(), model.getNumFaces()));
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -486,48 +488,29 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
         }
 
         var finalModelName = modelName;
-        // var modeList = Arrays.asList(GL11.GL_POLYGON, GL11.GL_LINES, GL11.GL_POINTS);
-        var modeList = Arrays.asList(GL11.GL_TRIANGLE_STRIP);
+        // var modeList = Arrays.asList(GL11.GL_TRIANGLES, GL11.GL_LINES, GL11.GL_POINTS);
 
-        for (var mode : modeList) {
-            GL11.glBegin(mode);
+        GL11.glBegin(GL11.GL_TRIANGLES);
 
-            IntStream.range(0, objHashMap.get(finalModelName).getNumVertices()).forEachOrdered(e -> {
-                var normal = objHashMap.get(finalModelName).getNormal(e);
-                GL11.glNormal3f(normal.getX(), normal.getY(), normal.getZ());
+        var indicesArray = ObjData.getFaceVertexIndicesArray(objHashMap.get(finalModelName));
 
-                var texture = objHashMap.get(finalModelName).getTexCoord(e);
+        for (var index : indicesArray) {
+            var normal = objHashMap.get(finalModelName).getNormal(index);
+            GL11.glNormal3f(normal.getX(), normal.getY(), normal.getZ());
+
+            if (objHashMap.get(finalModelName).getNumTexCoords() > 0) {
+                var texture = objHashMap.get(finalModelName).getTexCoord(index);
                 GL11.glTexCoord2f(texture.getX(), texture.getY());
+            }
 
-                var vertex = objHashMap.get(finalModelName).getVertex(e);
-                GL11.glVertex3f(vertex.getX(), vertex.getY(), vertex.getZ());
+            var vertex = objHashMap.get(finalModelName).getVertex(index);
+            GL11.glVertex3f(vertex.getX(), vertex.getY(), vertex.getZ());
 
-                System.out.println(String.format("Index: %d, X: %f, Y: %f, Z: %f", e, vertex.getX(), vertex.getY(), vertex.getZ()));
-            });
-            System.out.println("------------------------------");
-
-            GL11.glEnd();
+            // System.out.printf("Index: %d, X: %f, Y: %f, Z: %f\n", index, vertex.getX(), vertex.getY(), vertex.getZ());
+            // System.out.println("------------------------------");
         }
 
-        // var model = objHashMap.get(modelName);
-
-        // var indices = ObjData.getFaceVertexIndices(model, 3);
-        // var vertices = ObjData.getVertices(model);
-        // var texture = ObjData.getTexCoords(model, 2);
-        // var normals = ObjData.getNormals(model);
-
-        // var vertexHandle = GL15.glGenBuffers();
-        // GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vertexHandle);
-        // GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, GL15.GL_STATIC_DRAW);
-        // GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, 0L);
-        // GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-
-        // GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-        // GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, vertices.capacity());
-
-        // GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-
-        // GL15.glDeleteBuffers(vertexHandle);
+        GL11.glEnd();
 
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
     }
