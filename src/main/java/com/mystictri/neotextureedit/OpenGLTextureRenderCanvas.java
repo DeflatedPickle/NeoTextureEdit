@@ -450,33 +450,35 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
 
             // if (triangleCounter == 3) {
                 // triangleCounter = 0;
-
-                var P0 = objHashMap.get(finalModelName).getVertex(indicesArray[index]);
-                var P1 = objHashMap.get(finalModelName).getVertex(indicesArray[index + 1]);
-                var P2 = objHashMap.get(finalModelName).getVertex(indicesArray[index + 2]);
-
-                var deltaPos1 = new Vector3f(P1.getX() - P0.getX(), P1.getY() - P0.getY(), P1.getZ() - P0.getZ());
-                var deltaPos2 = new Vector3f(P2.getX() - P0.getX(), P2.getY() - P0.getY(), P2.getZ() - P0.getZ());
-
-                var T0 = objHashMap.get(finalModelName).getTexCoord(indicesArray[index]);
-                var T1 = objHashMap.get(finalModelName).getTexCoord(indicesArray[index + 1]);
-                var T2 = objHashMap.get(finalModelName).getTexCoord(indicesArray[index + 2]);
-
-                var deltaUV1 = new Vector2f(T1.getX() - T0.getX(), T1.getY() - T0.getY());
-                var deltaUV2 = new Vector2f(T2.getX() - T0.getX(), T2.getY() - T0.getY());
-
-                var r = 1 / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-
-                var tangent = (deltaPos1.mul(deltaUV2.y).sub(deltaPos2.mul(deltaUV1.y))).mul(r);
-
-                // Sets the height of the bumps
-                GL20.glVertexAttrib3f(1, tangent.x, tangent.y, tangent.z);
             // }
             System.out.printf("Index: %d, X: %f, Y: %f, Z: %f\n", index, normal.getX(), normal.getY(), normal.getZ());
 
             // System.out.printf("Index: %d, X: %f, Y: %f, Z: %f\n", index, vertex.getX(), vertex.getY(), vertex.getZ());
         }
         System.out.println("------------------------------");
+
+        IntStream.range(0, objHashMap.get(finalModelName).getNumVertices()).forEachOrdered(e -> {
+            var P0 = objHashMap.get(finalModelName).getVertex(indicesArray[e]);
+            var P1 = objHashMap.get(finalModelName).getVertex(indicesArray[e + 1]);
+            var P2 = objHashMap.get(finalModelName).getVertex(indicesArray[e + 2]);
+
+            var deltaPos1 = new Vector3f(P1.getX() - P0.getX(), P1.getY() - P0.getY(), P1.getZ() - P0.getZ());
+            var deltaPos2 = new Vector3f(P2.getX() - P0.getX(), P2.getY() - P0.getY(), P2.getZ() - P0.getZ());
+
+            var T0 = objHashMap.get(finalModelName).getTexCoord(indicesArray[e]);
+            var T1 = objHashMap.get(finalModelName).getTexCoord(indicesArray[e + 1]);
+            var T2 = objHashMap.get(finalModelName).getTexCoord(indicesArray[e + 2]);
+
+            var deltaUV1 = new Vector2f(T1.getX() - T0.getX(), T1.getY() - T0.getY());
+            var deltaUV2 = new Vector2f(T2.getX() - T0.getX(), T2.getY() - T0.getY());
+
+            var r = 1 / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+
+            var tangent = (deltaPos1.mul(deltaUV2.y).sub(deltaPos2.mul(deltaUV1.y))).mul(r);
+
+            // Sets the height of the bumps
+            GL20.glVertexAttrib3f(1, tangent.x, tangent.y, tangent.z);
+        });
 
         GL11.glEnd();
 
