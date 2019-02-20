@@ -28,6 +28,8 @@ dependencies {
     // compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
+    compile "org.joml:joml:1.9.12"
+
     compile 'com.google.guava:guava:27.0.1-jre'
 
     // compile 'com.weblookandfeel:weblaf-core:1.2.8'

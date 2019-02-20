@@ -27,6 +27,8 @@ import com.google.common.io.Resources;
 import de.javagl.obj.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.glu.GLU;
@@ -430,8 +432,11 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
         GL11.glBegin(GL11.GL_TRIANGLES);
 
         var indicesArray = ObjData.getFaceVertexIndicesArray(objHashMap.get(finalModelName));
+        // var triangleCounter = 0;
 
         for (var index : indicesArray) {
+            // triangleCounter++;
+
             var normal = objHashMap.get(finalModelName).getNormal(index);
             GL11.glNormal3f(normal.getX(), normal.getY(), normal.getZ());
 
@@ -443,9 +448,35 @@ class OpenGLTextureRenderCanvas extends AWTGLCanvas implements Runnable, MouseLi
             var vertex = objHashMap.get(finalModelName).getVertex(index);
             GL11.glVertex3f(vertex.getX(), vertex.getY(), vertex.getZ());
 
+            // if (triangleCounter == 3) {
+                // triangleCounter = 0;
+
+                var P0 = objHashMap.get(finalModelName).getVertex(indicesArray[index]);
+                var P1 = objHashMap.get(finalModelName).getVertex(indicesArray[index + 1]);
+                var P2 = objHashMap.get(finalModelName).getVertex(indicesArray[index + 2]);
+
+                var deltaPos1 = new Vector3f(P1.getX() - P0.getX(), P1.getY() - P0.getY(), P1.getZ() - P0.getZ());
+                var deltaPos2 = new Vector3f(P2.getX() - P0.getX(), P2.getY() - P0.getY(), P2.getZ() - P0.getZ());
+
+                var T0 = objHashMap.get(finalModelName).getTexCoord(indicesArray[index]);
+                var T1 = objHashMap.get(finalModelName).getTexCoord(indicesArray[index + 1]);
+                var T2 = objHashMap.get(finalModelName).getTexCoord(indicesArray[index + 2]);
+
+                var deltaUV1 = new Vector2f(T1.getX() - T0.getX(), T1.getY() - T0.getY());
+                var deltaUV2 = new Vector2f(T2.getX() - T0.getX(), T2.getY() - T0.getY());
+
+                var r = 1 / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+
+                var tangent = (deltaPos1.mul(deltaUV2.y).sub(deltaPos2.mul(deltaUV1.y))).mul(r);
+
+                // Sets the height of the bumps
+                GL20.glVertexAttrib3f(1, tangent.x, tangent.y, tangent.z);
+            // }
+            System.out.printf("Index: %d, X: %f, Y: %f, Z: %f\n", index, normal.getX(), normal.getY(), normal.getZ());
+
             // System.out.printf("Index: %d, X: %f, Y: %f, Z: %f\n", index, vertex.getX(), vertex.getY(), vertex.getZ());
-            // System.out.println("------------------------------");
         }
+        System.out.println("------------------------------");
 
         GL11.glEnd();
 
