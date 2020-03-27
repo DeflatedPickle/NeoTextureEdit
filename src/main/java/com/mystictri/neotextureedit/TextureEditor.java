@@ -497,7 +497,7 @@ public class TextureEditor implements ActionListener, KeyListener {
 													// here
 	JPanel m_CenterPanel;
 
-	JFrame m_MainFrame;
+	public JFrame m_MainFrame;
 	JMenuBar m_MainMenuBar;
 	JMenuItem m_File_Save_Item;
 
@@ -974,61 +974,6 @@ public class TextureEditor implements ActionListener, KeyListener {
 				setCurrentFileName(null);
 			}
 		}
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		JPopupMenu.setDefaultLightWeightPopupEnabled(false); // needed for the
-																// gl canvas
-		// font for the basic help dialogs
-		UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Monospaced", Font.PLAIN, 12)));
-
-		System.setProperty("org.lwjgl.librarypath", System.getProperty("user.dir") + "/build/natives");
-
-		// TODO: Add a theme chooser
-		// try {
-		// 	// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-		// 	// UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-		// 	// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-		// 	// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-
-		// 	// UIManager.setLookAndFeel("com.alee.laf.WebLookAndFeel");
-
-
-		// 	LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-		// 	for (int i = 0; i < infos.length; i++) {
-		// 		// System.out.println(infos[i]);
-		// 	}
-		// } catch (UnsupportedLookAndFeelException e) {
-		// 	System.err.println("LookAndFeel Exception: " + e);
-		// } catch (ClassNotFoundException e) {
-		// 	System.err.println("LookAndFeel Exception: " + e);
-		// } catch (InstantiationException e) {
-		// 	System.err.println("LookAndFeel Exception: " + e);
-		// } catch (IllegalAccessException e) {
-		// 	System.err.println("LookAndFeel Exception: " + e);
-		// }
-
-		try {
-			UIManager.setLookAndFeel(new DarculaLaf());
-		}
-		catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
-
-		TextureEditor te = new TextureEditor(args); // new
-													// String[]{"--disableGL"}
-		te.createMainFrame();
-		te.initialize();
-		te.registerForMacOSXEvents();
-		te.m_MainFrame.setVisible(true);
 	}
 
 	// -------------------------------------------------------------------------------------------------------------

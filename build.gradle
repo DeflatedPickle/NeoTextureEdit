@@ -1,39 +1,42 @@
 plugins {
     id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.41'
+
     id 'application'
+
     id 'com.stehno.natives' version '0.3.1'
 }
+apply plugin: 'java'
 apply plugin: 'idea'
 
 group 'com.mystictri.neotextureedit'
 version '0.6.5'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.12
 
 mainClassName = 'com.mystictri.neotextureedit.TextureEditor'
 
 repositories {
     jcenter()
     mavenCentral()
-    
+
+    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    // Kotlin Standard Library
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    // OpenGL
     compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
     compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
 
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+    // Logging
+    compile 'org.apache.logging.log4j:log4j-api:2.11.1'
+    compile 'org.apache.logging.log4j:log4j-core:2.11.1'
 
-    // compile 'com.weblookandfeel:weblaf-core:1.2.8'
-    // compile 'com.weblookandfeel:weblaf-ui:1.2.8'
-
-    // compile 'com.jtattoo:JTattoo:1.6.11'
-
-    // compile 'org.codehaus.griffon.plugins:griffon-lookandfeel-napkin:2.0.0'
-    // compile 'org.codehaus.griffon.plugins:griffon-lookandfeel-office:2.0.0'
-
+    // Dark Theme
     compile 'com.github.lkishalmi:Darcula:gradle-SNAPSHOT'
 }
 
